@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="ByPab — Conseil & Communication par Pablo, basé à Angers. Stratégie digitale, identité visuelle, réseaux sociaux et création de sites web pour startups, PME, associations et artisans en Maine-et-Loire."/>
+  <meta name="keywords" content="ByPab, Pablo, conseil communication Angers, stratégie digitale, identité visuelle, réseaux sociaux, création site web, branding Maine-et-Loire"/>
+  <meta name="author" content="Pablo — ByPab"/>
+  <meta name="robots" content="index, follow"/>
+  <meta property="og:title" content="ByPab — Conseil & Communication · Angers"/>
+  <meta property="og:description" content="Stratégie, conseil et communication signés ByPab. Pour startups, PME, associations et artisans à Angers et en Maine-et-Loire."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://bypab.fr"/>
+  <meta name="geo.region" content="FR-49"/>
+  <meta name="geo.placename" content="Angers"/>
+  <title>ByPab — Conseil & Communication · Angers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Montserrat',sans-serif;background:#f0f4ff;color:#0f1f3d;overflow-x:hidden;cursor:none}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    :root{
+      --bg:#f0f4ff;--bg2:#e8eeff;--bg3:#dde5ff;
+      --surface:#fff;--surface2:#f7f9ff;
+      --blue:#1a56db;--blue-mid:#2563eb;--blue-light:#3b82f6;
+      --blue-pale:#dbeafe;--blue-xpale:#eff6ff;--accent:#0ea5e9;
+      --text:#0f1f3d;--text2:#334155;--text3:#64748b;
+      --border:#c7d7f5;--border2:#a5b8f0;
+      --shadow:0 1px 3px rgba(15,31,61,.06),0 4px 16px rgba(15,31,61,.08);
+      --shadow2:0 8px 32px rgba(15,31,61,.12),0 2px 8px rgba(15,31,61,.06);
+      --shadow3:0 20px 60px rgba(15,31,61,.16);
+    }
+    ::-webkit-scrollbar{width:3px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:linear-gradient(rgba(26,86,219,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.04) 1px,transparent 1px);
+      background-size:54px 54px}
+    /* CURSOR */
+    .cur{position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);border-radius:50%}
+    #cd{width:9px;height:9px;background:var(--blue);top:0;left:0;transition:width .2s,height .2s}
+    #cr{width:34px;height:34px;border:1.5px solid rgba(26,86,219,.35);top:0;left:0;transition:width .2s,height .2s,border-color .2s}
+    #cd.h{width:16px;height:16px;background:var(--blue-light)}
+    #cr.h{width:48px;height:48px;border-color:rgba(59,130,246,.6)}
+    @media(max-width:580px){body{cursor:auto}.cur{display:none}}
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:rgba(240,244,255,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s}
+    nav.s{height:56px;background:rgba(240,244,255,.97);box-shadow:var(--shadow)}
+    .logo{display:flex;align-items:center;gap:9px;font-size:1.15rem;font-weight:900;letter-spacing:-.025em;color:var(--text)}
+    .logo-box{width:28px;height:28px;background:var(--blue);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;color:#fff;box-shadow:0 3px 10px rgba(26,86,219,.3)}
+    .logo em{color:var(--blue);font-style:normal}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);transition:color .25s;position:relative}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--blue);transition:width .25s;border-radius:2px}
+    .nav-links a:hover{color:var(--text)}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+    .nav-links a.active{color:var(--text)}
+    .nav-cta{padding:.42rem 1.1rem;background:var(--blue);color:#fff;border:none;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .25s;box-shadow:0 3px 12px rgba(26,86,219,.28)}
+    .nav-cta:hover{background:var(--blue-mid);transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,86,219,.38)}
+    .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+    .burger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+    .mob{position:fixed;inset:0;z-index:999;background:rgba(240,244,255,.98);backdrop-filter:blur(24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;opacity:0;pointer-events:none;transition:opacity .3s}
+    .mob.open{opacity:1;pointer-events:all}
+    .mob a{font-size:1.4rem;font-weight:800;color:var(--text3);transition:color .25s}
+    .mob a:hover{color:var(--blue)}
+    .mob-x{position:absolute;top:1.4rem;right:6%;font-size:1.5rem;cursor:pointer;color:var(--text3);background:none;border:none;font-family:inherit}
+    /* UTILS */
+    section{position:relative;z-index:1}
+    .w{max-width:1160px;margin:0 auto;padding:0 6%}
+    .sh{text-align:center;margin-bottom:4rem}
+    .stag{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:.8rem;padding:.28rem .8rem;background:var(--blue-xpale);border:1px solid var(--blue-pale);border-radius:100px}
+    .stit{font-size:clamp(1.8rem,3.5vw,2.7rem);font-weight:900;letter-spacing:-.03em;color:var(--text);line-height:1.1;margin-bottom:.9rem}
+    .ssub{font-size:.9rem;color:var(--text3);max-width:500px;margin:0 auto;line-height:1.85}
+    .rv{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+    .rv.in{opacity:1;transform:translateY(0)}
+    .d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}.d4{transition-delay:.28s}.d5{transition-delay:.35s}
+    .btn{display:inline-flex;align-items:center;gap:.45rem;padding:.78rem 1.75rem;border-radius:7px;font-family:'Montserrat',sans-serif;font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .25s;border:none}
+    .bp{background:var(--blue);color:#fff;box-shadow:0 3px 16px rgba(26,86,219,.28)}
+    .bp:hover{background:var(--blue-mid);transform:translateY(-2px);box-shadow:0 8px 28px rgba(26,86,219,.4)}
+    .bo{background:var(--surface);color:var(--text2);border:1.5px solid var(--border);box-shadow:var(--shadow)}
+    .bo:hover{border-color:var(--blue);color:var(--blue);box-shadow:0 4px 16px rgba(26,86,219,.12)}
+
+    /* ══ HERO ══ */
+    #accueil{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:64px 6% 0;overflow:hidden;background:linear-gradient(160deg,#f0f4ff 0%,#e8eeff 55%,#dde5ff 100%)}
+    .orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
+    .o1{width:600px;height:600px;background:radial-gradient(circle,rgba(26,86,219,.12) 0%,transparent 70%);top:-100px;right:-60px;animation:fl 10s ease-in-out infinite}
+    .o2{width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 70%);bottom:0;left:-40px;animation:fl 13s ease-in-out infinite reverse}
+    @keyframes fl{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.04)}}
+    .hi{position:relative;z-index:1;text-align:center;max-width:900px}
+    .hbadge{display:inline-flex;align-items:center;gap:7px;padding:.32rem .95rem;margin-bottom:2rem;background:var(--surface);border:1px solid var(--border);border-radius:100px;font-size:.63rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);opacity:0;animation:fu .7s .2s forwards;box-shadow:var(--shadow)}
+    .hbadge-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:pu 2s infinite;box-shadow:0 0 6px rgba(26,86,219,.5);flex-shrink:0}
+    @keyframes pu{0%,100%{opacity:1}50%{opacity:.2}}
+    /* STATIC HERO TITLE — fixed width container prevents layout shift */
+    .htit-wrap{opacity:0;animation:fu .7s .35s forwards;margin-bottom:1.5rem}
+    .htit{font-size:clamp(2.6rem,6.5vw,6rem);font-weight:900;line-height:.97;letter-spacing:-.04em;color:var(--text)}
+    .htit .line{display:block}
+    /* Gradient text for second line — fixed, no typed animation */
+    .htit .line2{
+      background:linear-gradient(130deg,var(--blue) 0%,var(--blue-light) 60%,var(--accent) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      position:relative;display:inline-block
+    }
+    /* Subtle shimmer on the gradient line */
+    .htit .line2::after{
+      content:attr(data-text);
+      position:absolute;inset:0;
+      background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.35) 50%,transparent 100%);
+      background-size:200% 100%;
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      animation:shimmer 4s ease-in-out infinite 2s
+    }
+    @keyframes shimmer{0%,100%{background-position:200% 0}50%{background-position:-200% 0}}
+    .hsub{font-size:clamp(.88rem,1.7vw,1.05rem);color:var(--text3);max-width:540px;margin:0 auto 2.4rem;line-height:1.88;opacity:0;animation:fu .7s .5s forwards;font-weight:400}
+    .hact{display:flex;align-items:center;justify-content:center;gap:.9rem;flex-wrap:wrap;opacity:0;animation:fu .7s .65s forwards}
+    .hstats{display:flex;align-items:center;justify-content:center;gap:2.8rem;margin-top:4.5rem;padding-top:3rem;border-top:1px solid var(--border);opacity:0;animation:fu .7s .85s forwards}
+    .sn{font-size:2rem;font-weight:900;color:var(--blue);letter-spacing:-.03em;display:block;line-height:1}
+    .sl{font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-top:.25rem}
+    .sdiv{width:1px;height:40px;background:var(--border)}
+    @keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ══ ABOUT ══ */
+    #apropos{padding:120px 0;background:var(--surface)}
+    .agrid{display:grid;grid-template-columns:1fr 1.15fr;gap:5rem;align-items:center}
+    .avis{position:relative}
+    .acard{background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);border:1px solid var(--border);border-radius:20px;aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:var(--shadow2)}
+    .acard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,86,219,.05) 0%,transparent 60%)}
+    .acard-inner{display:flex;flex-direction:column;align-items:center;gap:1.4rem;position:relative;z-index:1;padding:2rem;text-align:center}
+    .acard-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--blue) 0%,var(--accent) 100%);display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:900;color:#fff;box-shadow:0 12px 36px rgba(26,86,219,.3)}
+    .acard-name{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-.015em}
+    .acard-role{font-size:.68rem;font-weight:700;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-top:.25rem}
+    .acard-loc{font-size:.72rem;color:var(--text3);margin-top:.15rem}
+    .acard-tags{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem}
+    .atag{padding:.28rem .7rem;background:var(--surface);border:1px solid var(--border);border-radius:100px;font-size:.65rem;font-weight:600;color:var(--blue)}
+    .adeco1{position:absolute;top:-10px;left:-10px;width:72px;height:72px;border:1px solid var(--border);border-radius:12px;background:var(--surface);z-index:-1;box-shadow:var(--shadow)}
+    .adeco2{position:absolute;bottom:-10px;right:-10px;width:110px;height:110px;border:1px solid var(--border);border-radius:12px;background:var(--surface);z-index:-1;box-shadow:var(--shadow)}
+    .abadge{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;border-radius:10px;padding:.55rem 1rem;font-size:.65rem;font-weight:700;letter-spacing:.04em;box-shadow:0 8px 24px rgba(26,86,219,.35);white-space:nowrap;z-index:2}
+    .atxt h2{font-size:clamp(1.55rem,2.8vw,2.15rem);font-weight:900;letter-spacing:-.028em;margin-bottom:1.3rem;line-height:1.15;color:var(--text)}
+    .atxt h2 em{color:var(--blue);font-style:normal}
+    .atxt p{font-size:.88rem;color:var(--text3);line-height:1.92;margin-bottom:1rem}
+    .avals{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-top:1.7rem}
+    .av{padding:.85rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;transition:border-color .25s,box-shadow .25s}
+    .av:hover{border-color:var(--border2);box-shadow:var(--shadow)}
+    .av-icon{width:28px;height:28px;background:var(--blue-xpale);border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:.5rem}
+    .av-icon svg{width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .av-t{font-size:.75rem;font-weight:700;color:var(--text);margin-bottom:.15rem}
+    .av-d{font-size:.68rem;color:var(--text3);line-height:1.6}
+    .skill-tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-top:1.6rem}
+    .skill-tag{padding:.3rem .8rem;background:var(--blue-xpale);border:1px solid var(--blue-pale);border-radius:100px;font-size:.66rem;font-weight:600;color:var(--blue)}
+
+    /* ══ SERVICES ══ */
+    #services{padding:120px 0;background:var(--bg)}
+    /* 5 cards: 3 top + 2 centered below */
+    .sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+    .sgrid .sc:nth-child(4){grid-column:1;margin-left:calc(50% + .65rem)}
+    .sgrid .sc:nth-child(5){grid-column:2}
+    /* Reset margin for responsive */
+    .sc{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2.2rem;position:relative;overflow:hidden;transition:all .3s ease;box-shadow:var(--shadow)}
+    .sc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+    .sc:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:var(--shadow2)}
+    .sc:hover::after{transform:scaleX(1)}
+    /* Bolder number */
+    .sc-num{
+      position:absolute;top:1.5rem;right:1.5rem;
+      font-size:3.2rem;font-weight:900;
+      color:rgba(26,86,219,.18);
+      line-height:1;letter-spacing:-.04em;user-select:none
+    }
+    .sc-icon{width:46px;height:46px;background:var(--blue-xpale);border:1px solid var(--blue-pale);border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:1.3rem}
+    .sc-icon svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .sc h3{font-size:1rem;font-weight:700;margin-bottom:.65rem;color:var(--text);letter-spacing:-.01em}
+    .sc p{font-size:.82rem;color:var(--text3);line-height:1.8;margin-bottom:1.3rem}
+    .sc-feat{list-style:none}
+    .sc-feat li{font-size:.75rem;color:var(--text3);padding:.26rem 0;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--bg2)}
+    .sc-feat li:last-child{border-bottom:none}
+    .sc-feat li::before{content:'';width:4px;height:4px;background:var(--blue);border-radius:50%;flex-shrink:0}
+
+    /* ══ PORTFOLIO ══ */
+    #portfolio{padding:120px 0;background:var(--surface)}
+    .pfilt{display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;margin-bottom:3rem}
+    .pfb{padding:.38rem 1.05rem;background:transparent;border:1.5px solid var(--border);border-radius:100px;font-family:'Montserrat',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);cursor:pointer;transition:all .25s}
+    .pfb:hover{border-color:var(--blue);color:var(--blue)}
+    .pfb.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 3px 14px rgba(26,86,219,.3)}
+    .pgrid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:240px;gap:1.2rem}
+    .pi{position:relative;border-radius:14px;overflow:hidden;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:all .35s;box-shadow:var(--shadow)}
+    .pi.wide{grid-column:span 2}
+    .pi.tall{grid-row:span 2}
+    .pi:hover{transform:translateY(-4px);box-shadow:var(--shadow3);border-color:var(--border2)}
+    .pi-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+    .pi:hover .pi-img{transform:scale(1.04)}
+    .pi-badge{position:absolute;top:.85rem;left:.85rem;background:rgba(255,255,255,.92);border:1px solid var(--border);padding:.2rem .6rem;border-radius:100px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);box-shadow:var(--shadow);backdrop-filter:blur(4px)}
+    .pi-arrow{position:absolute;top:.85rem;right:.85rem;width:28px;height:28px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.8);transition:all .3s}
+    .pi-arrow svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+    .pi:hover .pi-arrow{opacity:1;transform:scale(1)}
+    .pi-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,31,61,.88) 0%,rgba(15,31,61,.1) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.3rem;opacity:0;transition:opacity .35s}
+    .pi:hover .pi-ov{opacity:1}
+    .pi-cat{font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:.3rem}
+    .pi-tit{font-size:.92rem;font-weight:700;color:#fff;line-height:1.3}
+    .pi-sub{font-size:.72rem;color:rgba(255,255,255,.65);margin-top:.25rem}
+
+    /* ══ PORTFOLIO MODAL ══ */
+    .modal-bg{position:fixed;inset:0;z-index:2000;background:rgba(15,31,61,.55);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity .3s}
+    .modal-bg.open{opacity:1;pointer-events:all}
+    .modal{background:var(--surface);border-radius:20px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow3);transform:translateY(18px) scale(.98);transition:transform .3s;border:1px solid var(--border)}
+    .modal-bg.open .modal{transform:translateY(0) scale(1)}
+    .modal-art{height:300px;position:relative;overflow:hidden;border-radius:20px 20px 0 0}
+    .modal-art img{width:100%;height:100%;object-fit:cover}
+    .modal-art-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,31,61,.5) 0%,transparent 60%)}
+    .modal-body{padding:2.5rem}
+    .modal-meta{display:flex;gap:2.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+    .meta-item{display:flex;flex-direction:column;gap:.25rem}
+    .meta-label{font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text3)}
+    .meta-value{font-size:.85rem;font-weight:600;color:var(--text)}
+    .modal-divider{height:1px;background:var(--border);margin:1.5rem 0}
+    .modal-title{font-size:1.45rem;font-weight:900;letter-spacing:-.025em;color:var(--text);margin-bottom:.6rem}
+    .modal-desc{font-size:.88rem;color:var(--text3);line-height:1.88;margin-bottom:1.5rem}
+    .modal-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.8rem}
+    .modal-tag{padding:.28rem .75rem;background:var(--blue-xpale);border:1px solid var(--blue-pale);border-radius:100px;font-size:.65rem;font-weight:600;color:var(--blue)}
+    .modal-close{position:absolute;top:1.2rem;right:1.2rem;width:34px;height:34px;background:rgba(255,255,255,.9);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);transition:all .2s;z-index:10;backdrop-filter:blur(4px)}
+    .modal-close:hover{background:var(--surface);border-color:var(--border2)}
+    .modal-close svg{width:14px;height:14px;stroke:var(--text);fill:none;stroke-width:2.5;stroke-linecap:round}
+    .modal-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+
+    /* ══ TESTIMONIALS — carousel ══ */
+    #temoignages{padding:120px 0;background:var(--bg);overflow:hidden}
+    .tcarousel-wrap{position:relative}
+    .tcarousel{display:flex;gap:1.3rem;transition:transform .45s cubic-bezier(.25,.46,.45,.94)}
+    .tc{
+      background:var(--surface);border:1px solid var(--border);border-radius:14px;
+      padding:1.8rem;box-shadow:var(--shadow);
+      flex:0 0 calc(33.33% - .87rem);min-width:0
+    }
+    .stars{color:var(--blue);font-size:.75rem;margin-bottom:.8rem;letter-spacing:2px}
+    .tq-mark{font-size:2.8rem;line-height:1;color:var(--blue-pale);font-family:Georgia,serif;margin-bottom:.3rem;font-weight:900}
+    .ttxt{font-size:.84rem;color:var(--text3);line-height:1.9;margin-bottom:1.3rem;font-style:italic}
+    .tauth{display:flex;align-items:center;gap:.75rem}
+    .tav{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:#fff;flex-shrink:0}
+    .tan{font-size:.82rem;font-weight:700;color:var(--text)}
+    .tar{font-size:.68rem;color:var(--blue);margin-top:.1rem;font-weight:500}
+    .tcontrols{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:2.5rem}
+    .tbtn{width:40px;height:40px;background:var(--surface);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;box-shadow:var(--shadow)}
+    .tbtn:hover{background:var(--blue);border-color:var(--blue)}
+    .tbtn:hover svg{stroke:#fff}
+    .tbtn svg{width:16px;height:16px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .25s}
+    .tdots{display:flex;gap:.5rem;align-items:center}
+    .tdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .25s}
+    .tdot.on{background:var(--blue);transform:scale(1.2)}
+
+    /* ══ PARTNERS ══ */
+    #partenaires{padding:60px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .plab{text-align:center;margin-bottom:1.8rem}
+    .plab span{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text3)}
+    .ptrack-w{overflow:hidden;position:relative}
+    .ptrack-w::before,.ptrack-w::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
+    .ptrack-w::before{left:0;background:linear-gradient(to right,var(--surface),transparent)}
+    .ptrack-w::after{right:0;background:linear-gradient(to left,var(--surface),transparent)}
+    .ptrack{display:flex;gap:2rem;align-items:center;animation:sc 28s linear infinite;width:max-content}
+    .ptrack:hover{animation-play-state:paused}
+    @keyframes sc{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .pl{display:flex;align-items:center;justify-content:center;width:160px;height:56px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);flex-shrink:0;transition:all .25s;white-space:nowrap;padding:0 .8rem}
+    .pl:hover{border-color:var(--border2);color:var(--blue)}
+
+    /* ══ PRICING ══ */
+    #tarifs{padding:120px 0;background:var(--bg)}
+    .prgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:2rem}
+    .pr{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2.2rem;position:relative;overflow:hidden;transition:all .35s;box-shadow:var(--shadow)}
+    .pr.feat{border-color:var(--blue);background:linear-gradient(160deg,var(--blue-xpale) 0%,var(--surface) 60%);box-shadow:0 0 0 1px var(--blue),var(--shadow2)}
+    .pr:hover{transform:translateY(-4px);box-shadow:var(--shadow2)}
+    .pr.feat:hover{box-shadow:0 0 0 1px var(--blue),var(--shadow3)}
+    .pr-badge{position:absolute;top:-1px;right:1.8rem;padding:.25rem .7rem;background:var(--blue);border-radius:0 0 8px 8px;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+    .pr-name{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:.9rem}
+    .pr-from{font-size:.62rem;color:var(--text3);font-weight:500}
+    .pr-amt{font-size:2.5rem;font-weight:900;color:var(--text);letter-spacing:-.04em;line-height:1}
+    .pr-cur{font-size:1rem;font-weight:700;vertical-align:super;margin-right:1px}
+    .pr-per{font-size:.74rem;color:var(--text3);margin-top:.35rem;margin-bottom:1.3rem}
+    .pr-div{height:1px;background:var(--border);margin:1.3rem 0}
+    .pr-feats{list-style:none;margin-bottom:1.8rem}
+    .pr-feats li{font-size:.8rem;color:var(--text2);padding:.48rem 0;display:flex;align-items:flex-start;gap:.6rem;border-bottom:1px solid var(--bg)}
+    .pr-feats li:last-child{border-bottom:none}
+    .pr-check{color:var(--blue);flex-shrink:0;font-weight:700}
+    .pr-devis{text-align:center;padding:2.2rem;margin-top:1.8rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow)}
+    .pr-devis p{font-size:.87rem;color:var(--text3);margin-bottom:1.3rem;line-height:1.75}
+
+    /* ══ CONTACT ══ */
+    #contact{padding:120px 0 80px;background:var(--surface)}
+    .cgrid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start}
+    .ci h3{font-size:1.4rem;font-weight:900;margin-bottom:1rem;line-height:1.2;letter-spacing:-.025em;color:var(--text)}
+    .ci h3 em{color:var(--blue);font-style:normal}
+    .ci p{font-size:.86rem;color:var(--text3);line-height:1.88;margin-bottom:1.7rem}
+    .cmethods{display:flex;flex-direction:column;gap:.8rem}
+    .cm{display:flex;align-items:center;gap:.9rem;padding:.9rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;transition:all .25s;box-shadow:var(--shadow)}
+    .cm:hover{border-color:var(--border2);box-shadow:var(--shadow2)}
+    .cm-ic{width:36px;height:36px;background:var(--blue-xpale);border:1px solid var(--blue-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .cm-ic svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .cm-l{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+    .cm-v{font-size:.82rem;color:var(--text);font-weight:600;margin-top:.1rem}
+    .socials{display:flex;gap:.6rem;margin-top:1.7rem}
+    .soc{width:40px;height:40px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:var(--shadow)}
+    .soc:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 6px 18px rgba(26,86,219,.3)}
+    .soc:hover svg{stroke:#fff}
+    .soc svg{width:16px;height:16px;stroke:var(--text3);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke .25s}
+    .cform{display:flex;flex-direction:column;gap:1rem}
+    .frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .fg{display:flex;flex-direction:column;gap:.4rem}
+    .fg label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2)}
+    .fg input,.fg select,.fg textarea{width:100%;padding:.78rem .95rem;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:.83rem;outline:none;transition:all .25s;resize:none;-webkit-appearance:none}
+    .fg input::placeholder,.fg textarea::placeholder{color:var(--text3);opacity:.7}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.1);background:var(--surface)}
+    .fg select option{background:var(--surface);color:var(--text)}
+    .fcheck{display:flex;align-items:flex-start;gap:.6rem;font-size:.74rem;color:var(--text3);cursor:pointer;line-height:1.6}
+    .fcheck input{width:auto;margin-top:2px;accent-color:var(--blue);cursor:pointer;flex-shrink:0}
+    .fok{display:none;padding:.85rem 1.2rem;background:var(--blue-xpale);border:1px solid var(--blue-pale);border-radius:8px;font-size:.82rem;color:var(--blue);font-weight:600}
+    .fok.vis{display:block}
+    .ferr{display:none;padding:.85rem 1.2rem;background:#fff0f0;border:1px solid #fecaca;border-radius:8px;font-size:.82rem;color:#dc2626;font-weight:500}
+    .ferr.vis{display:block}
+    .ffoot{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+    .fnote{font-size:.66rem;color:var(--text3);display:flex;align-items:center;gap:.4rem}
+    .fnote svg{width:12px;height:12px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .btn-sending{opacity:.65;pointer-events:none}
+
+    /* ══ FOOTER ══ */
+    footer{position:relative;z-index:1;background:var(--text);padding:4rem 6% 2rem}
+    .ft-top{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.1)}
+    .ft-brand p{font-size:.82rem;color:rgba(255,255,255,.45);line-height:1.8;margin-top:.8rem;max-width:260px}
+    .ft-logo{font-size:1.15rem;font-weight:900;letter-spacing:-.025em;color:#fff}
+    .ft-logo em{color:var(--blue-light);font-style:normal}
+    .ft-col h4{font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1rem}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .ft-col a{font-size:.8rem;color:rgba(255,255,255,.5);transition:color .25s;cursor:pointer}
+    .ft-col a:hover{color:#fff}
+    .ft-bottom{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding-top:2rem}
+    .ft-copy{font-size:.68rem;color:rgba(255,255,255,.28)}
+    .ft-legal{display:flex;gap:1.5rem}
+    .ft-legal a{font-size:.68rem;color:rgba(255,255,255,.32);transition:color .25s;cursor:pointer}
+    .ft-legal a:hover{color:rgba(255,255,255,.7)}
+
+    /* ══ COOKIE BANNER ══ */
+    .cookie-banner{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:5000;width:calc(100% - 3rem);max-width:640px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.6rem;box-shadow:var(--shadow3);display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;animation:slideUp .4s ease}
+    @keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    .cookie-banner.hidden{display:none}
+    .cookie-text p{font-size:.78rem;color:var(--text2);line-height:1.6}
+    .cookie-text a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+    .cookie-actions{display:flex;gap:.6rem;flex-shrink:0}
+    .c-accept{padding:.45rem 1rem;background:var(--blue);color:#fff;border:none;border-radius:7px;font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .25s}
+    .c-accept:hover{background:var(--blue-mid)}
+    .c-decline{padding:.45rem 1rem;background:transparent;color:var(--text3);border:1.5px solid var(--border);border-radius:7px;font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:600;cursor:pointer;transition:all .25s}
+    .c-decline:hover{border-color:var(--border2);color:var(--text)}
+
+    /* ══ LEGAL OVERLAYS ══ */
+    .legal-overlay{position:fixed;inset:0;z-index:3000;background:rgba(15,31,61,.5);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity .3s}
+    .legal-overlay.open{opacity:1;pointer-events:all}
+    .legal-modal{background:var(--surface);border-radius:18px;width:100%;max-width:720px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow3);border:1px solid var(--border);transform:translateY(16px);transition:transform .3s}
+    .legal-overlay.open .legal-modal{transform:translateY(0)}
+    .legal-header{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;position:sticky;top:0;background:var(--surface);z-index:10;border-radius:18px 18px 0 0}
+    .legal-header h2{font-size:1.25rem;font-weight:900;color:var(--text);letter-spacing:-.02em}
+    .legal-header p{font-size:.72rem;color:var(--text3);margin-top:.3rem}
+    .legal-close{width:32px;height:32px;background:var(--bg);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s}
+    .legal-close:hover{background:var(--bg2);border-color:var(--border2)}
+    .legal-close svg{width:13px;height:13px;stroke:var(--text);fill:none;stroke-width:2.5;stroke-linecap:round}
+    .legal-body{padding:2rem 2.5rem 2.5rem}
+    .legal-body h3{font-size:.88rem;font-weight:700;color:var(--text);margin-top:1.8rem;margin-bottom:.6rem}
+    .legal-body h3:first-child{margin-top:0}
+    .legal-body p{font-size:.82rem;color:var(--text3);line-height:1.85;margin-bottom:.8rem}
+    .legal-body ul{list-style:none;padding:0;margin-bottom:.8rem}
+    .legal-body ul li{font-size:.82rem;color:var(--text3);padding:.25rem 0;display:flex;gap:.6rem}
+    .legal-body ul li::before{content:'—';color:var(--blue);flex-shrink:0}
+    .legal-body a{color:var(--blue)}
+
+    /* ══ RESPONSIVE ══ */
+    @media(max-width:1024px){
+      .sgrid{grid-template-columns:repeat(2,1fr)}
+      .sgrid .sc:nth-child(4){grid-column:auto;margin-left:0}
+      .sgrid .sc:nth-child(5){grid-column:auto}
+      .pgrid{grid-template-columns:repeat(2,1fr);grid-auto-rows:220px}
+      .pi.wide{grid-column:span 2}.pi.tall{grid-row:span 1}
+      .tc{flex:0 0 calc(50% - .65rem)}
+      .prgrid{grid-template-columns:1fr;max-width:460px;margin-left:auto;margin-right:auto}
+      .ft-top{grid-template-columns:1fr 1fr}
+      .ft-brand{grid-column:span 2}
+    }
+    @media(max-width:768px){
+      .nav-links{display:none}.burger{display:flex}
+      .agrid{grid-template-columns:1fr}.avis{display:none}
+      .sgrid{grid-template-columns:1fr}
+      .sgrid .sc:nth-child(4){grid-column:auto;margin-left:0}
+      .pgrid{grid-template-columns:1fr;grid-auto-rows:200px}
+      .pi.wide,.pi.tall{grid-column:span 1;grid-row:span 1}
+      .tc{flex:0 0 calc(100% - 0px)}
+      .cgrid{grid-template-columns:1fr;gap:3rem}
+      .frow{grid-template-columns:1fr}
+      .hstats{gap:1.3rem}.sdiv{display:none}
+      .ft-top{grid-template-columns:1fr}.ft-brand{grid-column:span 1}
+      .cookie-banner{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="cur" id="cd"></div>
+  <div class="cur" id="cr"></div>
+
+  <!-- COOKIE -->
+  <div class="cookie-banner hidden" id="cookie-banner">
+    <div class="cookie-text">
+      <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant, vous acceptez notre <a href="#" onclick="openLegal('confidentialite');return false">politique de confidentialité</a>.</p>
+    </div>
+    <div class="cookie-actions">
+      <button class="c-decline" onclick="closeCookie()">Refuser</button>
+      <button class="c-accept" onclick="acceptCookie()">Accepter</button>
+    </div>
+  </div>
+
+  <!-- LEGAL — Mentions légales -->
+  <div class="legal-overlay" id="legal-mentions">
+    <div class="legal-modal">
+      <div class="legal-header">
+        <div><h2>Mentions légales</h2><p>Dernière mise à jour : mars 2026</p></div>
+        <div class="legal-close" onclick="closeLegal('mentions')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+      </div>
+      <div class="legal-body">
+        <h3>Éditeur du site</h3>
+        <p>Le site bypab.fr est édité par Pablo C., auto-entrepreneur exerçant sous la marque commerciale <strong>ByPab</strong>, spécialisé en conseil et communication.</p>
+        <ul>
+          <li>Nom commercial : ByPab</li>
+          <li>Responsable de publication : Pablo C.</li>
+          <li>Adresse : Angers, Maine-et-Loire (49), France</li>
+          <li>Email : contact@bypab.fr</li>
+          <li>Téléphone : 06 70 67 86 65</li>
+          <li>SIRET : 00000000000000</li>
+        </ul>
+        <h3>Hébergement</h3>
+        <p>Le site est hébergé par Vercel Inc. — 340 Pine Street, Suite 701, San Francisco, California 94104, États-Unis. Site web : vercel.com</p>
+        <h3>Propriété intellectuelle</h3>
+        <p>L'ensemble des contenus présents sur le site bypab.fr (textes, images, graphismes, logos, icônes) est la propriété exclusive de ByPab ou de ses partenaires, sauf mention contraire. Toute reproduction, distribution ou utilisation sans autorisation préalable écrite est strictement interdite.</p>
+        <h3>Responsabilité</h3>
+        <p>ByPab met tout en œuvre pour offrir des informations fiables et à jour. La responsabilité du site ne saurait être engagée pour les inexactitudes ou omissions portant sur les informations disponibles. ByPab se réserve le droit de modifier les contenus à tout moment et sans préavis.</p>
+        <h3>Liens hypertextes</h3>
+        <p>Le site bypab.fr peut contenir des liens vers des sites tiers. ByPab n'est pas responsable du contenu de ces sites et ne saurait être tenu responsable des dommages pouvant résulter de leur consultation.</p>
+        <h3>Droit applicable</h3>
+        <p>Le présent site et ses conditions d'utilisation sont régis par le droit français. En cas de litige, les tribunaux français seront seuls compétents.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGAL — Politique de confidentialité -->
+  <div class="legal-overlay" id="legal-confidentialite">
+    <div class="legal-modal">
+      <div class="legal-header">
+        <div><h2>Politique de confidentialité</h2><p>Dernière mise à jour : mars 2026</p></div>
+        <div class="legal-close" onclick="closeLegal('confidentialite')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+      </div>
+      <div class="legal-body">
+        <h3>Responsable du traitement</h3>
+        <p>Pablo C. — ByPab, Angers (49), France. Contact : contact@bypab.fr</p>
+        <h3>Données collectées</h3>
+        <p>Le site bypab.fr collecte uniquement les données que vous fournissez volontairement via le formulaire de contact :</p>
+        <ul>
+          <li>Nom et prénom</li>
+          <li>Adresse email</li>
+          <li>Numéro de téléphone (facultatif)</li>
+          <li>Type de structure et service souhaité</li>
+          <li>Contenu de votre message</li>
+        </ul>
+        <h3>Finalité de la collecte</h3>
+        <p>Les données collectées sont utilisées exclusivement pour répondre à vos demandes de contact et de devis. Elles ne sont ni vendues, ni transmises à des tiers, ni utilisées à des fins commerciales sans votre consentement explicite.</p>
+        <h3>Durée de conservation</h3>
+        <p>Vos données sont conservées pour une durée maximale de 3 ans à compter du dernier contact, conformément aux recommandations de la CNIL.</p>
+        <h3>Cookies</h3>
+        <p>Ce site peut utiliser des cookies techniques nécessaires à son bon fonctionnement. Aucun cookie publicitaire ou de tracking tiers n'est utilisé sans votre consentement. Vous pouvez configurer votre navigateur pour refuser les cookies à tout moment.</p>
+        <h3>Vos droits (RGPD)</h3>
+        <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez des droits suivants :</p>
+        <ul>
+          <li>Droit d'accès à vos données</li>
+          <li>Droit de rectification</li>
+          <li>Droit à l'effacement (droit à l'oubli)</li>
+          <li>Droit d'opposition au traitement</li>
+          <li>Droit à la portabilité de vos données</li>
+        </ul>
+        <p>Pour exercer ces droits, contactez-nous à : <a href="mailto:contact@bypab.fr">contact@bypab.fr</a>. Vous pouvez également adresser une réclamation à la CNIL (cnil.fr).</p>
+        <h3>Sécurité</h3>
+        <p>Nous mettons en œuvre les mesures techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, perte ou divulgation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO MODAL -->
+  <div class="modal-bg" id="portfolio-modal" onclick="closeModal(event)">
+    <div class="modal" id="modal-content">
+      <div class="modal-close" onclick="closeModalDirect()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+      <div class="modal-art" id="modal-art"><div class="modal-art-overlay"></div></div>
+      <div class="modal-body">
+        <div class="modal-meta" id="modal-meta"></div>
+        <div class="modal-divider"></div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-tags" id="modal-tags"></div>
+        <div class="modal-footer">
+          <button class="btn bo" onclick="closeModalDirect()">Fermer</button>
+          <a href="#contact" onclick="closeModalDirect()"><button class="btn bp">Projet similaire ? Contactez-moi</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div class="mob" id="mob">
+    <button class="mob-x" id="mobx">✕</button>
+    <a href="#accueil" onclick="cm()">Accueil</a>
+    <a href="#apropos" onclick="cm()">À propos</a>
+    <a href="#services" onclick="cm()">Services</a>
+    <a href="#portfolio" onclick="cm()">Portfolio</a>
+    <a href="#tarifs" onclick="cm()">Tarifs</a>
+    <a href="#contact" onclick="cm()">Contact</a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="logo">
+      <div class="logo-box">BP</div>
+      <span>By<em>Pab</em></span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#accueil">Accueil</a></li>
+      <li><a href="#apropos">À propos</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#tarifs">Tarifs</a></li>
+      <li><a href="#contact"><button class="nav-cta">Contact</button></a></li>
+    </ul>
+    <div class="burger" id="burg"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="accueil">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="hi">
+      <div class="hbadge"><span class="hbadge-dot"></span>Conseil &amp; Communication · Angers, Maine-et-Loire</div>
+      <div class="htit-wrap">
+        <h1 class="htit">
+          <span class="line">Une communication</span>
+          <span class="line line2" data-text="qui vous démarque.">qui vous démarque.</span>
+        </h1>
+      </div>
+      <p class="hsub">ByPab accompagne startups, PME, associations et artisans avec une approche stratégique, humaine et orientée résultats. Chaque projet mérite une vision claire et une exécution soignée.</p>
+      <div class="hact">
+        <a href="#services"><button class="btn bp">Découvrir les services</button></a>
+        <a href="#portfolio"><button class="btn bo">Voir le portfolio</button></a>
+      </div>
+      <div class="hstats">
+        <div><span class="sn">20+</span><span class="sl">Projets réalisés</span></div>
+        <div class="sdiv"></div>
+        <div><span class="sn">15+</span><span class="sl">Clients satisfaits</span></div>
+        <div class="sdiv"></div>
+        <div><span class="sn">4,9 / 5</span><span class="sl">Note moyenne</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="apropos">
+    <div class="w">
+      <div class="agrid">
+        <div class="avis rv">
+          <div class="adeco1"></div><div class="adeco2"></div>
+          <div class="acard">
+            <div class="acard-inner">
+              <div class="acard-avatar">P</div>
+              <div class="acard-name">Pablo</div>
+              <div class="acard-role">Fondateur · ByPab</div>
+              <div class="acard-loc">Angers, Maine-et-Loire</div>
+              <div class="acard-tags">
+                <span class="atag">Stratégie</span>
+                <span class="atag">Conseil</span>
+                <span class="atag">Communication</span>
+              </div>
+            </div>
+          </div>
+          <div class="abadge">Disponible pour de nouveaux projets</div>
+        </div>
+        <div class="atxt rv d2">
+          <span class="stag">À propos</span>
+          <h2>La <em>communication</em> qui fait vraiment la différence</h2>
+          <p>Je suis Pablo, fondateur de <strong>ByPab</strong> — une structure de conseil et communication basée à Angers, pensée pour ceux qui veulent faire les choses bien. Analytique, à l'écoute et stratège avant tout, j'apporte une vraie valeur ajoutée à chaque projet.</p>
+          <p>Mon approche : comprendre votre besoin en profondeur avant d'agir. Une bonne communication ne se résume pas à un joli visuel — c'est un message clair, porté par la bonne stratégie, au bon moment, vers les bonnes personnes.</p>
+          <div class="avals">
+            <div class="av"><div class="av-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="av-t">Stratégie d'abord</div><div class="av-d">J'analyse avant d'agir. Chaque décision est réfléchie.</div></div>
+            <div class="av"><div class="av-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="av-t">À votre écoute</div><div class="av-d">Votre projet, votre vision. Je m'adapte à vous.</div></div>
+            <div class="av"><div class="av-icon"><svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="av-t">Réactivité</div><div class="av-d">Disponible, réactif et transparent à chaque étape.</div></div>
+            <div class="av"><div class="av-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="av-t">Orienté résultats</div><div class="av-d">Des livrables qui ont un impact réel sur votre activité.</div></div>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag">Identité visuelle</span><span class="skill-tag">Réseaux sociaux</span><span class="skill-tag">Création web</span><span class="skill-tag">Rédaction</span><span class="skill-tag">Print</span>
+          </div>
+          <div style="margin-top:2rem"><a href="#contact"><button class="btn bp">Parlons de votre projet</button></a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES — 5 cards, 3+2 layout -->
+  <section id="services">
+    <div class="w">
+      <div class="sh">
+        <span class="stag rv">Ce que je fais</span>
+        <h2 class="stit rv d1">Des services pensés<br>pour votre réussite</h2>
+        <p class="ssub rv d2">Une offre complète, adaptée à chaque profil — startup, PME, association ou artisan.</p>
+      </div>
+      <div class="sgrid">
+        <div class="sc rv">
+          <div class="sc-num">01</div>
+          <div class="sc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
+          <h3>Identité Visuelle &amp; Branding</h3>
+          <p>Création ou refonte de votre image de marque pour vous démarquer avec cohérence et impact durable.</p>
+          <ul class="sc-feat"><li>Logo &amp; charte graphique complète</li><li>Déclinaisons print &amp; digital</li><li>Guide d'identité visuelle</li><li>Direction artistique</li></ul>
+        </div>
+        <div class="sc rv d1">
+          <div class="sc-num">02</div>
+          <div class="sc-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+          <h3>Réseaux Sociaux</h3>
+          <p>Gestion stratégique de vos comptes pour développer votre communauté et renforcer votre présence.</p>
+          <ul class="sc-feat"><li>Stratégie éditoriale &amp; calendrier</li><li>Création de contenus visuels</li><li>Rédaction de posts engageants</li><li>Reporting &amp; analyse</li></ul>
+        </div>
+        <div class="sc rv d2">
+          <div class="sc-num">03</div>
+          <div class="sc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <h3>Création de Sites Web</h3>
+          <p>Sites vitrines et landing pages modernes, rapides et optimisés pour convertir vos visiteurs.</p>
+          <ul class="sc-feat"><li>Site vitrine ou one-page</li><li>Design responsive &amp; mobile-first</li><li>Optimisation SEO de base</li><li>Intégration CMS</li></ul>
+        </div>
+        <div class="sc rv d1">
+          <div class="sc-num">04</div>
+          <div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+          <h3>Rédaction &amp; Copywriting</h3>
+          <p>Des textes percutants qui parlent à votre audience, reflètent votre voix et poussent à l'action.</p>
+          <ul class="sc-feat"><li>Textes web &amp; pages de vente</li><li>Articles de blog &amp; newsletters</li><li>Fiches produits &amp; brochures</li><li>Scripts &amp; pitchs</li></ul>
+        </div>
+        <div class="sc rv d2">
+          <div class="sc-num">05</div>
+          <div class="sc-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
+          <h3>Print &amp; Communication Physique</h3>
+          <p>Supports imprimés professionnels qui laissent une impression durable auprès de vos clients.</p>
+          <ul class="sc-feat"><li>Flyers, affiches &amp; kakémonos</li><li>Cartes de visite &amp; papeterie</li><li>Brochures &amp; catalogues</li><li>Packaging &amp; étiquettes</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="w">
+      <div class="sh">
+        <span class="stag rv">Mes réalisations</span>
+        <h2 class="stit rv d1">Portfolio</h2>
+        <p class="ssub rv d2">Cliquez sur un projet pour découvrir le brief, les enjeux et les solutions apportées.</p>
+      </div>
+      <div class="pfilt rv d1">
+        <button class="pfb on" data-cat="all">Tout</button>
+        <button class="pfb" data-cat="branding">Branding</button>
+        <button class="pfb" data-cat="web">Web</button>
+        <button class="pfb" data-cat="social">Social Media</button>
+        <button class="pfb" data-cat="print">Print</button>
+      </div>
+      <div class="pgrid rv d2">
+
+        <div class="pi wide" data-cat="branding"
+          data-title="Studio Lumière — Refonte identité complète"
+          data-client="Studio Lumière, Angers"
+          data-date="Septembre 2024"
+          data-type="Identité visuelle"
+          data-desc="Studio Lumière, agence de photographie angevine, souhaitait moderniser une identité vieillissante pour attirer une clientèle professionnelle. Après audit de leur positionnement, j'ai conçu un nouveau logotype épuré, une palette chromatique premium et un guide de marque décliné sur tous leurs supports — du papier en-tête aux réseaux sociaux."
+          data-tags="Logo,Charte graphique,Guide de marque,Print,Digital"
+          data-img="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" alt="Branding Studio Lumière" loading="lazy"/>
+          <span class="pi-badge">Branding</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Identité Visuelle</span><div class="pi-tit">Studio Lumière — Refonte complète</div><div class="pi-sub">Logo · Charte · Guide de marque</div></div>
+        </div>
+
+        <div class="pi" data-cat="web"
+          data-title="Rénov'Maine — Site vitrine"
+          data-client="Rénov'Maine, Maine-et-Loire"
+          data-date="Juillet 2024"
+          data-type="Création web"
+          data-desc="Rénov'Maine, entreprise de rénovation intérieure, n'avait aucune présence en ligne. Objectif : créer un site vitrine qui génère des demandes de devis. Résultat : un site 5 pages, responsive, optimisé SEO local, avec formulaire de contact performant. En 3 mois, le client a reçu plus de 40 demandes entrantes organiques."
+          data-tags="Site vitrine,SEO local,Responsive,Formulaire de devis"
+          data-img="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80" alt="Site web Rénov'Maine" loading="lazy"/>
+          <span class="pi-badge">Web</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Site Web</span><div class="pi-tit">Rénov'Maine — Site vitrine</div><div class="pi-sub">40+ leads organiques en 3 mois</div></div>
+        </div>
+
+        <div class="pi" data-cat="social"
+          data-title="DataFlow — Stratégie réseaux sociaux"
+          data-client="DataFlow, Angers"
+          data-date="Juin 2024"
+          data-type="Social Media"
+          data-desc="DataFlow, startup spécialisée en data analytics, avait une présence sociale quasi inexistante. Mission : construire leur audience LinkedIn et Instagram en 3 mois. Stratégie éditoriale, création de templates visuels, rédaction de contenus, planification. Résultats : +1 200 abonnés LinkedIn, taux d'engagement multiplié par 4."
+          data-tags="LinkedIn,Instagram,Stratégie éditoriale,Création de contenu,Reporting"
+          data-img="https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=700&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=700&q=80" alt="Social media DataFlow" loading="lazy"/>
+          <span class="pi-badge">Social Media</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Social Media</span><div class="pi-tit">DataFlow — 3 mois de contenus</div><div class="pi-sub">+1 200 abonnés · Engagement ×4</div></div>
+        </div>
+
+        <div class="pi" data-cat="print"
+          data-title="Les Scènes de l'Ouest — Kit communication"
+          data-client="Les Scènes de l'Ouest, Angers"
+          data-date="Avril 2024"
+          data-type="Print"
+          data-desc="Association culturelle angevine proposant des spectacles vivants. Besoin : un kit de communication complet pour leur saison 2024-2025. J'ai réalisé l'affiche de saison, les flyers, les programmes de salle et les bannières roll-up. Un univers graphique cohérent, élégant et accessible."
+          data-tags="Affiche,Flyer,Programme,Roll-up,Identité de saison"
+          data-img="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=80" alt="Print Les Scènes de l'Ouest" loading="lazy"/>
+          <span class="pi-badge">Print</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Print</span><div class="pi-tit">Les Scènes de l'Ouest</div><div class="pi-sub">Kit complet saison 2024-2025</div></div>
+        </div>
+
+        <div class="pi tall" data-cat="branding"
+          data-title="FC Anjou Nord — Branding sportif"
+          data-client="FC Anjou Nord, Maine-et-Loire"
+          data-date="Février 2024"
+          data-type="Identité visuelle"
+          data-desc="Le FC Anjou Nord souhaitait une identité moderne pour accompagner leur montée en compétition régionale. Nouveau blason, typographie dédiée, déclinaison sur les maillots, équipements et supports digitaux. Le club dispose désormais d'une identité professionnelle qui reflète leurs ambitions."
+          data-tags="Logo,Blason,Maillots,Print,Digital,Identité sportive"
+          data-img="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=80" alt="Branding FC Anjou Nord" loading="lazy"/>
+          <span class="pi-badge">Branding</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Identité Visuelle</span><div class="pi-tit">FC Anjou Nord</div><div class="pi-sub">Blason · Maillots · Identité complète</div></div>
+        </div>
+
+        <div class="pi" data-cat="social"
+          data-title="Réseau Entreprendre 49 — Campagne événementielle"
+          data-client="Réseau Entreprendre 49, Angers"
+          data-date="Janvier 2024"
+          data-type="Social Media & Print"
+          data-desc="Réseau Entreprendre 49 accompagne les créateurs d'entreprise en Maine-et-Loire. Mission : promouvoir leur prochain événement de networking. Visuels pour les réseaux, newsletter et supports imprimés. L'événement a affiché complet deux semaines avant la date."
+          data-tags="Visuels réseaux,Newsletter,Print,Événementiel"
+          data-img="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=700&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=700&q=80" alt="Événement Réseau Entreprendre" loading="lazy"/>
+          <span class="pi-badge">Social & Print</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Communication événementielle</span><div class="pi-tit">Réseau Entreprendre 49</div><div class="pi-sub">Événement complet 2 sem. à l'avance</div></div>
+        </div>
+
+        <div class="pi" data-cat="branding"
+          data-title="Optique Renard — Stratégie 12 mois"
+          data-client="Optique Renard, Angers"
+          data-date="Novembre 2023"
+          data-type="Conseil & Stratégie"
+          data-desc="Optique Renard, opticien indépendant angevin, souhaitait se différencier des enseignes nationales. Après audit complet, j'ai élaboré une stratégie sur 12 mois : refonte identité, présence réseaux, campagne print de proximité et partenariats locaux. CA en hausse de 22% en un an."
+          data-tags="Audit,Stratégie 12 mois,Identité,Réseaux,Print local"
+          data-img="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=700&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=700&q=80" alt="Stratégie Optique Renard" loading="lazy"/>
+          <span class="pi-badge">Conseil</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Stratégie & Conseil</span><div class="pi-tit">Optique Renard</div><div class="pi-sub">Stratégie 12 mois · +22% de CA</div></div>
+        </div>
+
+        <div class="pi" data-cat="web"
+          data-title="GreenPack — Landing page lancement"
+          data-client="GreenPack, Maine-et-Loire"
+          data-date="Octobre 2023"
+          data-type="Création web"
+          data-desc="GreenPack, startup éco-responsable, lançait une nouvelle gamme d'emballages biosourcés. Objectif : une landing page percutante pour collecter des leads BtoB avant le lancement. Résultat : 320 leads qualifiés en 6 semaines grâce à une page claire et une campagne LinkedIn coordonnée."
+          data-tags="Landing page,Lead generation,BtoB,SEO,LinkedIn"
+          data-img="https://images.unsplash.com/photo-1542744094-24638eff58bb?w=700&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1542744094-24638eff58bb?w=700&q=80" alt="Landing page GreenPack" loading="lazy"/>
+          <span class="pi-badge">Web</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Landing Page</span><div class="pi-tit">GreenPack — Lancement produit</div><div class="pi-sub">320 leads BtoB en 6 semaines</div></div>
+        </div>
+
+        <div class="pi" data-cat="print"
+          data-title="Artisan Leduc — Kit print complet"
+          data-client="Charpente Leduc, Maine-et-Loire"
+          data-date="Août 2023"
+          data-type="Print & Branding"
+          data-desc="Charpente Leduc, artisan charpentier avec 20 ans d'expérience, avait besoin d'une communication professionnelle pour se démarquer localement. Création d'un kit complet : carte de visite, devisier, flyer de présentation et panneau de chantier. Une identité sobre et solide, à l'image de leur savoir-faire."
+          data-tags="Carte de visite,Devisier,Flyer,Panneau chantier,Print"
+          data-img="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80">
+          <img class="pi-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="Print Charpente Leduc" loading="lazy"/>
+          <span class="pi-badge">Print</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+          <div class="pi-ov"><span class="pi-cat">Print & Branding</span><div class="pi-tit">Charpente Leduc</div><div class="pi-sub">Kit complet · Carte · Flyer · Panneau</div></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS — carousel -->
+  <section id="temoignages">
+    <div class="w">
+      <div class="sh">
+        <span class="stag rv">Ils me font confiance</span>
+        <h2 class="stit rv d1">Ce que disent mes clients</h2>
+      </div>
+      <div class="tcarousel-wrap rv">
+        <div class="tcarousel" id="tcarousel">
+          <div class="tc"><div class="stars">★★★★★</div><div class="tq-mark">"</div><p class="ttxt">Un travail remarquable sur notre identité visuelle. Pablo est à l'écoute, réactif et très professionnel. Notre logo et nos supports sont exactement ce dont nous avions besoin pour nous lancer.</p><div class="tauth"><div class="tav">ML</div><div><div class="tan">Marie L.</div><div class="tar">Fondatrice · Startup Greentech, Angers</div></div></div></div>
+          <div class="tc"><div class="stars">★★★★★</div><div class="tq-mark">"</div><p class="ttxt">Notre site vitrine a été livré dans les délais, il est beau, rapide et bien référencé. En trois mois, on a reçu plus de quarante demandes entrantes. Je recommande Pablo sans hésiter.</p><div class="tauth"><div class="tav">JD</div><div><div class="tan">Jean D.</div><div class="tar">Gérant · PME Bâtiment, Maine-et-Loire</div></div></div></div>
+          <div class="tc"><div class="stars">★★★★★</div><div class="tq-mark">"</div><p class="ttxt">La gestion de nos réseaux a transformé notre visibilité. La communauté grandit, nos événements se remplissent. Un vrai partenaire de confiance pour notre association.</p><div class="tauth"><div class="tav">SC</div><div><div class="tan">Sophie C.</div><div class="tar">Présidente · Association culturelle, Angers</div></div></div></div>
+          <div class="tc"><div class="stars">★★★★★</div><div class="tq-mark">"</div><p class="ttxt">Pablo a su cerner très rapidement notre positionnement et proposer une stratégie cohérente. Les résultats sont là : notre taux d'engagement a explosé et nos prospects sont bien plus qualifiés.</p><div class="tauth"><div class="tav">TP</div><div><div class="tan">Thomas P.</div><div class="tar">Directeur · Startup SaaS, Angers</div></div></div></div>
+          <div class="tc"><div class="stars">★★★★★</div><div class="tq-mark">"</div><p class="ttxt">Un freelance sérieux, ponctuel et vraiment impliqué. Le kit print qu'il nous a conçu dépasse de loin ce qu'on espérait. Nos clients le remarquent systématiquement.</p><div class="tauth"><div class="tav">AR</div><div><div class="tan">Audrey R.</div><div class="tar">Gérante · Commerce local, Maine-et-Loire</div></div></div></div>
+          <div class="tc"><div class="stars">★★★★★</div><div class="tq-mark">"</div><p class="ttxt">Collaboration au top du début à la fin. Pablo comprend vite les enjeux, force de proposition, et livre toujours un travail soigné. On repart sur un deuxième projet ensemble sans hésiter.</p><div class="tauth"><div class="tav">NB</div><div><div class="tan">Nicolas B.</div><div class="tar">Co-fondateur · Startup Tech, Angers</div></div></div></div>
+        </div>
+        <div class="tcontrols">
+          <button class="tbtn" id="tprev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <div class="tdots" id="tdots"></div>
+          <button class="tbtn" id="tnext"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section id="partenaires">
+    <div class="w">
+      <div class="plab rv"><span>Ils m'ont fait confiance</span></div>
+      <div class="ptrack-w rv">
+        <div class="ptrack">
+          <div class="pl">Transports Naulet</div>
+          <div class="pl">Scania</div>
+          <div class="pl">Mairie d'Erdre en Anjou</div>
+          <div class="pl">EURL Melain</div>
+          <div class="pl">SARL Coignard</div>
+          <div class="pl">Transports Naulet</div>
+          <div class="pl">Scania</div>
+          <div class="pl">Mairie d'Erdre en Anjou</div>
+          <div class="pl">EURL Melain</div>
+          <div class="pl">SARL Coignard</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING — tarifs révisés marché freelance communication -->
+  <section id="tarifs">
+    <div class="w">
+      <div class="sh">
+        <span class="stag rv">Investissement</span>
+        <h2 class="stit rv d1">Des tarifs clairs,<br>adaptés à chaque projet</h2>
+        <p class="ssub rv d2">Des fourchettes transparentes pour vous aider à budgéter. Devis gratuit et sans engagement.</p>
+      </div>
+      <div class="prgrid">
+        <div class="pr rv">
+          <div class="pr-name">Starter</div>
+          <div class="pr-from">à partir de</div>
+          <div class="pr-amt"><span class="pr-cur">€</span>350</div>
+          <div class="pr-per">Idéal pour un premier projet ciblé</div>
+          <div class="pr-div"></div>
+          <ul class="pr-feats">
+            <li><span class="pr-check">✓</span>Logo simple + 2 déclinaisons</li>
+            <li><span class="pr-check">✓</span>Charte graphique basique</li>
+            <li><span class="pr-check">✓</span>1 support print au choix</li>
+            <li><span class="pr-check">✓</span>2 révisions incluses</li>
+            <li><span class="pr-check">✓</span>Fichiers livrés HD (PNG, PDF, SVG)</li>
+          </ul>
+          <a href="#contact"><button class="btn bo" style="width:100%;justify-content:center">Demander un devis</button></a>
+        </div>
+        <div class="pr feat rv d1">
+          <div class="pr-badge">Le plus choisi</div>
+          <div class="pr-name">Essentiel</div>
+          <div class="pr-from">à partir de</div>
+          <div class="pr-amt"><span class="pr-cur">€</span>900</div>
+          <div class="pr-per">Pour une communication complète &amp; cohérente</div>
+          <div class="pr-div"></div>
+          <ul class="pr-feats">
+            <li><span class="pr-check">✓</span>Identité visuelle complète</li>
+            <li><span class="pr-check">✓</span>Site vitrine jusqu'à 5 pages</li>
+            <li><span class="pr-check">✓</span>Gestion réseaux sociaux (1 mois)</li>
+            <li><span class="pr-check">✓</span>Kit print 3 supports</li>
+            <li><span class="pr-check">✓</span>3 révisions incluses</li>
+            <li><span class="pr-check">✓</span>Suivi &amp; accompagnement dédié</li>
+          </ul>
+          <a href="#contact"><button class="btn bp" style="width:100%;justify-content:center">Démarrer le projet</button></a>
+        </div>
+        <div class="pr rv d2">
+          <div class="pr-name">Stratégique</div>
+          <div class="pr-from">à partir de</div>
+          <div class="pr-amt"><span class="pr-cur">€</span>1800</div>
+          <div class="pr-per">Accompagnement global sur la durée</div>
+          <div class="pr-div"></div>
+          <ul class="pr-feats">
+            <li><span class="pr-check">✓</span>Audit &amp; stratégie de communication</li>
+            <li><span class="pr-check">✓</span>Identité visuelle premium</li>
+            <li><span class="pr-check">✓</span>Site web complet + SEO avancé</li>
+            <li><span class="pr-check">✓</span>3 mois gestion réseaux sociaux</li>
+            <li><span class="pr-check">✓</span>Kit print complet</li>
+            <li><span class="pr-check">✓</span>Révisions illimitées · Bilan mensuel</li>
+          </ul>
+          <a href="#contact"><button class="btn bo" style="width:100%;justify-content:center">Demander un devis</button></a>
+        </div>
+      </div>
+      <div class="pr-devis rv"><p>Vous avez un projet spécifique ou un budget particulier ? <strong>Chaque projet est unique.</strong> Le premier échange est gratuit et sans engagement.</p><a href="#contact"><button class="btn bp">Obtenir un devis gratuit</button></a></div>
+    </div>
+  </section>
+
+  <!-- CONTACT — form via Formspree -->
+  <section id="contact">
+    <div class="w">
+      <div class="sh">
+        <span class="stag rv">Parlons de votre projet</span>
+        <h2 class="stit rv d1">Prêt à collaborer ?</h2>
+        <p class="ssub rv d2">Remplissez le formulaire ou contactez-moi directement. Je reviens vers vous sous 24h.</p>
+      </div>
+      <div class="cgrid">
+        <div class="ci rv">
+          <h3>Discutons de votre <em>vision</em></h3>
+          <p>Que ce soit pour un projet ponctuel ou un accompagnement sur la durée, je suis disponible pour en discuter. Basé à Angers, j'interviens dans tout le Maine-et-Loire et à distance partout en France.</p>
+          <div class="cmethods">
+            <div class="cm"><div class="cm-ic"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="cm-l">Email</div><div class="cm-v">contact@bypab.fr</div></div></div>
+            <div class="cm"><div class="cm-ic"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.27 6.27l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="cm-l">Téléphone</div><div class="cm-v">06 70 67 86 65</div></div></div>
+            <div class="cm"><div class="cm-ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="cm-l">Localisation</div><div class="cm-v">Angers, Maine-et-Loire (49) · France</div></div></div>
+          </div>
+          <div class="socials">
+            <a href="https://www.linkedin.com/in/pablo-c-b49428208/" target="_blank" rel="noopener noreferrer" class="soc" title="LinkedIn — Pablo · ByPab">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="rv d2">
+          <!-- Formspree form — email invisible, direct to pablochauvin1@gmail.com -->
+          <form class="cform" id="contact-form" action="https://formspree.io/f/xpwrqodj" method="POST" novalidate>
+            <!-- Hidden redirect after submit -->
+            <input type="hidden" name="_subject" value="Nouveau message via bypab.fr"/>
+            <input type="hidden" name="_gotcha" style="display:none"/>
+            <div class="frow">
+              <div class="fg"><label for="fn">Prénom &amp; Nom *</label><input type="text" id="fn" name="name" placeholder="Jean Dupont" autocomplete="name" required/></div>
+              <div class="fg"><label for="fe">Email *</label><input type="email" id="fe" name="email" placeholder="jean@exemple.fr" autocomplete="email" required/></div>
+            </div>
+            <div class="frow">
+              <div class="fg"><label for="fp">Téléphone</label><input type="tel" id="fp" name="phone" placeholder="06 00 00 00 00" autocomplete="tel"/></div>
+              <div class="fg"><label for="ft">Type de structure</label>
+                <select id="ft" name="structure"><option value="">Sélectionner...</option><option>Startup</option><option>PME / TPE</option><option>Association / Club</option><option>Artisan / Indépendant</option><option>Particulier</option><option>Autre</option></select>
+              </div>
+            </div>
+            <div class="fg"><label for="fs">Service souhaité</label>
+              <select id="fs" name="service"><option value="">Quel service vous intéresse ?</option><option>Identité Visuelle / Branding</option><option>Réseaux Sociaux</option><option>Création de site web</option><option>Rédaction / Copywriting</option><option>Print</option><option>Pack complet / Sur devis</option></select>
+            </div>
+            <div class="fg"><label for="fm">Votre message *</label><textarea id="fm" name="message" rows="5" placeholder="Décrivez votre projet, vos objectifs, vos besoins..." required></textarea></div>
+            <div class="fg"><label class="fcheck"><input type="checkbox" id="fr" name="rgpd" required/>J'accepte que mes données soient utilisées pour être recontacté dans le cadre de ce projet. *</label></div>
+            <div class="fok" id="fok">Message bien reçu — Je vous réponds sous 24h. À très vite, Pablo.</div>
+            <div class="ferr" id="ferr">Une erreur est survenue. Merci de réessayer ou de m'écrire directement à contact@bypab.fr</div>
+            <div class="ffoot">
+              <button type="submit" class="btn bp" id="fsend">Envoyer le message</button>
+              <span class="fnote"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Données confidentielles · Réponse sous 24h</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div class="ft-logo">By<em>Pab</em>.</div>
+        <p>Conseil &amp; Communication à Angers. Stratégie, identité visuelle et communication digitale pour les structures qui veulent faire les choses bien.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#accueil">Accueil</a></li>
+          <li><a href="#apropos">À propos</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#tarifs">Tarifs</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:contact@bypab.fr">contact@bypab.fr</a></li>
+          <li><a href="tel:0670678665">06 70 67 86 65</a></li>
+          <li><a href="https://www.linkedin.com/in/pablo-c-b49428208/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a>Angers, Maine-et-Loire (49)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <p class="ft-copy">© 2025 ByPab — Pablo · Angers. Tous droits réservés.</p>
+      <div class="ft-legal">
+        <a onclick="openLegal('mentions')">Mentions légales</a>
+        <a onclick="openLegal('confidentialite')">Politique de confidentialité</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  // ── CURSOR ──
+  const cd=document.getElementById('cd'),cr=document.getElementById('cr');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px';});
+  (function loop(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.querySelectorAll('a,button,.pi,.sc,.tc,.pr,.av,.cm').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cd.classList.add('h');cr.classList.add('h');});
+    el.addEventListener('mouseleave',()=>{cd.classList.remove('h');cr.classList.remove('h');});
+  });
+
+  // ── NAV ──
+  const nav=document.getElementById('nav');
+  const navLinks=document.querySelectorAll('.nav-links a');
+  const sections=document.querySelectorAll('section[id]');
+  window.addEventListener('scroll',()=>{
+    nav.classList.toggle('s',scrollY>50);
+    let cur='';
+    sections.forEach(s=>{if(scrollY>=s.offsetTop-120)cur=s.id;});
+    navLinks.forEach(l=>{
+      const isActive=l.getAttribute('href')==='#'+cur;
+      l.classList.toggle('active',isActive);
+    });
+  });
+
+  // ── MOBILE ──
+  const mob=document.getElementById('mob');
+  document.getElementById('burg').onclick=()=>mob.classList.add('open');
+  document.getElementById('mobx').onclick=()=>mob.classList.remove('open');
+  function cm(){mob.classList.remove('open');}
+
+  // ── REVEAL ──
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+  },{threshold:.07,rootMargin:'0px 0px -32px 0px'});
+  document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+  // ── PORTFOLIO FILTER ──
+  document.querySelectorAll('.pfb').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.pfb').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+      const cat=btn.dataset.cat;
+      document.querySelectorAll('.pi').forEach(item=>{
+        const show=cat==='all'||item.dataset.cat===cat;
+        item.style.opacity=show?'1':'0.15';
+        item.style.pointerEvents=show?'':'none';
+        item.style.transition='opacity .3s';
+      });
+    });
+  });
+
+  // ── PORTFOLIO MODAL ──
+  document.querySelectorAll('.pi').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const {title,client,date,type,desc,img}=el.dataset;
+      const tags=el.dataset.tags.split(',');
+      const artEl=document.getElementById('modal-art');
+      artEl.innerHTML=`<img src="${img}" alt="${title}" style="width:100%;height:100%;object-fit:cover"/><div class="modal-art-overlay"></div>`;
+      document.getElementById('modal-meta').innerHTML=`
+        <div class="meta-item"><span class="meta-label">Client</span><span class="meta-value">${client}</span></div>
+        <div class="meta-item"><span class="meta-label">Date</span><span class="meta-value">${date}</span></div>
+        <div class="meta-item"><span class="meta-label">Prestation</span><span class="meta-value">${type}</span></div>`;
+      document.getElementById('modal-title').textContent=title;
+      document.getElementById('modal-desc').textContent=desc;
+      document.getElementById('modal-tags').innerHTML=tags.map(t=>`<span class="modal-tag">${t.trim()}</span>`).join('');
+      document.getElementById('portfolio-modal').classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+  });
+  function closeModal(e){if(e.target===document.getElementById('portfolio-modal'))closeModalDirect();}
+  function closeModalDirect(){document.getElementById('portfolio-modal').classList.remove('open');document.body.style.overflow='';}
+
+  // ── TESTIMONIAL CAROUSEL ──
+  const carousel=document.getElementById('tcarousel');
+  const cards=carousel.querySelectorAll('.tc');
+  const dotsC=document.getElementById('tdots');
+  let current=0;
+  let perPage=window.innerWidth>768?3:window.innerWidth>580?2:1;
+
+  function updatePerPage(){perPage=window.innerWidth>768?3:window.innerWidth>580?2:1;}
+  window.addEventListener('resize',()=>{updatePerPage();goTo(current);buildDots();});
+
+  const totalPages=()=>Math.ceil(cards.length/perPage);
+
+  function buildDots(){
+    dotsC.innerHTML='';
+    for(let i=0;i<totalPages();i++){
+      const d=document.createElement('div');
+      d.className='tdot'+(i===current?' on':'');
+      d.onclick=()=>goTo(i);
+      dotsC.appendChild(d);
+    }
+  }
+  function goTo(idx){
+    const tp=totalPages();
+    current=(idx+tp)%tp;
+    const cardW=cards[0].getBoundingClientRect().width;
+    const gap=parseFloat(getComputedStyle(carousel).gap)||20.8;
+    carousel.style.transform=`translateX(-${current*(cardW+gap)*perPage}px)`;
+    dotsC.querySelectorAll('.tdot').forEach((d,i)=>d.classList.toggle('on',i===current));
+  }
+  document.getElementById('tprev').onclick=()=>goTo(current-1);
+  document.getElementById('tnext').onclick=()=>goTo(current+1);
+
+  // Auto-advance
+  let tInterval=setInterval(()=>goTo(current+1),5000);
+  carousel.addEventListener('mouseenter',()=>clearInterval(tInterval));
+  carousel.addEventListener('mouseleave',()=>{tInterval=setInterval(()=>goTo(current+1),5000);});
+
+  buildDots();
+
+  // ── COOKIE ──
+  if(!localStorage.getItem('bypab-cookies')){
+    setTimeout(()=>document.getElementById('cookie-banner').classList.remove('hidden'),1200);
+  }
+  function acceptCookie(){localStorage.setItem('bypab-cookies','accepted');document.getElementById('cookie-banner').classList.add('hidden');}
+  function closeCookie(){localStorage.setItem('bypab-cookies','declined');document.getElementById('cookie-banner').classList.add('hidden');}
+
+  // ── LEGAL ──
+  function openLegal(p){document.getElementById('legal-'+p).classList.add('open');document.body.style.overflow='hidden';}
+  function closeLegal(p){document.getElementById('legal-'+p).classList.remove('open');document.body.style.overflow='';}
+  document.querySelectorAll('.legal-overlay').forEach(ov=>{
+    ov.addEventListener('click',e=>{if(e.target===ov)closeLegal(ov.id.replace('legal-',''));});
+  });
+
+  // ── FORM (Formspree) ──
+  const form=document.getElementById('contact-form');
+  const fsend=document.getElementById('fsend');
+  if(form){
+    form.addEventListener('submit',async(e)=>{
+      e.preventDefault();
+      if(!form.checkValidity()){form.reportValidity();return;}
+      const checkbox=document.getElementById('fr');
+      if(!checkbox.checked){alert('Merci d\'accepter la politique de confidentialité.');return;}
+      fsend.textContent='Envoi en cours...';
+      fsend.classList.add('btn-sending');
+      try{
+        const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});
+        if(res.ok){
+          document.getElementById('fok').classList.add('vis');
+          document.getElementById('ferr').classList.remove('vis');
+          form.reset();
+        } else {
+          document.getElementById('ferr').classList.add('vis');
+        }
+      } catch(err){
+        document.getElementById('ferr').classList.add('vis');
+      }
+      fsend.textContent='Envoyer le message';
+      fsend.classList.remove('btn-sending');
+    });
+  }
+
+  // ── ESCAPE KEY ──
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){
+      closeModalDirect();
+      document.querySelectorAll('.legal-overlay.open').forEach(ov=>closeLegal(ov.id.replace('legal-','')));
+    }
+  });
+  </script>
+</body>
+</html>
