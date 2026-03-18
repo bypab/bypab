@@ -3,772 +3,26 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="ByPab — Conseil & Communication par Pablo, basé à Angers. Stratégie digitale, identité visuelle, réseaux sociaux et création de sites web pour startups, PME, associations et artisans."/>
+<meta name="description" content="ByPab — Conseil & Communication par Pablo, basé à Angers. Stratégie digitale, identité visuelle, réseaux sociaux et création de sites web pour startups, PME, associations et artisans en Maine-et-Loire."/>
 <meta name="robots" content="index,follow"/>
 <meta property="og:title" content="ByPab — Conseil & Communication · Angers"/>
-<meta property="og:description" content="Stratégie et communication signés ByPab. Pour startups, PME, associations et artisans à Angers."/>
+<meta property="og:description" content="Stratégie et communication signés ByPab. Pour startups, PME, associations et artisans à Angers et en Maine-et-Loire."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://bypab.fr"/>
 <meta name="geo.region" content="FR-49"/>
 <meta name="geo.placename" content="Angers"/>
 <title>ByPab — Conseil & Communication · Angers</title>
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+
+<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<style>
-/* ═══════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:'Montserrat',sans-serif;background:#FAFAF8;color:#0A0F1E;overflow-x:hidden;cursor:none;line-height:1.6}
-a{text-decoration:none;color:inherit}
-img{max-width:100%;display:block}
-button{font-family:inherit}
 
-/* ═══════════════════════════════════════
-   DESIGN TOKENS
-═══════════════════════════════════════ */
-:root{
-  /* Colors */
-  --ink:#0A0F1E;
-  --ink2:#2D3748;
-  --ink3:#64748B;
-  --ink4:#94A3B8;
-  --bg:#FAFAF8;
-  --bg2:#F4F4F0;
-  --bg3:#EEEEE8;
-  --white:#FFFFFF;
-  --blue:#0F2B6B;
-  --blue2:#1E40AF;
-  --blue3:#2563EB;
-  --blue-light:#DBEAFE;
-  --blue-xlight:#EFF6FF;
-  --border:#E2E8F0;
-  --border2:#CBD5E1;
-  /* Shadows */
-  --s1:0 1px 2px rgba(10,15,30,.04),0 2px 8px rgba(10,15,30,.06);
-  --s2:0 4px 16px rgba(10,15,30,.08),0 1px 4px rgba(10,15,30,.05);
-  --s3:0 12px 40px rgba(10,15,30,.12),0 2px 8px rgba(10,15,30,.06);
-  --s4:0 24px 64px rgba(10,15,30,.16);
-  /* Spacing scale */
-  --sp1:4px;--sp2:8px;--sp3:12px;--sp4:16px;--sp5:24px;--sp6:32px;--sp7:48px;--sp8:64px;--sp9:96px;--sp10:128px;
-  /* Radius */
-  --r1:4px;--r2:8px;--r3:12px;--r4:16px;--r5:24px;
-}
-
-/* ═══════════════════════════════════════
-   SCROLLBAR
-═══════════════════════════════════════ */
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--blue3);border-radius:2px}
-
-/* ═══════════════════════════════════════
-   SUBTLE GRID TEXTURE
-═══════════════════════════════════════ */
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(15,43,107,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(15,43,107,.03) 1px,transparent 1px);
-  background-size:60px 60px
-}
-
-/* ═══════════════════════════════════════
-   CURSOR
-═══════════════════════════════════════ */
-.cur{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%)}
-#cd{width:8px;height:8px;background:var(--blue3);top:0;left:0;transition:width .15s,height .15s,background .15s}
-#cr{width:32px;height:32px;border:1.5px solid rgba(37,99,235,.3);top:0;left:0;transition:width .2s,height .2s,border-color .2s}
-#cd.h{width:14px;height:14px;background:var(--blue)}
-#cr.h{width:44px;height:44px;border-color:rgba(37,99,235,.55)}
-@media(max-width:768px){body{cursor:auto}.cur{display:none}}
-
-/* ═══════════════════════════════════════
-   NAVIGATION
-═══════════════════════════════════════ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:800;
-  height:60px;padding:0 max(24px,5%);
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(250,250,248,.85);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  transition:height .3s,box-shadow .3s
-}
-nav.scrolled{height:52px;box-shadow:var(--s1)}
-.logo{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:900;letter-spacing:-.03em;color:var(--ink)}
-.logo-mark{
-  width:28px;height:28px;background:var(--blue);border-radius:7px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.58rem;font-weight:900;color:#fff;letter-spacing:-.01em;
-  box-shadow:0 3px 10px rgba(15,43,107,.25)
-}
-.logo span em{color:var(--blue3);font-style:normal}
-.nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
-.nav-links a{
-  font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink3);transition:color .2s;position:relative;padding-bottom:2px
-}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--blue3);transition:width .25s;border-radius:1px}
-.nav-links a:hover,.nav-links a.active{color:var(--ink)}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%}
-.nav-cta{
-  padding:.4rem 1rem;background:var(--blue);color:#fff;
-  border:none;border-radius:6px;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  cursor:pointer;transition:all .2s;box-shadow:0 2px 10px rgba(15,43,107,.25)
-}
-.nav-cta:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(15,43,107,.35)}
-.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
-.burger span{display:block;width:20px;height:1.5px;background:var(--ink);border-radius:2px;transition:all .3s}
-.mob-menu{
-  position:fixed;inset:0;z-index:790;
-  background:rgba(250,250,248,.97);backdrop-filter:blur(24px);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
-  opacity:0;pointer-events:none;transition:opacity .3s
-}
-.mob-menu.open{opacity:1;pointer-events:all}
-.mob-menu a{font-size:1.6rem;font-weight:800;color:var(--ink3);transition:color .2s}
-.mob-menu a:hover{color:var(--blue3)}
-.mob-close{position:absolute;top:1.2rem;right:5%;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--ink3);padding:4px}
-
-/* ═══════════════════════════════════════
-   LAYOUT UTILS
-═══════════════════════════════════════ */
-section{position:relative;z-index:1}
-.container{max-width:1120px;margin:0 auto;padding:0 max(24px,5%)}
-.section-header{text-align:center;margin-bottom:var(--sp8)}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--blue3);padding:.25rem .75rem;
-  background:var(--blue-xlight);border:1px solid var(--blue-light);border-radius:100px;
-  margin-bottom:var(--sp4)
-}
-.eyebrow-dot{width:5px;height:5px;background:var(--blue3);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-h2.section-title{
-  font-family:'DM Serif Display',Georgia,serif;
-  font-size:clamp(1.9rem,4vw,3rem);font-weight:400;font-style:italic;
-  letter-spacing:-.02em;color:var(--ink);line-height:1.1;margin-bottom:.8rem
-}
-h2.section-title strong{font-style:normal;font-weight:400}
-.section-sub{font-size:.9rem;color:var(--ink3);max-width:460px;margin:0 auto;line-height:1.8}
-
-/* REVEAL ANIMATIONS */
-.rv{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
-.rv.in{opacity:1;transform:none}
-.rv.d1{transition-delay:.06s}.rv.d2{transition-delay:.12s}.rv.d3{transition-delay:.18s}
-.rv.d4{transition-delay:.24s}.rv.d5{transition-delay:.3s}
-
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.72rem 1.6rem;border-radius:7px;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:all .22s;border:none;line-height:1}
-.btn-primary{background:var(--blue);color:#fff;box-shadow:0 3px 14px rgba(15,43,107,.25)}
-.btn-primary:hover{background:var(--blue2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,43,107,.35)}
-.btn-secondary{background:var(--white);color:var(--ink2);border:1.5px solid var(--border2);box-shadow:var(--s1)}
-.btn-secondary:hover{border-color:var(--blue3);color:var(--blue3);box-shadow:0 4px 14px rgba(37,99,235,.12)}
-.btn-ghost{background:transparent;color:var(--ink3);border:1.5px solid var(--border)}
-.btn-ghost:hover{border-color:var(--border2);color:var(--ink)}
-
-/* ═══════════════════════════════════════
-   HERO
-═══════════════════════════════════════ */
-#accueil{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  padding:60px max(24px,5%) 0;
-  background:linear-gradient(160deg,#FAFAF8 0%,#F0F4FF 60%,#E8EEFF 100%);
-  overflow:hidden
-}
-.hero-orb{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
-.orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,235,.1) 0%,transparent 70%);top:-80px;right:-60px;animation:float1 12s ease-in-out infinite}
-.orb-2{width:350px;height:350px;background:radial-gradient(circle,rgba(15,43,107,.07) 0%,transparent 70%);bottom:10%;left:-40px;animation:float2 15s ease-in-out infinite}
-@keyframes float1{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.03)}}
-@keyframes float2{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(14px) scale(1.02)}}
-.hero-inner{position:relative;z-index:1;text-align:center;max-width:820px;width:100%}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:.32rem .9rem;margin-bottom:var(--sp6);
-  background:var(--white);border:1px solid var(--border);border-radius:100px;
-  font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--blue3);
-  box-shadow:var(--s1);
-  opacity:0;animation:fadeUp .7s .15s forwards
-}
-.hero-badge-dot{width:5px;height:5px;background:var(--blue3);border-radius:50%;animation:pulse 2s infinite}
-/* HERO TITLE — DM Serif Display, italic for impact, clamp prevents overflow */
-.hero-title{
-  font-family:'DM Serif Display',Georgia,serif;
-  font-size:clamp(2.4rem,5.5vw,5.2rem);
-  font-weight:400;line-height:1.05;letter-spacing:-.03em;
-  color:var(--ink);
-  margin-bottom:var(--sp5);
-  opacity:0;animation:fadeUp .7s .3s forwards
-}
-.hero-title .line{display:block}
-.hero-title .accent{
-  font-style:italic;
-  background:linear-gradient(135deg,var(--blue) 0%,var(--blue3) 55%,#60A5FA 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
-}
-.hero-sub{
-  font-size:clamp(.85rem,1.6vw,1rem);color:var(--ink3);
-  max-width:520px;margin:0 auto var(--sp6);line-height:1.85;
-  opacity:0;animation:fadeUp .7s .45s forwards
-}
-.hero-actions{
-  display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap;
-  opacity:0;animation:fadeUp .7s .6s forwards
-}
-.hero-stats{
-  display:flex;align-items:center;justify-content:center;gap:var(--sp7);
-  margin-top:var(--sp8);padding-top:var(--sp6);border-top:1px solid var(--border);
-  opacity:0;animation:fadeUp .7s .78s forwards;flex-wrap:wrap;gap:var(--sp6)
-}
-.stat-num{font-family:'DM Serif Display',Georgia,serif;font-size:1.9rem;font-weight:400;font-style:italic;color:var(--blue);display:block;line-height:1}
-.stat-label{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);margin-top:.2rem}
-.stat-div{width:1px;height:36px;background:var(--border)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-
-/* ═══════════════════════════════════════
-   ABOUT
-═══════════════════════════════════════ */
-#apropos{padding:var(--sp10) 0;background:var(--white)}
-.about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:center}
-/* Profile card */
-.profile-card{
-  position:relative;
-  background:linear-gradient(155deg,var(--bg) 0%,var(--bg2) 100%);
-  border:1px solid var(--border);border-radius:20px;
-  aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;
-  box-shadow:var(--s3);overflow:hidden
-}
-.profile-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(37,99,235,.04) 0%,transparent 60%)}
-.profile-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:var(--sp4);padding:var(--sp6);text-align:center}
-.profile-avatar{
-  width:88px;height:88px;border-radius:50%;
-  background:linear-gradient(135deg,var(--blue) 0%,var(--blue3) 100%);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'DM Serif Display',Georgia,serif;font-size:2.2rem;font-style:italic;color:#fff;
-  box-shadow:0 10px 30px rgba(15,43,107,.28)
-}
-.profile-name{font-size:1rem;font-weight:800;color:var(--ink);letter-spacing:-.015em}
-.profile-title{font-size:.65rem;font-weight:700;color:var(--blue3);letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem}
-.profile-location{font-size:.7rem;color:var(--ink4);margin-top:.1rem}
-.profile-chips{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem}
-.chip{padding:.22rem .65rem;background:var(--white);border:1px solid var(--border);border-radius:100px;font-size:.6rem;font-weight:600;color:var(--blue3)}
-.profile-deco1,.profile-deco2{position:absolute;border:1px solid var(--border);border-radius:12px;background:var(--white);box-shadow:var(--s1)}
-.profile-deco1{top:-10px;left:-10px;width:64px;height:64px;z-index:-1}
-.profile-deco2{bottom:-10px;right:-10px;width:96px;height:96px;z-index:-1}
-.profile-badge{
-  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
-  background:var(--blue);color:#fff;border-radius:8px;
-  padding:.48rem .9rem;font-size:.62rem;font-weight:700;letter-spacing:.04em;
-  box-shadow:0 6px 20px rgba(15,43,107,.3);white-space:nowrap;z-index:2
-}
-/* CV trigger button */
-.cv-btn{
-  display:inline-flex;align-items:center;gap:.5rem;margin-top:var(--sp5);
-  padding:.55rem 1.1rem;background:var(--blue-xlight);border:1px solid var(--blue-light);
-  border-radius:7px;font-size:.68rem;font-weight:700;color:var(--blue3);
-  cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.06em
-}
-.cv-btn:hover{background:var(--blue-light);border-color:var(--blue3)}
-.cv-btn svg{width:14px;height:14px;stroke:var(--blue3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-/* About text */
-.about-text h2{
-  font-family:'DM Serif Display',Georgia,serif;
-  font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:400;font-style:italic;
-  letter-spacing:-.02em;margin-bottom:var(--sp5);line-height:1.15;color:var(--ink)
-}
-.about-text h2 em{font-style:normal;color:var(--blue3)}
-.about-text p{font-size:.87rem;color:var(--ink3);line-height:1.9;margin-bottom:.9rem}
-.values-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:var(--sp5)}
-.value-card{
-  padding:.8rem .95rem;background:var(--bg);
-  border:1px solid var(--border);border-radius:10px;transition:border-color .2s,box-shadow .2s
-}
-.value-card:hover{border-color:var(--border2);box-shadow:var(--s1)}
-.value-icon{
-  width:26px;height:26px;background:var(--blue-xlight);border-radius:6px;
-  display:flex;align-items:center;justify-content:center;margin-bottom:.4rem
-}
-.value-icon svg{width:13px;height:13px;stroke:var(--blue3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.value-title{font-size:.72rem;font-weight:700;color:var(--ink);margin-bottom:.1rem}
-.value-desc{font-size:.65rem;color:var(--ink3);line-height:1.55}
-.skills-row{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:var(--sp5)}
-.skill-pill{padding:.25rem .75rem;background:var(--blue-xlight);border:1px solid var(--blue-light);border-radius:100px;font-size:.63rem;font-weight:600;color:var(--blue3)}
-
-/* ═══════════════════════════════════════
-   CV MODAL
-═══════════════════════════════════════ */
-.cv-overlay{
-  position:fixed;inset:0;z-index:2000;
-  background:rgba(10,15,30,.5);backdrop-filter:blur(10px);
-  display:flex;align-items:center;justify-content:center;padding:var(--sp5);
-  opacity:0;pointer-events:none;transition:opacity .3s
-}
-.cv-overlay.open{opacity:1;pointer-events:all}
-.cv-modal{
-  background:var(--white);border-radius:20px;
-  width:100%;max-width:680px;max-height:88vh;overflow-y:auto;
-  box-shadow:var(--s4);border:1px solid var(--border);
-  transform:translateY(16px) scale(.98);transition:transform .3s
-}
-.cv-overlay.open .cv-modal{transform:none}
-.cv-modal-header{
-  padding:var(--sp6) var(--sp7) var(--sp5);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp4);
-  position:sticky;top:0;background:var(--white);z-index:5;border-radius:20px 20px 0 0
-}
-.cv-modal-header h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.4rem;font-style:italic;color:var(--ink)}
-.cv-modal-header p{font-size:.72rem;color:var(--ink4);margin-top:.2rem}
-.modal-close-btn{
-  width:30px;height:30px;background:var(--bg);border:1px solid var(--border);
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;transition:all .2s
-}
-.modal-close-btn:hover{background:var(--bg2);border-color:var(--border2)}
-.modal-close-btn svg{width:12px;height:12px;stroke:var(--ink);fill:none;stroke-width:2.5;stroke-linecap:round}
-.cv-modal-body{padding:var(--sp6) var(--sp7) var(--sp7)}
-/* CV Sections */
-.cv-section{margin-bottom:var(--sp7)}
-.cv-section:last-child{margin-bottom:0}
-.cv-section-label{
-  font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--blue3);margin-bottom:var(--sp4);display:flex;align-items:center;gap:.5rem
-}
-.cv-section-label::after{content:'';flex:1;height:1px;background:var(--border)}
-/* Timeline */
-.timeline{display:flex;flex-direction:column;gap:var(--sp4)}
-.tl-item{display:grid;grid-template-columns:auto 1fr;gap:var(--sp4);align-items:start}
-.tl-dot-col{display:flex;flex-direction:column;align-items:center;padding-top:3px}
-.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--blue3);flex-shrink:0;box-shadow:0 0 0 3px var(--blue-light)}
-.tl-line{width:1px;flex:1;background:var(--border);margin-top:6px;min-height:24px}
-.tl-item:last-child .tl-line{display:none}
-.tl-content{padding-bottom:var(--sp4)}
-.tl-period{font-size:.6rem;font-weight:600;letter-spacing:.06em;color:var(--ink4);text-transform:uppercase;margin-bottom:.25rem}
-.tl-title{font-size:.88rem;font-weight:700;color:var(--ink);line-height:1.3}
-.tl-sub{font-size:.75rem;color:var(--blue3);font-weight:600;margin-top:.18rem}
-.tl-loc{font-size:.7rem;color:var(--ink4);margin-top:.12rem}
-/* Skills grid */
-.skills-grid{display:flex;flex-wrap:wrap;gap:.4rem}
-.skill-badge{
-  padding:.28rem .75rem;background:var(--bg2);border:1px solid var(--border);
-  border-radius:6px;font-size:.7rem;font-weight:600;color:var(--ink2)
-}
-/* Certifs */
-.cert-list{display:flex;flex-direction:column;gap:.6rem}
-.cert-item{
-  display:flex;align-items:center;gap:.75rem;
-  padding:.7rem .9rem;background:var(--bg);border:1px solid var(--border);border-radius:8px
-}
-.cert-icon{width:32px;height:32px;background:var(--blue-xlight);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.cert-icon svg{width:15px;height:15px;stroke:var(--blue3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.cert-name{font-size:.78rem;font-weight:700;color:var(--ink)}
-.cert-issuer{font-size:.66rem;color:var(--ink4);margin-top:.1rem}
-
-/* ═══════════════════════════════════════
-   SERVICES
-═══════════════════════════════════════ */
-#services{padding:var(--sp10) 0;background:var(--bg)}
-/* 5 cards: 3 top, 2 centered */
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
-.service-card{
-  background:var(--white);border:1px solid var(--border);border-radius:14px;
-  padding:var(--sp6) var(--sp5);position:relative;overflow:hidden;
-  transition:transform .3s,box-shadow .3s,border-color .3s;box-shadow:var(--s1)
-}
-.service-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--blue),var(--blue3));
-  transform:scaleX(0);transform-origin:left;transition:transform .3s
-}
-.service-card:hover{transform:translateY(-5px);box-shadow:var(--s3);border-color:var(--border2)}
-.service-card:hover::before{transform:scaleX(1)}
-/* Row 2: cards 4 & 5 centered */
-.services-grid .service-card:nth-child(4){grid-column:1;margin-left:calc(50% + .6rem)}
-.services-grid .service-card:nth-child(5){grid-column:2}
-.svc-num{
-  position:absolute;top:1.4rem;right:1.4rem;
-  font-family:'DM Serif Display',Georgia,serif;
-  font-size:3rem;font-style:italic;font-weight:400;
-  color:rgba(37,99,235,.1);line-height:1;user-select:none
-}
-.svc-icon{
-  width:44px;height:44px;background:var(--blue-xlight);border:1px solid var(--blue-light);
-  border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:var(--sp4)
-}
-.svc-icon svg{width:19px;height:19px;stroke:var(--blue3);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.service-card h3{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:.55rem;letter-spacing:-.01em}
-.service-card p{font-size:.8rem;color:var(--ink3);line-height:1.78;margin-bottom:var(--sp4)}
-.svc-list{list-style:none}
-.svc-list li{font-size:.73rem;color:var(--ink3);padding:.22rem 0;display:flex;align-items:center;gap:.45rem;border-bottom:1px solid var(--bg2)}
-.svc-list li:last-child{border-bottom:none}
-.svc-list li::before{content:'';width:3px;height:3px;background:var(--blue3);border-radius:50%;flex-shrink:0}
-
-/* ═══════════════════════════════════════
-   PORTFOLIO
-═══════════════════════════════════════ */
-#portfolio{padding:var(--sp10) 0;background:var(--white)}
-.portfolio-filters{display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;margin-bottom:var(--sp7)}
-.filter-btn{
-  padding:.34rem 1rem;background:transparent;
-  border:1.5px solid var(--border);border-radius:100px;
-  font-size:.63rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--ink3);cursor:pointer;transition:all .22s
-}
-.filter-btn:hover{border-color:var(--blue3);color:var(--blue3)}
-.filter-btn.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 3px 12px rgba(15,43,107,.25)}
-/* Masonry-ish grid */
-.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:220px;gap:1.1rem}
-.p-card{position:relative;border-radius:12px;overflow:hidden;background:var(--bg2);border:1px solid var(--border);cursor:pointer;box-shadow:var(--s1);transition:transform .35s,box-shadow .35s,opacity .3s}
-.p-card.wide{grid-column:span 2}
-.p-card.tall{grid-row:span 2}
-.p-card:hover{transform:translateY(-4px);box-shadow:var(--s4)}
-.p-img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;display:block}
-.p-card:hover .p-img{transform:scale(1.05)}
-.p-badge{
-  position:absolute;top:.75rem;left:.75rem;
-  background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
-  border:1px solid var(--border);padding:.18rem .55rem;border-radius:100px;
-  font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue3);
-  box-shadow:var(--s1)
-}
-.p-hover-arrow{
-  position:absolute;top:.75rem;right:.75rem;
-  width:26px;height:26px;background:var(--blue);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transform:scale(.8);transition:all .25s
-}
-.p-hover-arrow svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.p-card:hover .p-hover-arrow{opacity:1;transform:scale(1)}
-.p-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(10,15,30,.85) 0%,rgba(10,15,30,.1) 55%,transparent 100%);
-  display:flex;flex-direction:column;justify-content:flex-end;padding:1.2rem;
-  opacity:0;transition:opacity .3s
-}
-.p-card:hover .p-overlay{opacity:1}
-.p-cat{font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:.28rem}
-.p-title{font-size:.88rem;font-weight:700;color:#fff;line-height:1.3}
-.p-desc{font-size:.68rem;color:rgba(255,255,255,.62);margin-top:.2rem}
-
-/* Portfolio modal */
-.p-modal-bg{
-  position:fixed;inset:0;z-index:2000;
-  background:rgba(10,15,30,.55);backdrop-filter:blur(10px);
-  display:flex;align-items:center;justify-content:center;padding:var(--sp5);
-  opacity:0;pointer-events:none;transition:opacity .3s
-}
-.p-modal-bg.open{opacity:1;pointer-events:all}
-.p-modal{
-  background:var(--white);border-radius:20px;
-  width:100%;max-width:800px;max-height:90vh;overflow-y:auto;
-  box-shadow:var(--s4);border:1px solid var(--border);
-  transform:translateY(16px) scale(.98);transition:transform .3s
-}
-.p-modal-bg.open .p-modal{transform:none}
-.p-modal-img{height:280px;overflow:hidden;border-radius:20px 20px 0 0;position:relative}
-.p-modal-img img{width:100%;height:100%;object-fit:cover}
-.p-modal-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,30,.45) 0%,transparent 55%)}
-.p-modal-body{padding:var(--sp6) var(--sp6) var(--sp7)}
-.p-modal-meta{display:flex;gap:var(--sp6);flex-wrap:wrap;margin-bottom:var(--sp5)}
-.meta-field{display:flex;flex-direction:column;gap:.2rem}
-.meta-label{font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4)}
-.meta-val{font-size:.82rem;font-weight:600;color:var(--ink)}
-.p-modal-divider{height:1px;background:var(--border);margin-bottom:var(--sp5)}
-.p-modal-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.4rem;font-style:italic;color:var(--ink);margin-bottom:.5rem}
-.p-modal-desc{font-size:.86rem;color:var(--ink3);line-height:1.85;margin-bottom:var(--sp5)}
-.p-modal-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:var(--sp6)}
-.p-tag{padding:.24rem .7rem;background:var(--blue-xlight);border:1px solid var(--blue-light);border-radius:100px;font-size:.62rem;font-weight:600;color:var(--blue3)}
-.p-modal-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
-.p-modal-close{
-  position:absolute;top:1rem;right:1rem;
-  width:32px;height:32px;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);
-  border:1px solid var(--border);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--s1);transition:all .2s;z-index:10
-}
-.p-modal-close:hover{background:var(--white);border-color:var(--border2)}
-.p-modal-close svg{width:13px;height:13px;stroke:var(--ink);fill:none;stroke-width:2.5;stroke-linecap:round}
-
-/* ═══════════════════════════════════════
-   TESTIMONIALS
-═══════════════════════════════════════ */
-#temoignages{padding:var(--sp10) 0;background:var(--bg);overflow:hidden}
-.testimonials-track-wrap{position:relative;margin:0 -5%}
-.testimonials-track{display:flex;gap:1.1rem;transition:transform .42s cubic-bezier(.25,.46,.45,.94);padding:0 max(24px,5%)}
-.t-card{
-  flex:0 0 calc(33.33% - .75rem);min-width:0;
-  background:var(--white);border:1px solid var(--border);border-radius:14px;
-  padding:var(--sp5);box-shadow:var(--s1)
-}
-.t-stars{color:var(--blue3);font-size:.72rem;letter-spacing:3px;margin-bottom:.65rem}
-.t-quote-mark{
-  font-family:'DM Serif Display',Georgia,serif;font-size:3rem;font-style:italic;
-  line-height:1;color:var(--blue-light);margin-bottom:.3rem
-}
-.t-text{font-size:.82rem;color:var(--ink3);line-height:1.88;margin-bottom:var(--sp4);font-style:italic}
-.t-author{display:flex;align-items:center;gap:.7rem}
-.t-avatar{
-  width:38px;height:38px;border-radius:50%;
-  background:linear-gradient(135deg,var(--blue),var(--blue3));
-  display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0
-}
-.t-name{font-size:.78rem;font-weight:700;color:var(--ink)}
-.t-role{font-size:.65rem;color:var(--blue3);margin-top:.1rem;font-weight:500}
-.t-controls{display:flex;align-items:center;justify-content:center;gap:.9rem;margin-top:var(--sp6)}
-.t-arrow{
-  width:38px;height:38px;background:var(--white);border:1.5px solid var(--border);
-  border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;
-  transition:all .22s;box-shadow:var(--s1)
-}
-.t-arrow:hover{background:var(--blue);border-color:var(--blue)}
-.t-arrow:hover svg{stroke:#fff}
-.t-arrow svg{width:15px;height:15px;stroke:var(--ink3);fill:none;stroke-width:2;stroke-linecap:round;transition:stroke .22s}
-.t-dots{display:flex;gap:.45rem;align-items:center}
-.t-dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .22s}
-.t-dot.active{background:var(--blue3);transform:scale(1.3)}
-
-/* ═══════════════════════════════════════
-   PARTNERS
-═══════════════════════════════════════ */
-#partenaires{
-  padding:var(--sp7) 0;background:var(--white);
-  border-top:1px solid var(--border);border-bottom:1px solid var(--border)
-}
-.partners-label{text-align:center;margin-bottom:var(--sp5)}
-.partners-label span{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink4)}
-.marquee-wrap{overflow:hidden;position:relative}
-.marquee-wrap::before,.marquee-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
-.marquee-wrap::before{left:0;background:linear-gradient(to right,var(--white),transparent)}
-.marquee-wrap::after{right:0;background:linear-gradient(to left,var(--white),transparent)}
-.marquee-track{display:flex;gap:1.5rem;animation:marquee 30s linear infinite;width:max-content}
-.marquee-track:hover{animation-play-state:paused}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.partner-pill{
-  display:flex;align-items:center;justify-content:center;
-  height:48px;padding:0 var(--sp5);
-  background:var(--bg);border:1px solid var(--border);border-radius:8px;
-  font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:var(--ink3);flex-shrink:0;white-space:nowrap;
-  transition:all .22s;min-width:0;max-width:200px
-}
-.partner-pill:hover{border-color:var(--border2);color:var(--blue3)}
-
-/* ═══════════════════════════════════════
-   PRICING
-═══════════════════════════════════════ */
-#tarifs{padding:var(--sp10) 0;background:var(--bg)}
-.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:var(--sp6)}
-.pricing-card{
-  background:var(--white);border:1px solid var(--border);border-radius:16px;
-  padding:var(--sp6);position:relative;overflow:hidden;
-  transition:transform .3s,box-shadow .3s;box-shadow:var(--s1)
-}
-.pricing-card.featured{
-  border-color:var(--blue3);
-  background:linear-gradient(160deg,var(--blue-xlight) 0%,var(--white) 55%);
-  box-shadow:0 0 0 1px var(--blue3),var(--s2)
-}
-.pricing-card:hover{transform:translateY(-5px);box-shadow:var(--s3)}
-.pricing-card.featured:hover{box-shadow:0 0 0 1px var(--blue3),var(--s3)}
-.pricing-badge{position:absolute;top:-1px;right:1.6rem;padding:.22rem .65rem;background:var(--blue3);border-radius:0 0 7px 7px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff}
-.pricing-tier{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--blue3);margin-bottom:.8rem}
-.pricing-from{font-size:.6rem;color:var(--ink4);font-weight:500}
-.pricing-amount{font-family:'DM Serif Display',Georgia,serif;font-size:2.4rem;font-style:italic;color:var(--ink);letter-spacing:-.02em;line-height:1}
-.pricing-currency{font-size:.9rem;font-style:normal;vertical-align:super;margin-right:1px}
-.pricing-desc{font-size:.72rem;color:var(--ink3);margin-top:.3rem;margin-bottom:var(--sp4)}
-.pricing-divider{height:1px;background:var(--border);margin:var(--sp4) 0}
-.pricing-features{list-style:none;margin-bottom:var(--sp5)}
-.pricing-features li{font-size:.77rem;color:var(--ink2);padding:.44rem 0;display:flex;align-items:flex-start;gap:.55rem;border-bottom:1px solid var(--bg)}
-.pricing-features li:last-child{border-bottom:none}
-.pf-check{color:var(--blue3);flex-shrink:0;font-weight:700;font-size:.82rem}
-.pricing-cta-block{
-  margin-top:var(--sp6);padding:var(--sp5);text-align:center;
-  background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--s1)
-}
-.pricing-cta-block p{font-size:.84rem;color:var(--ink3);margin-bottom:var(--sp4);line-height:1.7}
-
-/* ═══════════════════════════════════════
-   CONTACT
-═══════════════════════════════════════ */
-#contact{padding:var(--sp10) 0 var(--sp8);background:var(--white)}
-.contact-grid{display:grid;grid-template-columns:1fr 1.55fr;gap:5rem;align-items:start}
-.contact-info h3{
-  font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;font-style:italic;
-  color:var(--ink);margin-bottom:var(--sp4);line-height:1.2
-}
-.contact-info h3 em{font-style:normal;color:var(--blue3)}
-.contact-info p{font-size:.84rem;color:var(--ink3);line-height:1.85;margin-bottom:var(--sp5)}
-.contact-methods{display:flex;flex-direction:column;gap:.7rem}
-.contact-method{
-  display:flex;align-items:center;gap:.85rem;padding:.85rem .95rem;
-  background:var(--bg);border:1px solid var(--border);border-radius:10px;
-  transition:all .22s;box-shadow:var(--s1)
-}
-.contact-method:hover{border-color:var(--border2);box-shadow:var(--s2)}
-.contact-method-icon{
-  width:34px;height:34px;background:var(--blue-xlight);border:1px solid var(--blue-light);
-  border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0
-}
-.contact-method-icon svg{width:15px;height:15px;stroke:var(--blue3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.contact-method-label{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue3)}
-.contact-method-value{font-size:.8rem;color:var(--ink);font-weight:600;margin-top:.1rem}
-.social-row{display:flex;gap:.55rem;margin-top:var(--sp5)}
-.social-btn{
-  width:38px;height:38px;background:var(--bg);border:1px solid var(--border);
-  border-radius:8px;display:flex;align-items:center;justify-content:center;
-  transition:all .22s;box-shadow:var(--s1)
-}
-.social-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 5px 16px rgba(15,43,107,.28)}
-.social-btn:hover svg{stroke:#fff}
-.social-btn svg{stroke:var(--ink3);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke .22s}
-/* Form */
-.contact-form-wrap{display:flex;flex-direction:column;gap:.9rem}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
-.form-field{display:flex;flex-direction:column;gap:.38rem}
-.form-label{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
-.form-input,.form-select,.form-textarea{
-  width:100%;padding:.72rem .9rem;
-  background:var(--bg);border:1.5px solid var(--border);border-radius:8px;
-  color:var(--ink);font-family:'Montserrat',sans-serif;font-size:.82rem;
-  outline:none;transition:all .22s;resize:none;-webkit-appearance:none;appearance:none
-}
-.form-input::placeholder,.form-textarea::placeholder{color:var(--ink4);opacity:.8}
-.form-input:focus,.form-select:focus,.form-textarea:focus{
-  border-color:var(--blue3);
-  box-shadow:0 0 0 3px rgba(37,99,235,.1);background:var(--white)
-}
-.form-select option{background:var(--white);color:var(--ink)}
-.form-checkbox-label{display:flex;align-items:flex-start;gap:.55rem;font-size:.72rem;color:var(--ink3);cursor:pointer;line-height:1.55}
-.form-checkbox-label input{width:auto;margin-top:2px;accent-color:var(--blue3);cursor:pointer;flex-shrink:0}
-.form-success{
-  display:none;padding:.8rem 1.1rem;
-  background:var(--blue-xlight);border:1px solid var(--blue-light);
-  border-radius:8px;font-size:.8rem;color:var(--blue3);font-weight:600
-}
-.form-success.visible{display:block}
-.form-error{
-  display:none;padding:.8rem 1.1rem;
-  background:#FEF2F2;border:1px solid #FECACA;
-  border-radius:8px;font-size:.8rem;color:#DC2626;font-weight:500
-}
-.form-error.visible{display:block}
-.form-footer{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
-.form-note{font-size:.63rem;color:var(--ink4);display:flex;align-items:center;gap:.35rem}
-.form-note svg{width:11px;height:11px;stroke:var(--ink4);fill:none;stroke-width:2;stroke-linecap:round}
-
-/* ═══════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════ */
-footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position:relative;z-index:1}
-.footer-top{
-  max-width:1120px;margin:0 auto;
-  display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:var(--sp7);
-  padding-bottom:var(--sp7);border-bottom:1px solid rgba(255,255,255,.08)
-}
-.footer-brand-desc{font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.75;margin-top:.75rem;max-width:240px}
-.footer-logo-text{font-size:1.1rem;font-weight:900;letter-spacing:-.025em;color:#fff}
-.footer-logo-text em{color:#60A5FA;font-style:normal}
-.footer-col-heading{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.9rem}
-.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
-.footer-col a{font-size:.78rem;color:rgba(255,255,255,.45);transition:color .2s;cursor:pointer}
-.footer-col a:hover{color:#fff}
-.footer-bottom{
-  max-width:1120px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.9rem;
-  padding-top:var(--sp5)
-}
-.footer-copy{font-size:.65rem;color:rgba(255,255,255,.25)}
-.footer-legal{display:flex;gap:1.3rem}
-.footer-legal a{font-size:.65rem;color:rgba(255,255,255,.3);transition:color .2s;cursor:pointer}
-.footer-legal a:hover{color:rgba(255,255,255,.65)}
-
-/* ═══════════════════════════════════════
-   COOKIE BANNER
-═══════════════════════════════════════ */
-.cookie-banner{
-  position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);z-index:5000;
-  width:calc(100% - 2.5rem);max-width:620px;
-  background:var(--white);border:1px solid var(--border);border-radius:14px;
-  padding:1.2rem 1.4rem;box-shadow:var(--s4);
-  display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap;
-  animation:slideUpBanner .35s ease
-}
-@keyframes slideUpBanner{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.cookie-banner.hidden{display:none}
-.cookie-text p{font-size:.75rem;color:var(--ink2);line-height:1.55}
-.cookie-text a{color:var(--blue3);text-decoration:underline;text-underline-offset:2px}
-.cookie-actions{display:flex;gap:.5rem;flex-shrink:0}
-.cookie-accept{padding:.42rem .95rem;background:var(--blue);color:#fff;border:none;border-radius:6px;font-family:inherit;font-size:.67rem;font-weight:700;cursor:pointer;transition:background .2s}
-.cookie-accept:hover{background:var(--blue2)}
-.cookie-decline{padding:.42rem .95rem;background:transparent;color:var(--ink3);border:1.5px solid var(--border);border-radius:6px;font-family:inherit;font-size:.67rem;font-weight:600;cursor:pointer;transition:all .2s}
-.cookie-decline:hover{border-color:var(--border2);color:var(--ink)}
-
-/* ═══════════════════════════════════════
-   LEGAL OVERLAYS
-═══════════════════════════════════════ */
-.legal-overlay{
-  position:fixed;inset:0;z-index:3000;
-  background:rgba(10,15,30,.5);backdrop-filter:blur(8px);
-  display:flex;align-items:center;justify-content:center;padding:var(--sp5);
-  opacity:0;pointer-events:none;transition:opacity .3s
-}
-.legal-overlay.open{opacity:1;pointer-events:all}
-.legal-modal{
-  background:var(--white);border-radius:18px;width:100%;max-width:680px;max-height:85vh;
-  overflow-y:auto;box-shadow:var(--s4);border:1px solid var(--border);
-  transform:translateY(14px);transition:transform .3s
-}
-.legal-overlay.open .legal-modal{transform:none}
-.legal-modal-header{
-  padding:var(--sp6) var(--sp7) var(--sp4);border-bottom:1px solid var(--border);
-  display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp4);
-  position:sticky;top:0;background:var(--white);z-index:5;border-radius:18px 18px 0 0
-}
-.legal-modal-header h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;font-style:italic;color:var(--ink)}
-.legal-modal-header .legal-date{font-size:.68rem;color:var(--ink4);margin-top:.25rem}
-.legal-modal-body{padding:var(--sp5) var(--sp7) var(--sp7)}
-.legal-modal-body h3{font-size:.84rem;font-weight:700;color:var(--ink);margin-top:var(--sp5);margin-bottom:.5rem}
-.legal-modal-body h3:first-child{margin-top:0}
-.legal-modal-body p{font-size:.8rem;color:var(--ink3);line-height:1.82;margin-bottom:.75rem}
-.legal-modal-body ul{list-style:none;padding:0;margin-bottom:.75rem}
-.legal-modal-body ul li{font-size:.8rem;color:var(--ink3);padding:.22rem 0;display:flex;gap:.55rem}
-.legal-modal-body ul li::before{content:'—';color:var(--blue3);flex-shrink:0}
-.legal-modal-body a{color:var(--blue3)}
-
-/* ═══════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════ */
-@media(max-width:1024px){
-  .services-grid{grid-template-columns:repeat(2,1fr)}
-  .services-grid .service-card:nth-child(4){grid-column:auto;margin-left:0}
-  .services-grid .service-card:nth-child(5){grid-column:auto}
-  .portfolio-grid{grid-template-columns:repeat(2,1fr)}
-  .p-card.wide{grid-column:span 2}.p-card.tall{grid-row:auto}
-  .t-card{flex:0 0 calc(50% - .55rem)}
-  .pricing-grid{grid-template-columns:1fr;max-width:440px;margin-left:auto;margin-right:auto}
-  .footer-top{grid-template-columns:1fr 1fr}
-  .footer-brand{grid-column:span 2}
-}
-@media(max-width:768px){
-  .nav-links{display:none}.burger{display:flex}
-  .about-grid{grid-template-columns:1fr}.profile-card{display:none}
-  .services-grid{grid-template-columns:1fr}
-  .services-grid .service-card:nth-child(4){grid-column:auto;margin-left:0}
-  .portfolio-grid{grid-template-columns:1fr;grid-auto-rows:200px}
-  .p-card.wide,.p-card.tall{grid-column:auto;grid-row:auto}
-  .t-card{flex:0 0 100%}
-  .contact-grid{grid-template-columns:1fr;gap:var(--sp7)}
-  .form-row{grid-template-columns:1fr}
-  .hero-stats .stat-div{display:none}
-  .hero-stats{gap:var(--sp5)}
-  .footer-top{grid-template-columns:1fr}.footer-brand{grid-column:auto}
-  .cookie-banner{flex-direction:column;align-items:flex-start}
-  .cv-modal-body,.cv-modal-header,.legal-modal-body,.legal-modal-header{padding-left:var(--sp5);padding-right:var(--sp5)}
-  .p-modal-body{padding:var(--sp4) var(--sp5) var(--sp6)}
-}
-</style>
+<!-- Styles -->
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
@@ -776,26 +30,45 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
 <div class="cur" id="cd"></div>
 <div class="cur" id="cr"></div>
 
-<!-- COOKIE BANNER -->
+<!-- ══════════════════════════════════
+     COOKIE BANNER
+══════════════════════════════════ -->
 <div class="cookie-banner hidden" id="cookie-banner">
-  <div class="cookie-text"><p>Ce site utilise des cookies pour améliorer votre expérience. <a href="#" onclick="openLegal('mentions');return false">Mentions légales</a> · <a href="#" onclick="openLegal('confidentialite');return false">Confidentialité</a></p></div>
+  <div class="cookie-text">
+    <p>Ce site utilise des cookies pour améliorer votre expérience.
+       <a href="#" onclick="openLegal('confidentialite');return false">Politique de confidentialité</a>.</p>
+  </div>
   <div class="cookie-actions">
     <button class="cookie-decline" onclick="cookieDecline()">Refuser</button>
     <button class="cookie-accept" onclick="cookieAccept()">Accepter</button>
   </div>
 </div>
 
-<!-- LEGAL — Mentions légales -->
+<!-- ══════════════════════════════════
+     MENTIONS LÉGALES
+══════════════════════════════════ -->
 <div class="legal-overlay" id="legal-mentions">
   <div class="legal-modal">
-    <div class="legal-modal-header">
-      <div><h2>Mentions légales</h2><div class="legal-date">Dernière mise à jour : mars 2026</div></div>
-      <div class="modal-close-btn" onclick="closeLegal('mentions')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    <div class="legal-header">
+      <div>
+        <h2>Mentions légales</h2>
+        <div class="legal-date">Dernière mise à jour : mars 2026</div>
+      </div>
+      <div class="modal-x" onclick="closeLegal('mentions')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
     </div>
-    <div class="legal-modal-body">
+    <div class="legal-body">
       <h3>Éditeur du site</h3>
       <p>Le site bypab.fr est édité par Pablo C., auto-entrepreneur exerçant sous la marque commerciale <strong>ByPab</strong>, spécialisé en conseil et communication.</p>
-      <ul><li>Nom commercial : ByPab</li><li>Responsable de publication : Pablo C.</li><li>Adresse : Angers, Maine-et-Loire (49), France</li><li>Email : contact@bypab.fr</li><li>Téléphone : 06 70 67 86 65</li><li>SIRET : 00000000000000</li></ul>
+      <ul>
+        <li>Nom commercial : ByPab</li>
+        <li>Responsable de publication : Pablo C.</li>
+        <li>Adresse : Angers, Maine-et-Loire (49), France</li>
+        <li>Email : contact@bypab.fr</li>
+        <li>Téléphone : 06 70 67 86 65</li>
+        <li>SIRET : 00000000000000</li>
+      </ul>
       <h3>Hébergement</h3>
       <p>Le site est hébergé par Vercel Inc. — 340 Pine Street, Suite 701, San Francisco, California 94104, États-Unis. Site web : vercel.com</p>
       <h3>Propriété intellectuelle</h3>
@@ -808,33 +81,61 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
   </div>
 </div>
 
-<!-- LEGAL — Politique de confidentialité -->
+<!-- ══════════════════════════════════
+     POLITIQUE DE CONFIDENTIALITÉ
+══════════════════════════════════ -->
 <div class="legal-overlay" id="legal-confidentialite">
   <div class="legal-modal">
-    <div class="legal-modal-header">
-      <div><h2>Politique de confidentialité</h2><div class="legal-date">Dernière mise à jour : mars 2026</div></div>
-      <div class="modal-close-btn" onclick="closeLegal('confidentialite')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    <div class="legal-header">
+      <div>
+        <h2>Politique de confidentialité</h2>
+        <div class="legal-date">Dernière mise à jour : mars 2026</div>
+      </div>
+      <div class="modal-x" onclick="closeLegal('confidentialite')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
     </div>
-    <div class="legal-modal-body">
-      <h3>Responsable du traitement</h3><p>Pablo C. — ByPab, Angers (49). Contact : contact@bypab.fr</p>
-      <h3>Données collectées</h3><p>Via le formulaire de contact uniquement :</p>
-      <ul><li>Nom et prénom</li><li>Adresse email</li><li>Téléphone (facultatif)</li><li>Type de structure et service souhaité</li><li>Contenu du message</li></ul>
-      <h3>Finalité</h3><p>Les données sont utilisées exclusivement pour répondre à vos demandes. Elles ne sont ni vendues ni transmises à des tiers.</p>
-      <h3>Durée de conservation</h3><p>Vos données sont conservées 3 ans maximum à compter du dernier contact (recommandation CNIL).</p>
-      <h3>Cookies</h3><p>Ce site utilise uniquement des cookies techniques nécessaires à son fonctionnement. Aucun cookie publicitaire ou de tracking sans consentement.</p>
+    <div class="legal-body">
+      <h3>Responsable du traitement</h3>
+      <p>Pablo C. — ByPab, Angers (49). Contact : contact@bypab.fr</p>
+      <h3>Données collectées</h3>
+      <p>Via le formulaire de contact uniquement :</p>
+      <ul>
+        <li>Nom et prénom</li>
+        <li>Adresse email</li>
+        <li>Téléphone (facultatif)</li>
+        <li>Type de structure et service souhaité</li>
+        <li>Contenu du message</li>
+      </ul>
+      <h3>Finalité</h3>
+      <p>Les données sont utilisées exclusivement pour répondre à vos demandes. Elles ne sont ni vendues ni transmises à des tiers.</p>
+      <h3>Durée de conservation</h3>
+      <p>Vos données sont conservées 3 ans maximum à compter du dernier contact (recommandation CNIL).</p>
+      <h3>Cookies</h3>
+      <p>Ce site utilise uniquement des cookies techniques nécessaires à son fonctionnement. Aucun cookie publicitaire sans consentement.</p>
       <h3>Vos droits (RGPD)</h3>
-      <ul><li>Droit d'accès, rectification et effacement</li><li>Droit d'opposition et à la portabilité</li></ul>
+      <ul>
+        <li>Droit d'accès, rectification et effacement</li>
+        <li>Droit d'opposition et à la portabilité</li>
+      </ul>
       <p>Pour exercer ces droits : <a href="mailto:contact@bypab.fr">contact@bypab.fr</a>. Réclamation possible auprès de la CNIL (cnil.fr).</p>
     </div>
   </div>
 </div>
 
-<!-- CV MODAL -->
+<!-- ══════════════════════════════════
+     CV MODAL
+══════════════════════════════════ -->
 <div class="cv-overlay" id="cv-overlay" onclick="closeCVModal(event)">
   <div class="cv-modal" id="cv-modal-content">
     <div class="cv-modal-header">
-      <div><h2>Profil & Parcours</h2><p>Pablo C. — Fondateur ByPab · Angers</p></div>
-      <div class="modal-close-btn" onclick="closeCVModalDirect()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+      <div>
+        <h2>Profil &amp; parcours</h2>
+        <p>Pablo C. — Fondateur ByPab · Angers</p>
+      </div>
+      <div class="modal-x" onclick="closeCVModalDirect()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
     </div>
     <div class="cv-modal-body">
 
@@ -846,7 +147,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
             <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-period">Sept. 2024 — Aujourd'hui · 1 an 7 mois</div>
-              <div class="tl-title">Chargé de Communication</div>
+              <div class="tl-title">Chargé de communication</div>
               <div class="tl-sub">Scania France · Alternance</div>
               <div class="tl-loc">Angers, Pays de la Loire · Sur site</div>
             </div>
@@ -855,7 +156,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
             <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-period">Sept. 2023 — Août 2024 · 1 an</div>
-              <div class="tl-title">Chargé de Communication</div>
+              <div class="tl-title">Chargé de communication</div>
               <div class="tl-sub">Sébastien Naulet Transports · Alternance</div>
               <div class="tl-loc">Baugé-en-Anjou, Pays de la Loire · Sur site</div>
             </div>
@@ -864,7 +165,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
             <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-period">Sept. 2021 — Sept. 2023 · 2 ans</div>
-              <div class="tl-title">Chargé de Communication</div>
+              <div class="tl-title">Chargé de communication</div>
               <div class="tl-sub">Commune d'Erdre-en-Anjou · Alternance</div>
               <div class="tl-loc">Erdre-en-Anjou, Pays de la Loire · Sur site</div>
             </div>
@@ -880,7 +181,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
             <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-period">Sept. 2024 — Août 2026</div>
-              <div class="tl-title">Master Stratégie Marketing &amp; Communication Digitale</div>
+              <div class="tl-title">Master Stratégie marketing &amp; communication digitale</div>
               <div class="tl-sub">MBway</div>
             </div>
           </div>
@@ -888,7 +189,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
             <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-period">Sept. 2023 — Août 2024</div>
-              <div class="tl-title">Bachelor Marketing Communication Publicité</div>
+              <div class="tl-title">Bachelor Marketing communication publicité</div>
               <div class="tl-sub">Ipac Bachelor Factory</div>
             </div>
           </div>
@@ -906,7 +207,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
       <!-- Compétences -->
       <div class="cv-section">
         <div class="cv-section-label">Compétences &amp; outils</div>
-        <div class="skills-grid">
+        <div class="skills-badges">
           <span class="skill-badge">Adobe Photoshop</span>
           <span class="skill-badge">Adobe Illustrator</span>
           <span class="skill-badge">Adobe InDesign</span>
@@ -927,12 +228,22 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
         <div class="cv-section-label">Certifications</div>
         <div class="cert-list">
           <div class="cert-item">
-            <div class="cert-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
-            <div><div class="cert-name">Google Ads — Certification officielle</div><div class="cert-issuer">Google · Skillshop</div></div>
+            <div class="cert-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            </div>
+            <div>
+              <div class="cert-name">Google Ads — Certification officielle</div>
+              <div class="cert-issuer">Google · Skillshop</div>
+            </div>
           </div>
           <div class="cert-item">
-            <div class="cert-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-            <div><div class="cert-name">Google Analytics — Certification officielle</div><div class="cert-issuer">Google · Skillshop</div></div>
+            <div class="cert-icon">
+              <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div>
+              <div class="cert-name">Google Analytics — Certification officielle</div>
+              <div class="cert-issuer">Google · Skillshop</div>
+            </div>
           </div>
         </div>
       </div>
@@ -941,10 +252,14 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
   </div>
 </div>
 
-<!-- PORTFOLIO MODAL -->
+<!-- ══════════════════════════════════
+     PORTFOLIO MODAL
+══════════════════════════════════ -->
 <div class="p-modal-bg" id="p-modal-bg" onclick="closePModal(event)">
   <div class="p-modal" id="p-modal-content">
-    <div class="p-modal-close" onclick="closePModalDirect()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    <div class="p-modal-close" onclick="closePModalDirect()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
     <div class="p-modal-img" id="pmod-img"><div class="p-modal-img-overlay"></div></div>
     <div class="p-modal-body">
       <div class="p-modal-meta" id="pmod-meta"></div>
@@ -960,7 +275,9 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
   </div>
 </div>
 
-<!-- MOBILE MENU -->
+<!-- ══════════════════════════════════
+     MOBILE MENU
+══════════════════════════════════ -->
 <div class="mob-menu" id="mob-menu">
   <button class="mob-close" id="mob-close">✕</button>
   <a href="#accueil" onclick="closeMob()">Accueil</a>
@@ -971,7 +288,9 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
   <a href="#contact" onclick="closeMob()">Contact</a>
 </div>
 
-<!-- NAV -->
+<!-- ══════════════════════════════════
+     NAV
+══════════════════════════════════ -->
 <nav id="main-nav">
   <div class="logo">
     <div class="logo-mark">BP</div>
@@ -985,21 +304,26 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
     <li><a href="#tarifs">Tarifs</a></li>
     <li><a href="#contact"><button class="nav-cta">Contact</button></a></li>
   </ul>
-  <button class="burger" id="burger-btn" aria-label="Menu"><span></span><span></span><span></span></button>
+  <button class="burger" id="burger-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- ═══ HERO ═══ -->
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
 <section id="accueil">
   <div class="hero-orb orb-1"></div>
   <div class="hero-orb orb-2"></div>
   <div class="hero-inner">
-    <div class="hero-badge"><span class="hero-badge-dot"></span>Conseil &amp; Communication · Angers</div>
-    <div class="htit-wrap">
-      <h1 class="hero-title">
-        <span class="line">Une communication</span>
-        <span class="line accent">qui vous démarque.</span>
-      </h1>
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Conseil &amp; Communication · Angers
     </div>
+    <h1 class="hero-title">
+      <span class="line">Une communication</span>
+      <span class="line accent">qui vous démarque.</span>
+    </h1>
     <p class="hero-sub">ByPab accompagne startups, PME, associations et artisans avec une approche stratégique, humaine et orientée résultats.</p>
     <div class="hero-actions">
       <a href="#services"><button class="btn btn-primary">Découvrir les services</button></a>
@@ -1015,18 +339,20 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
   </div>
 </section>
 
-<!-- ═══ ABOUT ═══ -->
+<!-- ══════════════════════════════════
+     À PROPOS
+══════════════════════════════════ -->
 <section id="apropos">
   <div class="container">
     <div class="about-grid">
+
+      <!-- Left: profile card + CV button centered below -->
       <div class="rv">
-        <div class="profile-deco1"></div>
-        <div class="profile-deco2"></div>
         <div class="profile-card">
           <div class="profile-inner">
             <div class="profile-avatar">P</div>
             <div class="profile-name">Pablo C.</div>
-            <div class="profile-title">Fondateur · ByPab</div>
+            <div class="profile-role">Fondateur · ByPab</div>
             <div class="profile-location">Angers, Maine-et-Loire</div>
             <div class="profile-chips">
               <span class="chip">Stratégie</span>
@@ -1035,33 +361,67 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
             </div>
           </div>
         </div>
-        <div class="profile-badge">Disponible pour de nouveaux projets</div>
-        <button class="cv-btn" onclick="openCVModal()">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          Voir mon parcours
-        </button>
+        <!-- CV button centered under the card -->
+        <div class="cv-btn-wrap">
+          <button class="cv-btn" onclick="openCVModal()">
+            <svg viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            Voir mon parcours
+          </button>
+        </div>
       </div>
+
+      <!-- Right: text content -->
       <div class="about-text rv d2">
         <div class="eyebrow"><span class="eyebrow-dot"></span>À propos</div>
         <h2>La <em>communication</em> qui fait vraiment la différence</h2>
         <p>Je suis Pablo, fondateur de <strong>ByPab</strong> — une structure de conseil et communication basée à Angers, pensée pour ceux qui veulent faire les choses bien. Analytique, à l'écoute et stratège avant tout, j'apporte une vraie valeur ajoutée à chaque projet.</p>
         <p>Mon approche : comprendre votre besoin en profondeur avant d'agir. Une bonne communication ne se résume pas à un joli visuel — c'est un message clair, porté par la bonne stratégie, au bon moment, vers les bonnes personnes.</p>
         <div class="values-grid">
-          <div class="value-card"><div class="value-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="value-title">Stratégie d'abord</div><div class="value-desc">J'analyse avant d'agir. Chaque décision est réfléchie.</div></div>
-          <div class="value-card"><div class="value-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="value-title">À votre écoute</div><div class="value-desc">Votre projet, votre vision. Je m'adapte à vous.</div></div>
-          <div class="value-card"><div class="value-icon"><svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="value-title">Réactivité</div><div class="value-desc">Disponible et transparent à chaque étape.</div></div>
-          <div class="value-card"><div class="value-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="value-title">Orienté résultats</div><div class="value-desc">Des livrables à impact réel sur votre activité.</div></div>
+          <div class="value-card">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div class="value-title">Stratégie d'abord</div>
+            <div class="value-desc">J'analyse avant d'agir. Chaque décision est réfléchie.</div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+            <div class="value-title">À votre écoute</div>
+            <div class="value-desc">Votre projet, votre vision. Je m'adapte à vous.</div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div class="value-title">Réactivité</div>
+            <div class="value-desc">Disponible et transparent à chaque étape.</div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+            <div class="value-title">Orienté résultats</div>
+            <div class="value-desc">Des livrables à impact réel sur votre activité.</div>
+          </div>
         </div>
         <div class="skills-row">
-          <span class="skill-pill">Identité visuelle</span><span class="skill-pill">Réseaux sociaux</span><span class="skill-pill">Création web</span><span class="skill-pill">Rédaction</span><span class="skill-pill">Print</span>
+          <span class="skill-pill">Identité visuelle</span>
+          <span class="skill-pill">Réseaux sociaux</span>
+          <span class="skill-pill">Création web</span>
+          <span class="skill-pill">Rédaction</span>
+          <span class="skill-pill">Print</span>
         </div>
-        <div style="margin-top:var(--sp6)"><a href="#contact"><button class="btn btn-primary">Parlons de votre projet</button></a></div>
+        <div style="margin-top:24px">
+          <a href="#contact"><button class="btn btn-primary">Parlons de votre projet</button></a>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- ═══ SERVICES ═══ -->
+<!-- ══════════════════════════════════
+     SERVICES
+══════════════════════════════════ -->
 <section id="services">
   <div class="container">
     <div class="section-header">
@@ -1070,46 +430,79 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
       <p class="section-sub rv d2">Une offre complète adaptée à chaque profil — startup, PME, association ou artisan.</p>
     </div>
     <div class="services-grid">
+
       <div class="service-card rv">
         <div class="svc-num">01</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
-        <h3>Identité Visuelle &amp; Branding</h3>
+        <h3>Identité visuelle &amp; branding</h3>
         <p>Création ou refonte de votre image de marque pour vous démarquer avec cohérence et impact durable.</p>
-        <ul class="svc-list"><li>Logo &amp; charte graphique complète</li><li>Déclinaisons print &amp; digital</li><li>Guide d'identité visuelle</li><li>Direction artistique</li></ul>
+        <ul class="svc-list">
+          <li>Logo &amp; charte graphique complète</li>
+          <li>Déclinaisons print &amp; digital</li>
+          <li>Guide d'identité visuelle</li>
+          <li>Direction artistique</li>
+        </ul>
       </div>
+
       <div class="service-card rv d1">
         <div class="svc-num">02</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
-        <h3>Réseaux Sociaux</h3>
+        <h3>Réseaux sociaux</h3>
         <p>Gestion stratégique de vos comptes pour développer votre communauté et renforcer votre présence en ligne.</p>
-        <ul class="svc-list"><li>Stratégie éditoriale &amp; calendrier</li><li>Création de contenus visuels</li><li>Rédaction &amp; planification</li><li>Reporting &amp; analyse</li></ul>
+        <ul class="svc-list">
+          <li>Stratégie éditoriale &amp; calendrier</li>
+          <li>Création de contenus visuels</li>
+          <li>Rédaction &amp; planification</li>
+          <li>Reporting &amp; analyse</li>
+        </ul>
       </div>
+
       <div class="service-card rv d2">
         <div class="svc-num">03</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-        <h3>Création de Sites Web</h3>
+        <h3>Création de sites web</h3>
         <p>Sites vitrines et landing pages modernes, rapides et optimisés pour convertir vos visiteurs en clients.</p>
-        <ul class="svc-list"><li>Site vitrine ou one-page</li><li>Design responsive mobile-first</li><li>Optimisation SEO</li><li>Intégration CMS</li></ul>
+        <ul class="svc-list">
+          <li>Site vitrine ou one-page</li>
+          <li>Design responsive mobile-first</li>
+          <li>Optimisation SEO</li>
+          <li>Intégration CMS</li>
+        </ul>
       </div>
+
       <div class="service-card rv d1">
         <div class="svc-num">04</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-        <h3>Rédaction &amp; Copywriting</h3>
+        <h3>Rédaction &amp; copywriting</h3>
         <p>Des textes percutants qui parlent à votre audience, reflètent votre voix et poussent à l'action.</p>
-        <ul class="svc-list"><li>Textes web &amp; pages de vente</li><li>Articles de blog &amp; newsletters</li><li>Brochures &amp; supports</li><li>Scripts &amp; pitchs</li></ul>
+        <ul class="svc-list">
+          <li>Textes web &amp; pages de vente</li>
+          <li>Articles de blog &amp; newsletters</li>
+          <li>Brochures &amp; supports</li>
+          <li>Scripts &amp; pitchs</li>
+        </ul>
       </div>
+
       <div class="service-card rv d2">
         <div class="svc-num">05</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
-        <h3>Print &amp; Communication Physique</h3>
+        <h3>Print &amp; communication physique</h3>
         <p>Supports imprimés professionnels qui laissent une impression durable auprès de vos clients et prospects.</p>
-        <ul class="svc-list"><li>Flyers, affiches &amp; kakémonos</li><li>Cartes de visite &amp; papeterie</li><li>Brochures &amp; catalogues</li><li>Packaging &amp; étiquettes</li></ul>
+        <ul class="svc-list">
+          <li>Flyers, affiches &amp; kakémonos</li>
+          <li>Cartes de visite &amp; papeterie</li>
+          <li>Brochures &amp; catalogues</li>
+          <li>Packaging &amp; étiquettes</li>
+        </ul>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- ═══ PORTFOLIO ═══ -->
+<!-- ══════════════════════════════════
+     PORTFOLIO
+══════════════════════════════════ -->
 <section id="portfolio">
   <div class="container">
     <div class="section-header">
@@ -1121,85 +514,193 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
       <button class="filter-btn active" data-cat="all">Tout</button>
       <button class="filter-btn" data-cat="branding">Branding</button>
       <button class="filter-btn" data-cat="web">Web</button>
-      <button class="filter-btn" data-cat="social">Social Media</button>
+      <button class="filter-btn" data-cat="social">Social media</button>
       <button class="filter-btn" data-cat="print">Print</button>
     </div>
     <div class="portfolio-grid rv d2">
-      <div class="p-card wide" data-cat="branding" data-title="Studio Lumière — Refonte identité" data-client="Studio Lumière, Angers" data-date="Septembre 2024" data-type="Identité visuelle" data-desc="Studio Lumière, agence photo angevine, souhaitait moderniser une identité vieillissante pour attirer une clientèle professionnelle. Après audit de positionnement, j'ai conçu un logotype épuré, une palette premium et un guide de marque complet décliné sur tous leurs supports." data-tags="Logo,Charte graphique,Guide de marque,Print,Digital" data-img="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80">
+
+      <div class="p-card wide" data-cat="branding"
+        data-title="Studio Lumière — Refonte identité"
+        data-client="Studio Lumière, Angers"
+        data-date="Septembre 2024"
+        data-type="Identité visuelle"
+        data-desc="Studio Lumière, agence photo angevine, souhaitait moderniser une identité vieillissante pour attirer une clientèle professionnelle. Après audit de positionnement, j'ai conçu un logotype épuré, une palette premium et un guide de marque décliné sur tous leurs supports."
+        data-tags="Logo,Charte graphique,Guide de marque,Print,Digital"
+        data-img="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" alt="Branding Studio Lumière" loading="lazy"/>
-        <span class="p-badge">Branding</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Identité Visuelle</span><div class="p-title">Studio Lumière — Refonte complète</div><div class="p-desc">Logo · Charte · Guide de marque</div></div>
+        <span class="p-badge">Branding</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div class="p-overlay"><span class="p-cat">Identité visuelle</span><div class="p-title">Studio Lumière — Refonte complète</div><div class="p-desc">Logo · Charte · Guide de marque</div></div>
       </div>
-      <div class="p-card" data-cat="web" data-title="Rénov'Maine — Site vitrine" data-client="Rénov'Maine, Maine-et-Loire" data-date="Juillet 2024" data-type="Création web" data-desc="Rénov'Maine, entreprise de rénovation intérieure, n'avait aucune présence en ligne. Objectif : un site vitrine générateur de devis. Résultat : 5 pages responsive, SEO local optimisé, formulaire performant. En 3 mois, plus de 40 demandes entrantes organiques." data-tags="Site vitrine,SEO local,Responsive,Lead generation" data-img="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80">
+
+      <div class="p-card" data-cat="web"
+        data-title="Rénov'Maine — Site vitrine"
+        data-client="Rénov'Maine, Maine-et-Loire"
+        data-date="Juillet 2024"
+        data-type="Création web"
+        data-desc="Rénov'Maine, entreprise de rénovation intérieure, n'avait aucune présence en ligne. Objectif : un site vitrine générateur de devis. Résultat : 5 pages responsive, SEO local optimisé, formulaire performant. En 3 mois, plus de 40 demandes entrantes organiques."
+        data-tags="Site vitrine,SEO local,Responsive,Lead generation"
+        data-img="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80" alt="Site Rénov'Maine" loading="lazy"/>
-        <span class="p-badge">Web</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Site Web</span><div class="p-title">Rénov'Maine — Site vitrine</div><div class="p-desc">40+ leads organiques en 3 mois</div></div>
+        <span class="p-badge">Web</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div class="p-overlay"><span class="p-cat">Site web</span><div class="p-title">Rénov'Maine — Site vitrine</div><div class="p-desc">40+ leads organiques en 3 mois</div></div>
       </div>
-      <div class="p-card" data-cat="social" data-title="DataFlow — Stratégie réseaux" data-client="DataFlow, Angers" data-date="Juin 2024" data-type="Social Media" data-desc="DataFlow, startup data analytics, avait une présence sociale quasi nulle. Mission : construire audience LinkedIn et Instagram en 3 mois. Stratégie éditoriale, templates visuels, rédaction, planification. Résultats : +1 200 abonnés LinkedIn, engagement ×4." data-tags="LinkedIn,Instagram,Stratégie,Contenus,Reporting" data-img="https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=700&q=80">
+
+      <div class="p-card" data-cat="social"
+        data-title="DataFlow — Stratégie réseaux"
+        data-client="DataFlow, Angers"
+        data-date="Juin 2024"
+        data-type="Social media"
+        data-desc="DataFlow, startup data analytics, avait une présence sociale quasi nulle. Mission : construire une audience LinkedIn et Instagram en 3 mois. Stratégie éditoriale, templates visuels, rédaction, planification. Résultats : +1 200 abonnés LinkedIn, engagement ×4."
+        data-tags="LinkedIn,Instagram,Stratégie,Contenus,Reporting"
+        data-img="https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=700&q=80" alt="Social media DataFlow" loading="lazy"/>
-        <span class="p-badge">Social Media</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Social Media</span><div class="p-title">DataFlow — 3 mois de contenus</div><div class="p-desc">+1 200 abonnés · Engagement ×4</div></div>
+        <span class="p-badge">Social media</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div class="p-overlay"><span class="p-cat">Social media</span><div class="p-title">DataFlow — 3 mois de contenus</div><div class="p-desc">+1 200 abonnés · Engagement ×4</div></div>
       </div>
-      <div class="p-card" data-cat="print" data-title="Les Scènes de l'Ouest — Kit print" data-client="Les Scènes de l'Ouest, Angers" data-date="Avril 2024" data-type="Print" data-desc="Association culturelle angevine proposant des spectacles vivants. Besoin d'un kit communication pour la saison 2024-2025. J'ai réalisé l'affiche de saison, flyers, programmes de salle et bannières roll-up. Un univers graphique cohérent, élégant et accessible." data-tags="Affiche,Flyer,Programme,Roll-up,Identité" data-img="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=80">
+
+      <div class="p-card" data-cat="print"
+        data-title="Les Scènes de l'Ouest — Kit print"
+        data-client="Les Scènes de l'Ouest, Angers"
+        data-date="Avril 2024"
+        data-type="Print"
+        data-desc="Association culturelle angevine proposant des spectacles vivants. Besoin d'un kit communication pour la saison 2024-2025. J'ai réalisé l'affiche de saison, flyers, programmes de salle et bannières roll-up. Un univers graphique cohérent, élégant et accessible."
+        data-tags="Affiche,Flyer,Programme,Roll-up,Identité"
+        data-img="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=80" alt="Print Les Scènes de l'Ouest" loading="lazy"/>
-        <span class="p-badge">Print</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <span class="p-badge">Print</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
         <div class="p-overlay"><span class="p-cat">Print</span><div class="p-title">Les Scènes de l'Ouest</div><div class="p-desc">Kit complet saison 2024-2025</div></div>
       </div>
-      <div class="p-card tall" data-cat="branding" data-title="FC Anjou Nord — Branding sportif" data-client="FC Anjou Nord, Maine-et-Loire" data-date="Février 2024" data-type="Identité visuelle" data-desc="Le FC Anjou Nord voulait une identité moderne pour accompagner leur montée en compétition régionale. Nouveau blason, typographie dédiée, déclinaison sur maillots, équipements et supports digitaux. Une identité professionnelle qui reflète leurs ambitions." data-tags="Logo,Blason,Maillots,Print,Digital" data-img="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=80">
+
+      <div class="p-card tall" data-cat="branding"
+        data-title="FC Anjou Nord — Branding sportif"
+        data-client="FC Anjou Nord, Maine-et-Loire"
+        data-date="Février 2024"
+        data-type="Identité visuelle"
+        data-desc="Le FC Anjou Nord voulait une identité moderne pour accompagner leur montée en compétition régionale. Nouveau blason, typographie dédiée, déclinaison sur maillots, équipements et supports digitaux. Une identité professionnelle qui reflète leurs ambitions."
+        data-tags="Logo,Blason,Maillots,Print,Digital"
+        data-img="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=80" alt="Branding FC Anjou Nord" loading="lazy"/>
-        <span class="p-badge">Branding</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Identité Visuelle</span><div class="p-title">FC Anjou Nord</div><div class="p-desc">Blason · Maillots · Digital</div></div>
+        <span class="p-badge">Branding</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div class="p-overlay"><span class="p-cat">Identité visuelle</span><div class="p-title">FC Anjou Nord</div><div class="p-desc">Blason · Maillots · Digital</div></div>
       </div>
-      <div class="p-card" data-cat="social" data-title="Réseau Entreprendre 49 — Événement" data-client="Réseau Entreprendre 49, Angers" data-date="Janvier 2024" data-type="Communication événementielle" data-desc="Réseau Entreprendre 49 accompagne les créateurs d'entreprise. Mission : promouvoir un événement networking. Visuels réseaux, newsletter, supports imprimés. L'événement a affiché complet deux semaines avant la date." data-tags="Visuels réseaux,Newsletter,Print,Événementiel" data-img="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=700&q=80">
+
+      <div class="p-card" data-cat="social"
+        data-title="Réseau Entreprendre 49 — Événement"
+        data-client="Réseau Entreprendre 49, Angers"
+        data-date="Janvier 2024"
+        data-type="Communication événementielle"
+        data-desc="Réseau Entreprendre 49 accompagne les créateurs d'entreprise. Mission : promouvoir un événement networking. Visuels réseaux, newsletter, supports imprimés. L'événement a affiché complet deux semaines avant la date."
+        data-tags="Visuels réseaux,Newsletter,Print,Événementiel"
+        data-img="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=700&q=80" alt="Événement Réseau Entreprendre" loading="lazy"/>
-        <span class="p-badge">Social &amp; Print</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Événementiel</span><div class="p-title">Réseau Entreprendre 49</div><div class="p-desc">Complet 2 semaines avant la date</div></div>
+        <span class="p-badge">Social &amp; print</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div class="p-overlay"><span class="p-cat">Événementiel</span><div class="p-title">Réseau Entreprendre 49</div><div class="p-desc">Complet 2 semaines à l'avance</div></div>
       </div>
-      <div class="p-card" data-cat="branding" data-title="Optique Renard — Stratégie 12 mois" data-client="Optique Renard, Angers" data-date="Nov. 2023" data-type="Conseil &amp; Stratégie" data-desc="Optique Renard, opticien indépendant, souhaitait se différencier des enseignes nationales. Après audit complet : refonte identité, présence réseaux, print de proximité et partenariats locaux sur 12 mois. Résultat : CA en hausse de 22% en un an." data-tags="Audit,Stratégie,Identité,Réseaux,Print" data-img="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=700&q=80">
+
+      <div class="p-card" data-cat="branding"
+        data-title="Optique Renard — Stratégie 12 mois"
+        data-client="Optique Renard, Angers"
+        data-date="Nov. 2023"
+        data-type="Conseil &amp; stratégie"
+        data-desc="Optique Renard, opticien indépendant, souhaitait se différencier des enseignes nationales. Après audit complet : refonte identité, présence réseaux, print de proximité et partenariats locaux sur 12 mois. Résultat : CA en hausse de 22% en un an."
+        data-tags="Audit,Stratégie,Identité,Réseaux,Print"
+        data-img="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=700&q=80" alt="Stratégie Optique Renard" loading="lazy"/>
-        <span class="p-badge">Conseil</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Conseil &amp; Stratégie</span><div class="p-title">Optique Renard</div><div class="p-desc">Stratégie 12 mois · +22% de CA</div></div>
+        <span class="p-badge">Conseil</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div class="p-overlay"><span class="p-cat">Conseil &amp; stratégie</span><div class="p-title">Optique Renard</div><div class="p-desc">Stratégie 12 mois · +22% de CA</div></div>
       </div>
-      <div class="p-card" data-cat="web" data-title="GreenPack — Landing page" data-client="GreenPack, Maine-et-Loire" data-date="Oct. 2023" data-type="Création web" data-desc="GreenPack, startup éco-responsable, lançait une gamme d'emballages biosourcés. Objectif : landing page BtoB pour collecter des leads avant le lancement. Résultat : 320 leads qualifiés en 6 semaines, grâce à une page claire et une campagne LinkedIn coordonnée." data-tags="Landing page,Lead gen,BtoB,SEO,LinkedIn" data-img="https://images.unsplash.com/photo-1542744094-24638eff58bb?w=700&q=80">
+
+      <div class="p-card" data-cat="web"
+        data-title="GreenPack — Landing page"
+        data-client="GreenPack, Maine-et-Loire"
+        data-date="Oct. 2023"
+        data-type="Création web"
+        data-desc="GreenPack, startup éco-responsable, lançait une gamme d'emballages biosourcés. Objectif : landing page BtoB pour collecter des leads avant le lancement. Résultat : 320 leads qualifiés en 6 semaines, grâce à une page claire et une campagne LinkedIn coordonnée."
+        data-tags="Landing page,Lead gen,BtoB,SEO,LinkedIn"
+        data-img="https://images.unsplash.com/photo-1542744094-24638eff58bb?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1542744094-24638eff58bb?w=700&q=80" alt="Landing page GreenPack" loading="lazy"/>
-        <span class="p-badge">Web</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Landing Page</span><div class="p-title">GreenPack — Lancement</div><div class="p-desc">320 leads BtoB en 6 semaines</div></div>
+        <span class="p-badge">Web</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div class="p-overlay"><span class="p-cat">Landing page</span><div class="p-title">GreenPack — Lancement</div><div class="p-desc">320 leads BtoB en 6 semaines</div></div>
       </div>
-      <div class="p-card" data-cat="print" data-title="Charpente Leduc — Kit print" data-client="Charpente Leduc, Maine-et-Loire" data-date="Août 2023" data-type="Print &amp; Branding" data-desc="Charpente Leduc, artisan avec 20 ans d'expérience, avait besoin d'une communication professionnelle locale. Création complète : carte de visite, devisier, flyer de présentation et panneau de chantier. Une identité sobre et solide, à l'image de son savoir-faire." data-tags="Carte de visite,Devisier,Flyer,Panneau chantier" data-img="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80">
+
+      <div class="p-card" data-cat="print"
+        data-title="Charpente Leduc — Kit print"
+        data-client="Charpente Leduc, Maine-et-Loire"
+        data-date="Août 2023"
+        data-type="Print &amp; branding"
+        data-desc="Charpente Leduc, artisan avec 20 ans d'expérience, avait besoin d'une communication professionnelle locale. Création complète : carte de visite, devisier, flyer de présentation et panneau de chantier. Une identité sobre et solide, à l'image de son savoir-faire."
+        data-tags="Carte de visite,Devisier,Flyer,Panneau chantier"
+        data-img="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="Print Charpente Leduc" loading="lazy"/>
-        <span class="p-badge">Print</span><div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Print &amp; Branding</span><div class="p-title">Charpente Leduc</div><div class="p-desc">Carte · Flyer · Panneau chantier</div></div>
+        <span class="p-badge">Print</span>
+        <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div class="p-overlay"><span class="p-cat">Print &amp; branding</span><div class="p-title">Charpente Leduc</div><div class="p-desc">Carte · Flyer · Panneau chantier</div></div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- ═══ TESTIMONIALS ═══ -->
+<!-- ══════════════════════════════════
+     TÉMOIGNAGES
+══════════════════════════════════ -->
 <section id="temoignages">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow rv"><span class="eyebrow-dot"></span>Ils me font confiance</div>
       <h2 class="section-title rv d1"><strong>Ce que disent mes clients</strong></h2>
     </div>
-    <div class="testimonials-track-wrap rv d1">
-      <div class="testimonials-track" id="t-track">
-        <div class="t-card"><div class="t-stars">★★★★★</div><div class="t-quote-mark">"</div><p class="t-text">Un travail remarquable sur notre identité visuelle. Pablo est à l'écoute, réactif et très professionnel. Notre logo et nos supports sont exactement ce dont nous avions besoin.</p><div class="t-author"><div class="t-avatar">ML</div><div><div class="t-name">Marie L.</div><div class="t-role">Fondatrice · Startup Greentech, Angers</div></div></div></div>
-        <div class="t-card"><div class="t-stars">★★★★★</div><div class="t-quote-mark">"</div><p class="t-text">Notre site vitrine a été livré dans les délais, beau, rapide et bien référencé. En trois mois, on a reçu plus de quarante demandes entrantes. Je recommande Pablo sans hésiter.</p><div class="t-author"><div class="t-avatar">JD</div><div><div class="t-name">Jean D.</div><div class="t-role">Gérant · PME Bâtiment, Maine-et-Loire</div></div></div></div>
-        <div class="t-card"><div class="t-stars">★★★★★</div><div class="t-quote-mark">"</div><p class="t-text">La gestion de nos réseaux a transformé notre visibilité. La communauté grandit, nos événements se remplissent. Un vrai partenaire de confiance pour notre association.</p><div class="t-author"><div class="t-avatar">SC</div><div><div class="t-name">Sophie C.</div><div class="t-role">Présidente · Association culturelle, Angers</div></div></div></div>
-        <div class="t-card"><div class="t-stars">★★★★★</div><div class="t-quote-mark">"</div><p class="t-text">Pablo a cerné très rapidement notre positionnement et proposé une stratégie cohérente. Les résultats sont là : engagement en hausse et prospects bien plus qualifiés.</p><div class="t-author"><div class="t-avatar">TP</div><div><div class="t-name">Thomas P.</div><div class="t-role">Directeur · Startup SaaS, Angers</div></div></div></div>
-        <div class="t-card"><div class="t-stars">★★★★★</div><div class="t-quote-mark">"</div><p class="t-text">Un freelance sérieux, ponctuel et vraiment impliqué. Le kit print qu'il nous a conçu dépasse ce qu'on espérait. Nos clients le remarquent systématiquement.</p><div class="t-author"><div class="t-avatar">AR</div><div><div class="t-name">Audrey R.</div><div class="t-role">Gérante · Commerce local, Maine-et-Loire</div></div></div></div>
-        <div class="t-card"><div class="t-stars">★★★★★</div><div class="t-quote-mark">"</div><p class="t-text">Collaboration au top du début à la fin. Pablo comprend vite les enjeux, est force de proposition et livre toujours un travail soigné. On repart ensemble sur un deuxième projet.</p><div class="t-author"><div class="t-avatar">NB</div><div><div class="t-name">Nicolas B.</div><div class="t-role">Co-fondateur · Startup Tech, Angers</div></div></div></div>
+    <div class="rv d1">
+      <!-- Grid testimonials — JS toggles pages -->
+      <div class="testimonials-grid" id="t-grid">
+        <div class="t-card">
+          <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
+          <p class="t-text">Un travail remarquable sur notre identité visuelle. Pablo est à l'écoute, réactif et très professionnel. Notre logo et nos supports sont exactement ce dont nous avions besoin pour nous lancer.</p>
+          <div class="t-author"><div class="t-avatar">ML</div><div><div class="t-name">Marie L.</div><div class="t-role">Fondatrice · Startup Greentech, Angers</div></div></div>
+        </div>
+        <div class="t-card">
+          <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
+          <p class="t-text">Notre site vitrine a été livré dans les délais, beau, rapide et bien référencé. En trois mois, on a reçu plus de quarante demandes entrantes. Je recommande Pablo sans hésiter.</p>
+          <div class="t-author"><div class="t-avatar">JD</div><div><div class="t-name">Jean D.</div><div class="t-role">Gérant · PME Bâtiment, Maine-et-Loire</div></div></div>
+        </div>
+        <div class="t-card">
+          <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
+          <p class="t-text">La gestion de nos réseaux a transformé notre visibilité. La communauté grandit, nos événements se remplissent. Un vrai partenaire de confiance pour notre association.</p>
+          <div class="t-author"><div class="t-avatar">SC</div><div><div class="t-name">Sophie C.</div><div class="t-role">Présidente · Association culturelle, Angers</div></div></div>
+        </div>
+        <div class="t-card">
+          <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
+          <p class="t-text">Pablo a cerné très rapidement notre positionnement et proposé une stratégie cohérente. Les résultats sont là : engagement en hausse et prospects bien plus qualifiés.</p>
+          <div class="t-author"><div class="t-avatar">TP</div><div><div class="t-name">Thomas P.</div><div class="t-role">Directeur · Startup SaaS, Angers</div></div></div>
+        </div>
+        <div class="t-card">
+          <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
+          <p class="t-text">Un freelance sérieux, ponctuel et vraiment impliqué. Le kit print qu'il nous a conçu dépasse ce qu'on espérait. Nos clients le remarquent systématiquement.</p>
+          <div class="t-author"><div class="t-avatar">AR</div><div><div class="t-name">Audrey R.</div><div class="t-role">Gérante · Commerce local, Maine-et-Loire</div></div></div>
+        </div>
+        <div class="t-card">
+          <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
+          <p class="t-text">Collaboration au top du début à la fin. Pablo comprend vite les enjeux, est force de proposition et livre toujours un travail soigné. On repart ensemble sur un deuxième projet.</p>
+          <div class="t-author"><div class="t-avatar">NB</div><div><div class="t-name">Nicolas B.</div><div class="t-role">Co-fondateur · Startup Tech, Angers</div></div></div>
+        </div>
       </div>
-      <div class="t-controls">
-        <button class="t-arrow" id="t-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div class="t-dots" id="t-dots"></div>
-        <button class="t-arrow" id="t-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
+      <!-- Pagination dots -->
+      <div class="t-nav" id="t-nav"></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ PARTNERS ═══ -->
+<!-- ══════════════════════════════════
+     PARTENAIRES
+══════════════════════════════════ -->
 <section id="partenaires">
   <div class="container">
     <div class="partners-label rv"><span>Ils m'ont fait confiance</span></div>
@@ -1210,6 +711,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
         <div class="partner-pill">Mairie d'Erdre-en-Anjou</div>
         <div class="partner-pill">EURL Melain</div>
         <div class="partner-pill">SARL Coignard</div>
+        <!-- duplicate for seamless loop -->
         <div class="partner-pill">Transports Naulet</div>
         <div class="partner-pill">Scania France</div>
         <div class="partner-pill">Mairie d'Erdre-en-Anjou</div>
@@ -1220,7 +722,9 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
   </div>
 </section>
 
-<!-- ═══ PRICING ═══ -->
+<!-- ══════════════════════════════════
+     TARIFS
+══════════════════════════════════ -->
 <section id="tarifs">
   <div class="container">
     <div class="section-header">
@@ -1229,6 +733,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
       <p class="section-sub rv d2">Des fourchettes transparentes pour vous aider à budgéter. Devis gratuit et sans engagement.</p>
     </div>
     <div class="pricing-grid">
+
       <div class="pricing-card rv">
         <div class="pricing-tier">Starter</div>
         <div class="pricing-from">à partir de</div>
@@ -1244,6 +749,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
         </ul>
         <a href="#contact"><button class="btn btn-ghost" style="width:100%;justify-content:center">Demander un devis</button></a>
       </div>
+
       <div class="pricing-card featured rv d1">
         <div class="pricing-badge">Le plus choisi</div>
         <div class="pricing-tier">Essentiel</div>
@@ -1261,6 +767,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
         </ul>
         <a href="#contact"><button class="btn btn-primary" style="width:100%;justify-content:center">Démarrer le projet</button></a>
       </div>
+
       <div class="pricing-card rv d2">
         <div class="pricing-tier">Stratégique</div>
         <div class="pricing-from">à partir de</div>
@@ -1277,6 +784,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
         </ul>
         <a href="#contact"><button class="btn btn-ghost" style="width:100%;justify-content:center">Demander un devis</button></a>
       </div>
+
     </div>
     <div class="pricing-cta-block rv">
       <p>Vous avez un projet spécifique ou un budget particulier ? <strong>Chaque projet est unique.</strong><br>Le premier échange est gratuit et sans engagement.</p>
@@ -1285,7 +793,9 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
   </div>
 </section>
 
-<!-- ═══ CONTACT ═══ -->
+<!-- ══════════════════════════════════
+     CONTACT
+══════════════════════════════════ -->
 <section id="contact">
   <div class="container">
     <div class="section-header">
@@ -1294,13 +804,23 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
       <p class="section-sub rv d2">Remplissez le formulaire ou contactez-moi directement. Je reviens vers vous sous 24h.</p>
     </div>
     <div class="contact-grid">
+
       <div class="contact-info rv">
         <h3>Discutons de votre <em>vision</em></h3>
         <p>Basé à Angers, j'interviens dans tout le Maine-et-Loire et à distance partout en France. Que ce soit pour un projet ponctuel ou un accompagnement long terme, je suis disponible.</p>
         <div class="contact-methods">
-          <div class="contact-method"><div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="contact-method-label">Email</div><div class="contact-method-value">contact@bypab.fr</div></div></div>
-          <div class="contact-method"><div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.27 6.27l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="contact-method-label">Téléphone</div><div class="contact-method-value">06 70 67 86 65</div></div></div>
-          <div class="contact-method"><div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="contact-method-label">Localisation</div><div class="contact-method-value">Angers, Maine-et-Loire (49)</div></div></div>
+          <div class="contact-method">
+            <div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div><div class="contact-method-label">Email</div><div class="contact-method-value">contact@bypab.fr</div></div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.27 6.27l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div><div class="contact-method-label">Téléphone</div><div class="contact-method-value">06 70 67 86 65</div></div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><div class="contact-method-label">Localisation</div><div class="contact-method-value">Angers, Maine-et-Loire (49)</div></div>
+          </div>
         </div>
         <div class="social-row">
           <a href="https://www.linkedin.com/in/pablo-c-b49428208/" target="_blank" rel="noopener" class="social-btn" title="LinkedIn">
@@ -1308,41 +828,82 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
           </a>
         </div>
       </div>
+
       <div class="rv d2">
-        <!-- EmailJS form — sends directly to pablochauvin1@gmail.com, email never exposed -->
         <form class="contact-form-wrap" id="contact-form" novalidate>
           <div class="form-row">
-            <div class="form-field"><label class="form-label" for="f-name">Prénom &amp; Nom *</label><input class="form-input" type="text" id="f-name" placeholder="Jean Dupont" autocomplete="name" required/></div>
-            <div class="form-field"><label class="form-label" for="f-email">Email *</label><input class="form-input" type="email" id="f-email" placeholder="jean@exemple.fr" autocomplete="email" required/></div>
-          </div>
-          <div class="form-row">
-            <div class="form-field"><label class="form-label" for="f-phone">Téléphone</label><input class="form-input" type="tel" id="f-phone" placeholder="06 00 00 00 00" autocomplete="tel"/></div>
-            <div class="form-field"><label class="form-label" for="f-type">Type de structure</label>
-              <select class="form-select" id="f-type"><option value="">Sélectionner...</option><option>Startup</option><option>PME / TPE</option><option>Association / Club</option><option>Artisan / Indépendant</option><option>Particulier</option><option>Autre</option></select>
+            <div class="form-field">
+              <label class="form-label" for="f-name">Prénom &amp; nom *</label>
+              <input class="form-input" type="text" id="f-name" placeholder="Jean Dupont" autocomplete="name" required/>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="f-email">Email *</label>
+              <input class="form-input" type="email" id="f-email" placeholder="jean@exemple.fr" autocomplete="email" required/>
             </div>
           </div>
-          <div class="form-field"><label class="form-label" for="f-service">Service souhaité</label>
-            <select class="form-select" id="f-service"><option value="">Quel service vous intéresse ?</option><option>Identité Visuelle / Branding</option><option>Réseaux Sociaux</option><option>Création de site web</option><option>Rédaction / Copywriting</option><option>Print</option><option>Pack complet / Sur devis</option></select>
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label" for="f-phone">Téléphone</label>
+              <input class="form-input" type="tel" id="f-phone" placeholder="06 00 00 00 00" autocomplete="tel"/>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="f-type">Type de structure</label>
+              <select class="form-select" id="f-type">
+                <option value="">Sélectionner...</option>
+                <option>Startup</option>
+                <option>PME / TPE</option>
+                <option>Association / Club</option>
+                <option>Artisan / Indépendant</option>
+                <option>Particulier</option>
+                <option>Autre</option>
+              </select>
+            </div>
           </div>
-          <div class="form-field"><label class="form-label" for="f-msg">Votre message *</label><textarea class="form-textarea" id="f-msg" rows="5" placeholder="Décrivez votre projet, vos objectifs, vos besoins..." required></textarea></div>
-          <div class="form-field"><label class="form-checkbox-label"><input type="checkbox" id="f-rgpd" required/>J'accepte que mes données soient utilisées pour être recontacté dans le cadre de ce projet. *</label></div>
+          <div class="form-field">
+            <label class="form-label" for="f-service">Service souhaité</label>
+            <select class="form-select" id="f-service">
+              <option value="">Quel service vous intéresse ?</option>
+              <option>Identité visuelle / Branding</option>
+              <option>Réseaux sociaux</option>
+              <option>Création de site web</option>
+              <option>Rédaction / Copywriting</option>
+              <option>Print</option>
+              <option>Pack complet / Sur devis</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="f-msg">Votre message *</label>
+            <textarea class="form-textarea" id="f-msg" rows="5" placeholder="Décrivez votre projet, vos objectifs, vos besoins..." required></textarea>
+          </div>
+          <div class="form-field">
+            <label class="form-checkbox-label">
+              <input type="checkbox" id="f-rgpd" required/>
+              J'accepte que mes données soient utilisées pour être recontacté dans le cadre de ce projet. *
+            </label>
+          </div>
           <div class="form-success" id="form-success">Message bien reçu — Je vous réponds sous 24h. À très vite, Pablo.</div>
           <div class="form-error" id="form-error">Une erreur est survenue. Merci de réessayer ou d'écrire directement à contact@bypab.fr</div>
           <div class="form-footer">
             <button type="submit" class="btn btn-primary" id="f-submit">Envoyer le message</button>
-            <span class="form-note"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Données confidentielles · Réponse sous 24h</span>
+            <span class="form-note">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Données confidentielles · Réponse sous 24h
+            </span>
           </div>
         </form>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
+<!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <div class="footer-logo-text">By<em>Pab</em>.</div>
+      <div class="footer-logo">By<em>Pab</em>.</div>
       <p class="footer-brand-desc">Conseil &amp; Communication à Angers. Stratégie, identité visuelle et digital pour les structures qui veulent faire les choses bien.</p>
     </div>
     <div class="footer-col">
@@ -1375,185 +936,7 @@ footer{background:var(--ink);padding:var(--sp8) max(24px,5%) var(--sp5);position
   </div>
 </footer>
 
-<script>
-// ── EMAILJS INIT ──
-// EmailJS sends directly to pablochauvin1@gmail.com via their API — email never exposed in frontend
-(function(){emailjs.init({publicKey:"YOUR_PUBLIC_KEY"});})();
-// ↑ Instructions: 1) go to emailjs.com, create free account
-//   2) Add Gmail service (Service ID: "service_bypab")
-//   3) Create template with variables: {{from_name}}, {{from_email}}, {{phone}}, {{structure}}, {{service}}, {{message}}
-//   4) Replace "YOUR_PUBLIC_KEY" with your actual public key
-//   5) Replace "service_bypab" and "template_bypab" below with your real IDs
-
-// ── CURSOR ──
-const cd=document.getElementById('cd'),cr=document.getElementById('cr');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px';});
-(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
-document.querySelectorAll('a,button,.p-card,.service-card,.t-card,.pricing-card,.value-card,.contact-method').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cd.classList.add('h');cr.classList.add('h');});
-  el.addEventListener('mouseleave',()=>{cd.classList.remove('h');cr.classList.remove('h');});
-});
-
-// ── NAV SCROLL ──
-const mainNav=document.getElementById('main-nav');
-const navAs=document.querySelectorAll('.nav-links a');
-const allSections=document.querySelectorAll('section[id]');
-let ticking=false;
-window.addEventListener('scroll',()=>{
-  if(!ticking){
-    requestAnimationFrame(()=>{
-      mainNav.classList.toggle('scrolled',scrollY>40);
-      let cur='';
-      allSections.forEach(s=>{if(scrollY>=s.offsetTop-100)cur=s.id;});
-      navAs.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
-      ticking=false;
-    });
-    ticking=true;
-  }
-});
-
-// ── MOBILE MENU ──
-const mobMenu=document.getElementById('mob-menu');
-document.getElementById('burger-btn').onclick=()=>mobMenu.classList.add('open');
-document.getElementById('mob-close').onclick=()=>mobMenu.classList.remove('open');
-function closeMob(){mobMenu.classList.remove('open');}
-
-// ── SCROLL REVEAL ──
-const revObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target);}});
-},{threshold:.06,rootMargin:'0px 0px -28px 0px'});
-document.querySelectorAll('.rv').forEach(el=>revObs.observe(el));
-
-// ── PORTFOLIO FILTER ──
-document.querySelectorAll('.filter-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const cat=btn.dataset.cat;
-    document.querySelectorAll('.p-card').forEach(c=>{
-      const show=cat==='all'||c.dataset.cat===cat;
-      c.style.opacity=show?'1':'0.15';
-      c.style.pointerEvents=show?'':'none';
-    });
-  });
-});
-
-// ── PORTFOLIO MODAL ──
-document.querySelectorAll('.p-card').forEach(card=>{
-  card.addEventListener('click',()=>{
-    const {title,client,date,type,desc,img}=card.dataset;
-    const tags=card.dataset.tags.split(',');
-    document.getElementById('pmod-img').innerHTML=`<img src="${img}" alt="${title}" style="width:100%;height:100%;object-fit:cover"/><div class="p-modal-img-overlay"></div>`;
-    document.getElementById('pmod-meta').innerHTML=`
-      <div class="meta-field"><span class="meta-label">Client</span><span class="meta-val">${client}</span></div>
-      <div class="meta-field"><span class="meta-label">Date</span><span class="meta-val">${date}</span></div>
-      <div class="meta-field"><span class="meta-label">Prestation</span><span class="meta-val">${type}</span></div>`;
-    document.getElementById('pmod-title').textContent=title;
-    document.getElementById('pmod-desc').textContent=desc;
-    document.getElementById('pmod-tags').innerHTML=tags.map(t=>`<span class="p-tag">${t.trim()}</span>`).join('');
-    document.getElementById('p-modal-bg').classList.add('open');
-    document.body.style.overflow='hidden';
-  });
-});
-function closePModal(e){if(e.target===document.getElementById('p-modal-bg'))closePModalDirect();}
-function closePModalDirect(){document.getElementById('p-modal-bg').classList.remove('open');document.body.style.overflow='';}
-
-// ── CV MODAL ──
-function openCVModal(){document.getElementById('cv-overlay').classList.add('open');document.body.style.overflow='hidden';}
-function closeCVModal(e){if(e.target===document.getElementById('cv-overlay'))closeCVModalDirect();}
-function closeCVModalDirect(){document.getElementById('cv-overlay').classList.remove('open');document.body.style.overflow='';}
-
-// ── TESTIMONIALS CAROUSEL ──
-const tTrack=document.getElementById('t-track');
-const tCards=Array.from(tTrack.querySelectorAll('.t-card'));
-const tDotsEl=document.getElementById('t-dots');
-let tCur=0;
-function getTPP(){return window.innerWidth>900?3:window.innerWidth>580?2:1;}
-let tPP=getTPP();
-const tTotal=()=>Math.ceil(tCards.length/tPP);
-
-function buildTDots(){
-  tDotsEl.innerHTML='';
-  for(let i=0;i<tTotal();i++){
-    const d=document.createElement('div');
-    d.className='t-dot'+(i===tCur?' active':'');
-    d.onclick=()=>tGoTo(i);
-    tDotsEl.appendChild(d);
-  }
-}
-function tGoTo(idx){
-  const tp=tTotal();
-  tCur=((idx%tp)+tp)%tp;
-  const cw=tCards[0].offsetWidth;
-  const gap=12;
-  tTrack.style.transform=`translateX(-${tCur*(cw+gap)*tPP}px)`;
-  tDotsEl.querySelectorAll('.t-dot').forEach((d,i)=>d.classList.toggle('active',i===tCur));
-}
-document.getElementById('t-prev').onclick=()=>tGoTo(tCur-1);
-document.getElementById('t-next').onclick=()=>tGoTo(tCur+1);
-let tAuto=setInterval(()=>tGoTo(tCur+1),5200);
-tTrack.addEventListener('mouseenter',()=>clearInterval(tAuto));
-tTrack.addEventListener('mouseleave',()=>{tAuto=setInterval(()=>tGoTo(tCur+1),5200);});
-window.addEventListener('resize',()=>{tPP=getTPP();tGoTo(0);buildTDots();});
-buildTDots();
-
-// ── COOKIE ──
-if(!localStorage.getItem('bypab-consent')){
-  setTimeout(()=>document.getElementById('cookie-banner').classList.remove('hidden'),1400);
-}
-function cookieAccept(){localStorage.setItem('bypab-consent','accepted');document.getElementById('cookie-banner').classList.add('hidden');}
-function cookieDecline(){localStorage.setItem('bypab-consent','declined');document.getElementById('cookie-banner').classList.add('hidden');}
-
-// ── LEGAL ──
-function openLegal(p){document.getElementById('legal-'+p).classList.add('open');document.body.style.overflow='hidden';}
-function closeLegal(p){document.getElementById('legal-'+p).classList.remove('open');document.body.style.overflow='';}
-document.querySelectorAll('.legal-overlay').forEach(ov=>{
-  ov.addEventListener('click',e=>{if(e.target===ov)closeLegal(ov.id.replace('legal-',''));});
-});
-
-// ── CONTACT FORM (EmailJS) ──
-document.getElementById('contact-form').addEventListener('submit',async(e)=>{
-  e.preventDefault();
-  const name=document.getElementById('f-name').value.trim();
-  const email=document.getElementById('f-email').value.trim();
-  const msg=document.getElementById('f-msg').value.trim();
-  const rgpd=document.getElementById('f-rgpd').checked;
-  if(!name||!email||!msg){alert('Merci de remplir les champs obligatoires (*).'); return;}
-  if(!rgpd){alert('Merci d\'accepter la politique de confidentialité.'); return;}
-  const btn=document.getElementById('f-submit');
-  btn.textContent='Envoi…';btn.disabled=true;
-  const successEl=document.getElementById('form-success');
-  const errorEl=document.getElementById('form-error');
-  successEl.classList.remove('visible');errorEl.classList.remove('visible');
-  try{
-    await emailjs.send('service_bypab','template_bypab',{
-      from_name:name,
-      from_email:email,
-      phone:document.getElementById('f-phone').value||'Non renseigné',
-      structure:document.getElementById('f-type').value||'Non renseigné',
-      service:document.getElementById('f-service').value||'Non renseigné',
-      message:msg
-    });
-    successEl.classList.add('visible');
-    e.target.reset();
-  }catch(err){
-    errorEl.classList.add('visible');
-  }
-  btn.textContent='Envoyer le message';btn.disabled=false;
-});
-
-// ── ESCAPE KEY ──
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
-    closePModalDirect();
-    closeCVModalDirect();
-    ['mentions','confidentialite'].forEach(p=>{
-      const el=document.getElementById('legal-'+p);
-      if(el&&el.classList.contains('open'))closeLegal(p);
-    });
-  }
-});
-</script>
+<!-- Script -->
+<script src="script.js"></script>
 </body>
 </html>
