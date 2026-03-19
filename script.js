@@ -1,16 +1,7 @@
-/* ═══════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    BYPAB — script.js
-
-   FORMULAIRE — Formspree (aucune config serveur nécessaire)
-   ─────────────────────────────────────────────────────────
-   Pour activer le formulaire :
-   1. Va sur https://formspree.io et crée un compte gratuit
-   2. Clique "New Form" → entre ton email pablochauvin1@gmail.com
-   3. Copie l'ID du formulaire (ex: xpwrqodj)
-   4. Remplace FORMSPREE_ID ci-dessous par cet ID
-   5. Déploie — c'est tout. Les messages arrivent dans ta boîte.
-═══════════════════════════════════════════════════════ */
-
+   Formulaire via Formspree → pablochauvin1@gmail.com
+═══════════════════════════════════════════════ */
 const FORMSPREE_ID = 'mreyjprr';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -26,9 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initEscKey();
 });
 
-/* ════════════════════════════
-   CURSOR
-════════════════════════════ */
 function initCursor() {
   const cd = document.getElementById('cd');
   const cr = document.getElementById('cr');
@@ -50,9 +38,6 @@ function initCursor() {
     });
 }
 
-/* ════════════════════════════
-   NAV
-════════════════════════════ */
 function initNav() {
   const nav   = document.getElementById('main-nav');
   const links = document.querySelectorAll('.nav-links a');
@@ -71,9 +56,6 @@ function initNav() {
   });
 }
 
-/* ════════════════════════════
-   MOBILE MENU
-════════════════════════════ */
 function initMobileMenu() {
   const menu  = document.getElementById('mob-menu');
   const open  = document.getElementById('burger-btn');
@@ -84,9 +66,6 @@ function initMobileMenu() {
 }
 window.closeMob = () => { document.getElementById('mob-menu')?.classList.remove('open'); };
 
-/* ════════════════════════════
-   SCROLL REVEAL
-════════════════════════════ */
 function initReveal() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
@@ -94,9 +73,6 @@ function initReveal() {
   document.querySelectorAll('.rv').forEach(el => obs.observe(el));
 }
 
-/* ════════════════════════════
-   PORTFOLIO FILTER
-════════════════════════════ */
 function initPortfolioFilter() {
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -112,9 +88,6 @@ function initPortfolioFilter() {
   });
 }
 
-/* ════════════════════════════
-   PORTFOLIO MODAL
-════════════════════════════ */
 function initPortfolioModal() {
   document.querySelectorAll('.p-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -135,55 +108,34 @@ function initPortfolioModal() {
     });
   });
 }
-window.closePModal = e => { if (e.target === document.getElementById('p-modal-bg')) closePModalDirect(); };
+window.closePModal       = e => { if (e.target === document.getElementById('p-modal-bg')) closePModalDirect(); };
 window.closePModalDirect = () => { document.getElementById('p-modal-bg').classList.remove('open'); document.body.style.overflow = ''; };
-
-/* ════════════════════════════
-   CV MODAL
-════════════════════════════ */
-window.openCVModal       = () => { document.getElementById('cv-overlay').classList.add('open'); document.body.style.overflow = 'hidden'; };
-window.closeCVModal      = e  => { if (e.target === document.getElementById('cv-overlay')) closeCVModalDirect(); };
+window.openCVModal        = () => { document.getElementById('cv-overlay').classList.add('open');    document.body.style.overflow = 'hidden'; };
+window.closeCVModal       = e  => { if (e.target === document.getElementById('cv-overlay')) closeCVModalDirect(); };
 window.closeCVModalDirect = () => { document.getElementById('cv-overlay').classList.remove('open'); document.body.style.overflow = ''; };
 
-/* ════════════════════════════
-   TESTIMONIALS — smooth slider
-   Cards slide 1 at a time,
-   responsive per-page count
-════════════════════════════ */
+/* ── TESTIMONIALS slider ── */
 function initTestimonials() {
   const track   = document.getElementById('t-track');
   const pipsEl  = document.getElementById('t-pips');
   const prevBtn = document.getElementById('t-prev');
   const nextBtn = document.getElementById('t-next');
   if (!track || !pipsEl || !prevBtn || !nextBtn) return;
-
   const cards = Array.from(track.querySelectorAll('.t-card'));
-  let   cur   = 0;
-  let   auto;
-
-  function perPage() {
-    return window.innerWidth > 1024 ? 3 : window.innerWidth > 640 ? 2 : 1;
-  }
+  let cur = 0, auto;
+  function perPage() { return window.innerWidth > 1024 ? 3 : window.innerWidth > 640 ? 2 : 1; }
   function totalSlides() { return Math.max(1, cards.length - perPage() + 1); }
-
   function go(idx) {
-    const pp = perPage();
     const ts = totalSlides();
     cur = ((idx % ts) + ts) % ts;
-
-    // Translate: move by card width + gap per step
-    const cardW  = cards[0].offsetWidth;
-    const gapPx  = 19.2; // 1.2rem at default
-    track.style.transform = `translateX(-${cur * (cardW + gapPx)}px)`;
-
-    // Update pips
+    const cardW = cards[0].offsetWidth;
+    const gap = 19.2;
+    track.style.transform = `translateX(-${cur * (cardW + gap)}px)`;
     pipsEl.querySelectorAll('.t-pip').forEach((p, i) => p.classList.toggle('active', i === cur));
   }
-
   function buildPips() {
-    const ts = totalSlides();
     pipsEl.innerHTML = '';
-    for (let i = 0; i < ts; i++) {
+    for (let i = 0; i < totalSlides(); i++) {
       const p = document.createElement('button');
       p.className = 't-pip' + (i === cur ? ' active' : '');
       p.setAttribute('aria-label', `Avis ${i + 1}`);
@@ -191,36 +143,25 @@ function initTestimonials() {
       pipsEl.appendChild(p);
     }
   }
-
   function resetAuto() {
     clearInterval(auto);
     auto = setInterval(() => go(cur + 1), 5000);
   }
-
   prevBtn.addEventListener('click', () => { go(cur - 1); resetAuto(); });
   nextBtn.addEventListener('click', () => { go(cur + 1); resetAuto(); });
-
-  // Pause on hover
   track.addEventListener('mouseenter', () => clearInterval(auto));
   track.addEventListener('mouseleave', resetAuto);
-
-  // Touch swipe
   let touchX = 0;
   track.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
   track.addEventListener('touchend',   e => {
     const dx = e.changedTouches[0].clientX - touchX;
     if (Math.abs(dx) > 40) { go(dx < 0 ? cur + 1 : cur - 1); resetAuto(); }
   });
-
   window.addEventListener('resize', () => { cur = 0; buildPips(); go(0); });
-
   buildPips();
   resetAuto();
 }
 
-/* ════════════════════════════
-   COOKIE
-════════════════════════════ */
 function initCookie() {
   if (!localStorage.getItem('bypab-consent')) {
     setTimeout(() => document.getElementById('cookie-banner')?.classList.remove('hidden'), 1400);
@@ -228,47 +169,30 @@ function initCookie() {
 }
 window.cookieAccept  = () => { localStorage.setItem('bypab-consent', 'accepted');  document.getElementById('cookie-banner').classList.add('hidden'); };
 window.cookieDecline = () => { localStorage.setItem('bypab-consent', 'declined'); document.getElementById('cookie-banner').classList.add('hidden'); };
-
-/* ════════════════════════════
-   LEGAL MODALS
-════════════════════════════ */
 window.openLegal  = p => { document.getElementById('legal-' + p).classList.add('open');    document.body.style.overflow = 'hidden'; };
 window.closeLegal = p => { document.getElementById('legal-' + p).classList.remove('open'); document.body.style.overflow = ''; };
 document.querySelectorAll('.legal-overlay').forEach(ov =>
   ov.addEventListener('click', e => { if (e.target === ov) window.closeLegal(ov.id.replace('legal-', '')); })
 );
 
-/* ════════════════════════════
-   CONTACT FORM — Formspree
-   Sends POST to Formspree API
-   → forwards to pablochauvin1@gmail.com
-   Email address is NEVER in the HTML
-════════════════════════════ */
+/* ── FORM via Formspree ── */
 function initForm() {
   const form    = document.getElementById('contact-form');
   const btnEl   = document.getElementById('f-submit');
   const success = document.getElementById('form-success');
   const errEl   = document.getElementById('form-error');
   if (!form) return;
-
   form.addEventListener('submit', async e => {
     e.preventDefault();
-
     const name  = document.getElementById('f-name').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const msg   = document.getElementById('f-msg').value.trim();
     const rgpd  = document.getElementById('f-rgpd').checked;
-
     if (!name || !email || !msg) { alert('Merci de remplir les champs obligatoires (*).'); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Adresse email invalide.'); return; }
     if (!rgpd) { alert("Merci d'accepter la politique de confidentialité."); return; }
-
-    btnEl.textContent = 'Envoi…';
-    btnEl.classList.add('loading');
-    success.classList.remove('visible');
-    errEl.classList.remove('visible');
-
-    // Build form data with all fields
+    btnEl.textContent = 'Envoi…'; btnEl.classList.add('loading');
+    success.classList.remove('visible'); errEl.classList.remove('visible');
     const body = new FormData();
     body.append('name',      name);
     body.append('email',     email);
@@ -276,36 +200,18 @@ function initForm() {
     body.append('structure', document.getElementById('f-type').value    || 'Non renseigné');
     body.append('service',   document.getElementById('f-service').value || 'Non renseigné');
     body.append('message',   msg);
-    // Honeypot anti-spam
-    body.append('_gotcha', '');
-
+    body.append('_gotcha',   '');
     try {
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method:  'POST',
-        body,
-        headers: { 'Accept': 'application/json' }
+        method: 'POST', body, headers: { 'Accept': 'application/json' }
       });
-      if (res.ok) {
-        success.classList.add('visible');
-        form.reset();
-      } else {
-        const data = await res.json();
-        console.error('Formspree error:', data);
-        errEl.classList.add('visible');
-      }
-    } catch (err) {
-      console.error('Network error:', err);
-      errEl.classList.add('visible');
-    }
-
-    btnEl.textContent = 'Envoyer le message';
-    btnEl.classList.remove('loading');
+      if (res.ok) { success.classList.add('visible'); form.reset(); }
+      else { errEl.classList.add('visible'); }
+    } catch { errEl.classList.add('visible'); }
+    btnEl.textContent = 'Envoyer le message'; btnEl.classList.remove('loading');
   });
 }
 
-/* ════════════════════════════
-   ESCAPE KEY
-════════════════════════════ */
 function initEscKey() {
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;

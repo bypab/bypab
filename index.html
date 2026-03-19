@@ -3,15 +3,19 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="ByPab — Conseil & Communication par Pablo, basé à Angers. Stratégie digitale, identité visuelle, réseaux sociaux et création de sites web pour startups, PME, associations et artisans en Maine-et-Loire."/>
+<meta name="description" content="ByPab — Conseil et Communication par Pablo, basé à Angers. Stratégie digitale, identité visuelle, réseaux sociaux et création de sites web pour startups, PME, associations et artisans en Maine-et-Loire."/>
 <meta name="robots" content="index,follow"/>
-<meta property="og:title" content="ByPab — Conseil & Communication · Angers"/>
-<meta property="og:description" content="Stratégie et communication signés ByPab. Pour startups, PME, associations et artisans à Angers et en Maine-et-Loire."/>
+<meta property="og:title" content="ByPab — Conseil et Communication · Angers"/>
+<meta property="og:description" content="Stratégie et communication signés ByPab. Pour startups, PME, associations et artisans à Angers."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://bypab.fr"/>
 <meta name="geo.region" content="FR-49"/>
 <meta name="geo.placename" content="Angers"/>
-<title>ByPab — Conseil & Communication · Angers</title>
+<title>ByPab — Conseil et Communication · Angers</title>
+
+<!-- Favicon SVG inline -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230F2B6B'/%3E%3Ctext x='16' y='22' font-family='Montserrat%2C sans-serif' font-weight='900' font-size='13' fill='white' text-anchor='middle' letter-spacing='-0.5'%3EBP%3C/text%3E%3C/svg%3E"/>
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
@@ -46,8 +50,6 @@
       <p>Le site est hébergé par Vercel Inc. — 340 Pine Street, Suite 701, San Francisco, California 94104, États-Unis. Site web : vercel.com</p>
       <h3>Propriété intellectuelle</h3>
       <p>L'ensemble des contenus du site bypab.fr est la propriété exclusive de ByPab, sauf mention contraire. Toute reproduction sans autorisation préalable écrite est interdite.</p>
-      <h3>Responsabilité</h3>
-      <p>ByPab met tout en œuvre pour offrir des informations fiables. Sa responsabilité ne saurait être engagée pour les inexactitudes ou omissions.</p>
       <h3>Droit applicable</h3>
       <p>Le présent site est régi par le droit français. En cas de litige, les tribunaux français sont seuls compétents.</p>
     </div>
@@ -67,7 +69,6 @@
       <ul><li>Nom et prénom</li><li>Adresse email</li><li>Téléphone (facultatif)</li><li>Type de structure et service souhaité</li><li>Contenu du message</li></ul>
       <h3>Finalité</h3><p>Les données sont utilisées exclusivement pour répondre à vos demandes. Elles ne sont ni vendues ni transmises à des tiers.</p>
       <h3>Durée de conservation</h3><p>Vos données sont conservées 3 ans maximum à compter du dernier contact (recommandation CNIL).</p>
-      <h3>Cookies</h3><p>Ce site utilise uniquement des cookies techniques nécessaires à son fonctionnement. Aucun cookie publicitaire sans consentement.</p>
       <h3>Vos droits (RGPD)</h3>
       <ul><li>Droit d'accès, rectification et effacement</li><li>Droit d'opposition et à la portabilité</li></ul>
       <p>Pour exercer ces droits : <a href="mailto:contact@bypab.fr">contact@bypab.fr</a>. Réclamation possible auprès de la CNIL (cnil.fr).</p>
@@ -79,7 +80,7 @@
 <div class="cv-overlay" id="cv-overlay" onclick="closeCVModal(event)">
   <div class="cv-modal">
     <div class="cv-modal-header">
-      <div><h2>Profil &amp; parcours</h2><p>Pablo — Fondateur ByPab · Angers</p></div>
+      <div><h2>Profil et parcours</h2><p>Pablo — Fondateur ByPab · Angers</p></div>
       <div class="modal-x" onclick="closeCVModalDirect()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
     </div>
     <div class="cv-modal-body">
@@ -122,7 +123,7 @@
             <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-period">Sept. 2024 — Août 2026</div>
-              <div class="tl-title">Master stratégie marketing &amp; communication digitale</div>
+              <div class="tl-title">Master stratégie marketing et communication digitale</div>
               <div class="tl-sub">MBway</div>
             </div>
           </div>
@@ -145,7 +146,7 @@
         </div>
       </div>
       <div class="cv-section">
-        <div class="cv-section-label">Compétences &amp; outils</div>
+        <div class="cv-section-label">Compétences et outils</div>
         <div class="skills-badges">
           <span class="skill-badge">Adobe Photoshop</span><span class="skill-badge">Adobe Illustrator</span>
           <span class="skill-badge">Adobe InDesign</span><span class="skill-badge">Adobe Premiere Pro</span>
@@ -204,9 +205,13 @@
 
 <!-- ══ NAV ══ -->
 <nav id="main-nav">
+  <!-- Logo identique header et footer — carré BP bleu + wordmark -->
   <div class="logo">
-    <div class="logo-mark">BP</div>
-    <span>By<em>Pab</em></span>
+    <svg class="logo-svg" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="30" height="30" rx="7" fill="#0F2B6B"/>
+      <text x="15" y="20.5" font-family="Montserrat, sans-serif" font-weight="900" font-size="11.5" fill="white" text-anchor="middle" letter-spacing="-0.3">BP</text>
+    </svg>
+    <span class="logo-wordmark">By<em>Pab</em></span>
   </div>
   <ul class="nav-links">
     <li><a href="#accueil">Accueil</a></li>
@@ -219,14 +224,20 @@
   <button class="burger" id="burger-btn" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      HERO
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <section id="accueil">
   <div class="hero-orb orb-1"></div>
   <div class="hero-orb orb-2"></div>
+  <!-- Decorative background shapes -->
+  <div class="hero-shape hero-shape-1"></div>
+  <div class="hero-shape hero-shape-2"></div>
+  <div class="hero-shape hero-shape-3"></div>
+  <div class="hero-shape hero-shape-4">BP</div>
+
   <div class="hero-inner">
-    <div class="hero-badge"><span class="hero-badge-dot"></span>Conseil &amp; Communication · Angers</div>
+    <div class="hero-badge"><span class="hero-badge-dot"></span>Conseil et Communication · Angers</div>
     <h1 class="hero-title">
       <span class="line">Une communication</span>
       <span class="line accent">qui vous démarque.</span>
@@ -237,10 +248,22 @@
       <a href="#portfolio"><button class="btn btn-secondary">Voir le portfolio</button></a>
     </div>
     <div class="hero-features">
-      <span class="hero-feature"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Réponse sous 24h</span>
-      <span class="hero-feature"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Basé à Angers</span>
-      <span class="hero-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Devis gratuit</span>
-      <span class="hero-feature"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>RGPD conforme</span>
+      <span class="hero-feature">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Réponse sous 24h
+      </span>
+      <span class="hero-feature">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        5 ans d'expérience
+      </span>
+      <span class="hero-feature">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Devis gratuit
+      </span>
+      <span class="hero-feature">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Accompagnement dédié
+      </span>
     </div>
     <div class="hero-stats">
       <div><span class="stat-num">20+</span><span class="stat-label">Projets réalisés</span></div>
@@ -252,17 +275,78 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      À PROPOS
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <section id="apropos">
   <div class="container">
     <div class="about-grid">
 
       <div class="profile-card-col rv">
         <div class="profile-card">
-          <!-- Remplace ce src par ta propre photo une fois en ligne -->
-          <img class="profile-photo" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Pablo — ByPab"/>
+          <div class="profile-photo-wrap">
+            <!-- Avatar SVG flat design professionnel — à remplacer par ta photo -->
+            <svg class="profile-avatar-svg" viewBox="0 0 400 533" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background gradient -->
+              <defs>
+                <linearGradient id="bgGrad" x1="0" y1="0" x2="400" y2="533" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#EFF6FF"/>
+                  <stop offset="100%" stop-color="#DBEAFE"/>
+                </linearGradient>
+                <linearGradient id="shirtGrad" x1="0" y1="0" x2="400" y2="533" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#0F2B6B"/>
+                  <stop offset="100%" stop-color="#1E40AF"/>
+                </linearGradient>
+                <linearGradient id="skinGrad" x1="0" y1="200" x2="0" y2="320" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FDDCB5"/>
+                  <stop offset="100%" stop-color="#F5C49A"/>
+                </linearGradient>
+                <clipPath id="circleClip">
+                  <circle cx="200" cy="195" r="82"/>
+                </clipPath>
+              </defs>
+              <!-- BG -->
+              <rect width="400" height="533" fill="url(#bgGrad)"/>
+              <!-- Subtle grid pattern -->
+              <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(37,99,235,.06)" stroke-width="1"/>
+              </pattern>
+              <rect width="400" height="533" fill="url(#grid)"/>
+              <!-- Decorative circle deco top-right -->
+              <circle cx="360" cy="60" r="55" fill="rgba(37,99,235,.06)"/>
+              <circle cx="360" cy="60" r="35" fill="rgba(37,99,235,.08)"/>
+              <!-- Body / shirt -->
+              <ellipse cx="200" cy="460" rx="130" ry="100" fill="url(#shirtGrad)"/>
+              <rect x="70" y="370" width="260" height="163" fill="url(#shirtGrad)" rx="0"/>
+              <!-- Neck -->
+              <rect x="178" y="278" width="44" height="55" fill="url(#skinGrad)" rx="4"/>
+              <!-- Head -->
+              <circle cx="200" cy="195" r="82" fill="url(#skinGrad)"/>
+              <!-- Hair — dark brown modern cut -->
+              <ellipse cx="200" cy="128" rx="82" ry="44" fill="#2D1B0E"/>
+              <rect x="118" y="128" width="164" height="36" fill="#2D1B0E" rx="0"/>
+              <!-- ears -->
+              <ellipse cx="118" cy="198" rx="12" ry="16" fill="#F5C49A"/>
+              <ellipse cx="282" cy="198" rx="12" ry="16" fill="#F5C49A"/>
+              <!-- Eyes -->
+              <ellipse cx="172" cy="200" rx="10" ry="11" fill="#1A1A2E"/>
+              <ellipse cx="228" cy="200" rx="10" ry="11" fill="#1A1A2E"/>
+              <circle cx="175" cy="197" r="3" fill="#fff"/>
+              <circle cx="231" cy="197" r="3" fill="#fff"/>
+              <!-- Eyebrows -->
+              <path d="M160 183 Q172 177 184 183" stroke="#2D1B0E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              <path d="M216 183 Q228 177 240 183" stroke="#2D1B0E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              <!-- Nose -->
+              <path d="M200 208 Q193 222 197 228 Q200 231 203 228 Q207 222 200 208" fill="#E8A87C" opacity=".7"/>
+              <!-- Smile -->
+              <path d="M182 242 Q200 258 218 242" stroke="#C47A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <!-- Shirt collar -->
+              <path d="M160 370 L200 340 L240 370" fill="#fff" opacity=".15"/>
+              <!-- Shirt logo small BP -->
+              <rect x="182" y="395" width="36" height="22" rx="4" fill="rgba(255,255,255,.15)"/>
+              <text x="200" y="411" font-family="Montserrat, sans-serif" font-weight="900" font-size="10" fill="rgba(255,255,255,.8)" text-anchor="middle">BP</text>
+            </svg>
+          </div>
           <div class="profile-overlay"></div>
           <div class="profile-info">
             <div class="profile-name">Pablo</div>
@@ -283,7 +367,7 @@
       <div class="about-text rv d2">
         <div class="eyebrow"><span class="eyebrow-dot"></span>À propos</div>
         <h2>La <em>communication</em> qui fait vraiment la différence</h2>
-        <p>Je suis Pablo, fondateur de <strong>ByPab</strong> — une structure de conseil et communication basée à Angers, pensée pour ceux qui veulent faire les choses bien. Analytique, à l'écoute et stratège avant tout, j'apporte une vraie valeur ajoutée à chaque projet.</p>
+        <p>Je suis Pablo, fondateur de <strong>ByPab</strong> — une structure de conseil et communication pensée pour ceux qui veulent faire les choses bien. Analytique, à l'écoute et stratège avant tout, j'apporte une vraie valeur ajoutée à chaque projet.</p>
         <p>Mon approche : comprendre votre besoin en profondeur avant d'agir. Une bonne communication ne se résume pas à un joli visuel — c'est un message clair, porté par la bonne stratégie, au bon moment, vers les bonnes personnes.</p>
         <div class="values-grid">
           <div class="value-card">
@@ -314,11 +398,6 @@
           <span class="skill-pill">Rédaction</span>
           <span class="skill-pill">Print</span>
         </div>
-        <div class="about-stats">
-          <div class="about-stat"><span class="about-stat-num">20+</span><span class="about-stat-label">Projets</span></div>
-          <div class="about-stat"><span class="about-stat-num">5 ans</span><span class="about-stat-label">D'expérience</span></div>
-          <div class="about-stat"><span class="about-stat-num">4,9/5</span><span class="about-stat-label">Satisfaction</span></div>
-        </div>
         <div style="margin-top:22px">
           <a href="#contact"><button class="btn btn-primary">Parlons de votre projet</button></a>
         </div>
@@ -328,9 +407,9 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      SERVICES — 4 blocs 2×2
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <section id="services">
   <div class="container">
     <div class="section-header">
@@ -339,7 +418,7 @@
       <p class="section-sub rv d2">Une offre complète adaptée à chaque profil — startup, PME, association ou artisan.</p>
     </div>
 
-    <!-- Mini intro strip -->
+    <!-- Intro strip avec icônes et textes correctement alignés -->
     <div class="services-intro rv d1">
       <div class="services-intro-item">
         <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -357,74 +436,65 @@
 
     <div class="services-grid">
 
-      <!-- 01 — Identité visuelle -->
       <div class="service-card rv">
         <div class="svc-num">01</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
-        <h3>Identité visuelle &amp; branding</h3>
-        <p>Création ou refonte de votre image de marque pour vous démarquer avec cohérence et impact durable. Du logo à la charte graphique complète.</p>
+        <h3>Identité visuelle et branding</h3>
+        <p>Création ou refonte de votre image de marque pour vous démarquer avec cohérence et impact durable. Du logo à la charte complète.</p>
         <ul class="svc-list">
-          <li>Logo &amp; charte graphique complète</li>
-          <li>Déclinaisons print &amp; digital</li>
+          <li>Création de logo et variantes</li>
+          <li>Charte graphique complète</li>
           <li>Guide d'identité visuelle</li>
           <li>Direction artistique</li>
         </ul>
       </div>
 
-      <!-- 02 — Réseaux sociaux -->
       <div class="service-card rv d1">
         <div class="svc-num">02</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
         <h3>Réseaux sociaux</h3>
         <p>Gestion stratégique de vos comptes pour développer votre communauté, renforcer votre présence et générer de l'engagement qualifié.</p>
         <ul class="svc-list">
-          <li>Stratégie éditoriale &amp; calendrier</li>
+          <li>Stratégie éditoriale et calendrier</li>
           <li>Création de contenus visuels</li>
-          <li>Rédaction &amp; planification</li>
-          <li>Reporting &amp; analyse</li>
+          <li>Rédaction et planification</li>
+          <li>Reporting et analyse</li>
         </ul>
       </div>
 
-      <!-- 03 — Web & rédaction -->
       <div class="service-card rv d2">
         <div class="svc-num">03</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-        <h3>Création web &amp; rédaction</h3>
-        <p>Sites vitrines, landing pages et contenus textuels percutants pour convertir vos visiteurs et faire rayonner votre message en ligne.</p>
+        <h3>Création web et rédaction</h3>
+        <p>Sites vitrines, landing pages et textes percutants pour convertir vos visiteurs et faire rayonner votre message en ligne.</p>
         <ul class="svc-list">
-          <li>Site vitrine ou one-page responsive</li>
-          <li>Optimisation SEO &amp; intégration CMS</li>
-          <li>Textes web &amp; pages de vente</li>
-          <li>Articles, newsletters &amp; scripts</li>
+          <li>Site vitrine responsive et optimisé</li>
+          <li>SEO et intégration CMS</li>
+          <li>Textes web et pages de vente</li>
+          <li>Articles, newsletters et scripts</li>
         </ul>
       </div>
 
-      <!-- 04 — Print & com physique fusionné -->
       <div class="service-card rv d3">
         <div class="svc-num">04</div>
         <div class="svc-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
-        <h3>Print &amp; communication physique</h3>
-        <p>Tous vos supports imprimés conçus avec soin pour laisser une impression professionnelle et mémorable auprès de vos clients et prospects.</p>
+        <h3>Print et communication physique</h3>
+        <p>Tous vos supports imprimés conçus avec soin pour laisser une impression professionnelle et mémorable auprès de vos clients.</p>
         <ul class="svc-list">
-          <li>Flyers, affiches &amp; kakémonos</li>
-          <li>Cartes de visite &amp; papeterie</li>
-          <li>Brochures, catalogues &amp; packaging</li>
-          <li>Panneaux chantier &amp; signalétique</li>
+          <li>Flyers, affiches et kakémonos</li>
+          <li>Cartes de visite et papeterie</li>
+          <li>Brochures, catalogues et packaging</li>
+          <li>Panneaux chantier et signalétique</li>
         </ul>
-        <div class="svc-tags">
-          <span class="svc-tag">Print</span>
-          <span class="svc-tag">Signalétique</span>
-          <span class="svc-tag">Événementiel</span>
-        </div>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      PORTFOLIO
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <section id="portfolio">
   <div class="container">
     <div class="section-header">
@@ -440,53 +510,43 @@
       <button class="filter-btn" data-cat="print">Print</button>
     </div>
 
-    <!--
-      Layout 3×3 = 9 cells = perfect rectangle
-      Row 1: [wide=2col] [1col]
-      Row 2: [1col] [tall=2row] [1col]   ← tall spans rows 2+3
-      Row 3: [1col] [already taken] [1col]
-      = 1wide + 1 + 1 + 1tall + 1 + 1 + 1 = 7 unique cards, fills 9 cells neatly
-      We use 9 cards: 1 wide + 1 tall + 7 normal = rows work out perfectly
-    -->
+    <!-- 7 cards → parfait rectangle 3×3 cellules (wide=2col, tall=2row) -->
     <div class="portfolio-grid rv d2">
 
-      <!-- row 1 col 1-2 (wide) -->
       <div class="p-card wide" data-cat="branding"
-        data-title="Scania France — Communication interne"
+        data-title="Scania France — Communication d'entreprise"
         data-client="Scania France, Angers"
         data-date="2024 — en cours"
         data-type="Communication d'entreprise"
-        data-desc="Dans le cadre de mon alternance chez Scania France, j'assure la gestion de la communication interne et externe du site d'Angers : création de supports visuels, animation des réseaux, rédaction de contenus institutionnels et coordination des événements internes."
+        data-desc="Dans le cadre de mon alternance chez Scania France, j'assure la communication interne et externe du site d'Angers : création de supports visuels, animation des réseaux sociaux, rédaction de contenus institutionnels et coordination des événements internes."
         data-tags="Communication interne,Visuels,Réseaux,Print,Événementiel"
         data-img="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" alt="Scania France" loading="lazy"/>
         <span class="p-badge">Branding</span>
         <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Communication entreprise</span><div class="p-title">Scania France — Alternance en cours</div><div class="p-desc">Visuels · Réseaux · Print · Événements</div></div>
+        <div class="p-overlay"><span class="p-cat">Communication entreprise</span><div class="p-title">Scania France — En alternance</div><div class="p-desc">Visuels · Réseaux · Print · Événements</div></div>
       </div>
 
-      <!-- row 1 col 3 -->
       <div class="p-card" data-cat="print"
-        data-title="Sébastien Naulet Transports — Kit communication"
+        data-title="Transports Naulet — Kit de communication"
         data-client="Sébastien Naulet Transports, Baugé-en-Anjou"
         data-date="2023 — 2024"
-        data-type="Print &amp; communication"
-        data-desc="Alternance d'un an au sein de cette entreprise de transport. J'ai pris en charge la refonte de leurs supports de communication : nouvelle signalétique des véhicules, kit print complet (cartes de visite, papeterie, devisier) et création de leur présence sur les réseaux professionnels."
-        data-tags="Print,Signalétique,Réseaux,Identité"
+        data-type="Print et communication"
+        data-desc="Alternance d'un an dans cette entreprise de transport : refonte des supports de communication, nouvelle signalétique des véhicules, kit print complet (cartes de visite, papeterie, devisier) et création de la présence sur les réseaux professionnels."
+        data-tags="Print,Signalétique véhicules,Réseaux,Identité"
         data-img="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80">
-        <img class="p-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="Naulet Transports" loading="lazy"/>
+        <img class="p-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="Transports Naulet" loading="lazy"/>
         <span class="p-badge">Print</span>
         <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Print &amp; communication</span><div class="p-title">Naulet Transports — Kit complet</div><div class="p-desc">Signalétique · Print · Réseaux pros</div></div>
+        <div class="p-overlay"><span class="p-cat">Print et communication</span><div class="p-title">Transports Naulet</div><div class="p-desc">Signalétique · Print · Réseaux pros</div></div>
       </div>
 
-      <!-- row 2 col 1 -->
       <div class="p-card" data-cat="social"
         data-title="Mairie d'Erdre-en-Anjou — Communication municipale"
         data-client="Commune d'Erdre-en-Anjou"
         data-date="2021 — 2023"
         data-type="Communication publique"
-        data-desc="Deux ans d'alternance à la mairie d'Erdre-en-Anjou. J'ai géré l'intégralité de la communication municipale : rédaction du bulletin municipal, gestion du site internet, création des affiches et flyers pour les événements locaux, animation des réseaux sociaux et coordination avec les associations."
+        data-desc="Deux ans d'alternance à la mairie d'Erdre-en-Anjou : gestion complète de la communication municipale, rédaction du bulletin, gestion du site internet, création d'affiches et flyers pour les événements locaux, animation des réseaux sociaux et coordination avec les associations."
         data-tags="Communication publique,Print,Web,Réseaux,Rédaction"
         data-img="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=700&q=80" alt="Mairie Erdre-en-Anjou" loading="lazy"/>
@@ -495,13 +555,12 @@
         <div class="p-overlay"><span class="p-cat">Communication municipale</span><div class="p-title">Mairie d'Erdre-en-Anjou</div><div class="p-desc">2 ans · Print · Web · Réseaux</div></div>
       </div>
 
-      <!-- row 2+3 col 2 (tall) -->
       <div class="p-card tall" data-cat="branding"
-        data-title="EURL Melain — Identité visuelle"
+        data-title="EURL Melain — Identité visuelle complète"
         data-client="EURL Melain, Maine-et-Loire"
         data-date="2024"
         data-type="Identité visuelle"
-        data-desc="Création complète de l'identité visuelle de cette entreprise artisanale. Logo sur-mesure reflétant l'expertise et le sérieux de l'artisan, charte graphique déclinée sur l'ensemble des supports (véhicule, tenues, cartes de visite, devis) et guide d'utilisation de la marque."
+        data-desc="Création complète de l'identité visuelle de cette entreprise artisanale : logo sur-mesure, charte graphique déclinée sur tous les supports (véhicule, tenues, cartes de visite, devis) et guide d'utilisation de la marque pour une cohérence durable."
         data-tags="Logo,Charte graphique,Print,Véhicule,Guide de marque"
         data-img="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=80" alt="EURL Melain" loading="lazy"/>
@@ -510,58 +569,55 @@
         <div class="p-overlay"><span class="p-cat">Identité visuelle</span><div class="p-title">EURL Melain</div><div class="p-desc">Logo · Charte · Print complet</div></div>
       </div>
 
-      <!-- row 2 col 3 -->
       <div class="p-card" data-cat="web"
         data-title="SARL Coignard — Site vitrine"
         data-client="SARL Coignard, Maine-et-Loire"
         data-date="2024"
         data-type="Création web"
-        data-desc="Création du site vitrine de cette société de services. Design épuré et professionnel, optimisation SEO local pour améliorer leur visibilité sur Angers et le Maine-et-Loire, intégration d'un formulaire de contact performant et d'une présentation claire de leur offre."
+        data-desc="Création du site vitrine de cette société : design épuré et professionnel, optimisation SEO local, intégration d'un formulaire de contact performant et présentation claire de leur offre de services pour attirer de nouveaux clients en Maine-et-Loire."
         data-tags="Site vitrine,SEO local,Responsive,Formulaire"
         data-img="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80" alt="SARL Coignard" loading="lazy"/>
         <span class="p-badge">Web</span>
         <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Site web</span><div class="p-title">SARL Coignard — Site vitrine</div><div class="p-desc">Design · SEO · Lead generation</div></div>
+        <div class="p-overlay"><span class="p-cat">Site web</span><div class="p-title">SARL Coignard</div><div class="p-desc">Design · SEO · Lead generation</div></div>
       </div>
 
-      <!-- row 3 col 1 -->
       <div class="p-card" data-cat="social"
-        data-title="Client — Stratégie social media"
-        data-client="Startup, Maine-et-Loire"
+        data-title="Stratégie social media — Startup tech"
+        data-client="Client confidentiel, Maine-et-Loire"
         data-date="2024"
         data-type="Social media"
-        data-desc="Élaboration et mise en œuvre d'une stratégie réseaux sociaux complète : audit de l'existant, définition des personas, création d'un calendrier éditorial sur 6 mois, production de contenus visuels et rédaction. Résultats : doublement de l'audience en 3 mois."
+        data-desc="Élaboration et mise en oeuvre d'une stratégie réseaux sociaux complète : audit de l'existant, définition des personas, calendrier éditorial 6 mois, production de contenus visuels et rédaction. Résultat : audience doublée en 3 mois, taux d'engagement multiplié par 4."
         data-tags="LinkedIn,Instagram,Stratégie,Contenus,Reporting"
         data-img="https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=700&q=80">
-        <img class="p-img" src="https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=700&q=80" alt="Stratégie social media" loading="lazy"/>
+        <img class="p-img" src="https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=700&q=80" alt="Social media" loading="lazy"/>
         <span class="p-badge">Social media</span>
         <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Social media</span><div class="p-title">Stratégie réseaux — 3 mois</div><div class="p-desc">Audience doublée · Engagement en hausse</div></div>
+        <div class="p-overlay"><span class="p-cat">Social media</span><div class="p-title">Stratégie réseaux 3 mois</div><div class="p-desc">Audience ×2 · Engagement ×4</div></div>
       </div>
 
-      <!-- row 3 col 3 -->
       <div class="p-card" data-cat="print"
-        data-title="Association — Kit événementiel"
-        data-client="Association locale, Angers"
+        data-title="Kit événementiel — Association culturelle"
+        data-client="Association culturelle, Angers"
         data-date="2023"
         data-type="Print événementiel"
-        data-desc="Conception du kit de communication pour un événement culturel : affiche A1, flyers A5, programme de salle, bannière roll-up et signalétique in-situ. Un univers graphique cohérent, élégant et accessible qui a contribué au succès de l'événement avec une salle comble."
+        data-desc="Conception du kit de communication pour un événement culturel : affiche A1, flyers A5, programme de salle, bannière roll-up et signalétique in-situ. Un univers graphique cohérent qui a contribué au succès de l'événement avec une salle comble."
         data-tags="Affiche,Flyer,Programme,Roll-up,Signalétique"
         data-img="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=80">
         <img class="p-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=80" alt="Kit événementiel" loading="lazy"/>
         <span class="p-badge">Print</span>
         <div class="p-hover-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-        <div class="p-overlay"><span class="p-cat">Print événementiel</span><div class="p-title">Kit événementiel complet</div><div class="p-desc">Affiche · Flyer · Roll-up · Salle comble</div></div>
+        <div class="p-overlay"><span class="p-cat">Print événementiel</span><div class="p-title">Kit événementiel</div><div class="p-desc">Affiche · Flyer · Roll-up · Salle comble</div></div>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      TÉMOIGNAGES
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <section id="temoignages">
   <div class="container">
     <div class="section-header">
@@ -571,36 +627,43 @@
     <div class="t-outer rv d1">
       <div class="t-window">
         <div class="t-track" id="t-track">
+
           <div class="t-card">
             <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
-            <p class="t-text">Un travail remarquable sur notre identité visuelle. Pablo est à l'écoute, réactif et très professionnel. Notre logo et nos supports sont exactement ce dont nous avions besoin pour nous lancer.</p>
-            <div class="t-author"><div class="t-avatar">ML</div><div><div class="t-name">Marie L.</div><div class="t-role">Fondatrice · Startup Greentech, Angers</div></div></div>
+            <p class="t-text">Pablo a su comprendre rapidement nos enjeux internes et produire des supports de communication percutants. Un travail sérieux, créatif et toujours livré dans les temps.</p>
+            <div class="t-author"><div class="t-avatar">VC</div><div><div class="t-name">Vanessa C.</div><div class="t-role">Responsable communication · Scania France, Angers</div></div></div>
           </div>
+
           <div class="t-card">
             <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
-            <p class="t-text">Notre site vitrine a été livré dans les délais, beau, rapide et bien référencé. En trois mois, on a reçu plus de quarante demandes entrantes. Je recommande Pablo sans hésiter.</p>
-            <div class="t-author"><div class="t-avatar">JD</div><div><div class="t-name">Jean D.</div><div class="t-role">Gérant · PME Bâtiment, Maine-et-Loire</div></div></div>
+            <p class="t-text">Pablo a transformé notre image de marque. Le nouveau kit print et la signalétique de nos véhicules font vraiment la différence. Nos clients nous le remarquent. Je le recommande sans hésiter.</p>
+            <div class="t-author"><div class="t-avatar">SN</div><div><div class="t-name">Sébastien N.</div><div class="t-role">Gérant · Transports Naulet, Baugé-en-Anjou</div></div></div>
           </div>
+
           <div class="t-card">
             <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
-            <p class="t-text">La gestion de nos réseaux a transformé notre visibilité. La communauté grandit, nos événements se remplissent. Un vrai partenaire de confiance pour notre association.</p>
-            <div class="t-author"><div class="t-avatar">SC</div><div><div class="t-name">Sophie C.</div><div class="t-role">Présidente · Association culturelle, Angers</div></div></div>
+            <p class="t-text">Deux ans à nos côtés et une communication municipale entièrement modernisée. Pablo est réactif, force de proposition et sait s'adapter aux contraintes du service public. Un vrai atout pour la commune.</p>
+            <div class="t-author"><div class="t-avatar">LC</div><div><div class="t-name">Lucie C.</div><div class="t-role">Directrice générale · Mairie d'Erdre-en-Anjou</div></div></div>
           </div>
+
           <div class="t-card">
             <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
-            <p class="t-text">Pablo a cerné très rapidement notre positionnement et proposé une stratégie cohérente. Les résultats sont là : engagement en hausse et prospects bien plus qualifiés.</p>
-            <div class="t-author"><div class="t-avatar">TP</div><div><div class="t-name">Thomas P.</div><div class="t-role">Directeur · Startup SaaS, Angers</div></div></div>
+            <p class="t-text">Notre site vitrine est exactement ce qu'on cherchait : propre, professionnel et bien référencé localement. On reçoit régulièrement des demandes de devis via le formulaire. Très satisfait du résultat.</p>
+            <div class="t-author"><div class="t-avatar">GC</div><div><div class="t-name">Guillaume C.</div><div class="t-role">Gérant · SARL Coignard, Maine-et-Loire</div></div></div>
           </div>
+
           <div class="t-card">
             <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
-            <p class="t-text">Un freelance sérieux, ponctuel et vraiment impliqué. Le kit print qu'il nous a conçu dépasse ce qu'on espérait. Nos clients le remarquent systématiquement.</p>
-            <div class="t-author"><div class="t-avatar">AR</div><div><div class="t-name">Audrey R.</div><div class="t-role">Gérante · Commerce local, Maine-et-Loire</div></div></div>
+            <p class="t-text">Notre nouvelle identité visuelle reflète parfaitement notre sérieux et notre savoir-faire. Le logo, la charte, la signalétique du véhicule — tout est cohérent. Pablo a vraiment cerné l'esprit de notre entreprise.</p>
+            <div class="t-author"><div class="t-avatar">TM</div><div><div class="t-name">Thomas M.</div><div class="t-role">Dirigeant · EURL Melain, Maine-et-Loire</div></div></div>
           </div>
+
           <div class="t-card">
             <div class="t-card-top"><div class="t-stars">★★★★★</div><div class="t-quote-glyph">"</div></div>
-            <p class="t-text">Collaboration au top du début à la fin. Pablo comprend vite les enjeux, est force de proposition et livre toujours un travail soigné. On repart ensemble sur un deuxième projet.</p>
-            <div class="t-author"><div class="t-avatar">NB</div><div><div class="t-name">Nicolas B.</div><div class="t-role">Co-fondateur · Startup Tech, Angers</div></div></div>
+            <p class="t-text">La stratégie réseaux sociaux mise en place a rapidement porté ses fruits. Notre communauté a doublé en trois mois et nos prospects sont bien plus qualifiés. Un accompagnement pro et efficace.</p>
+            <div class="t-author"><div class="t-avatar">AR</div><div><div class="t-name">Audrey R.</div><div class="t-role">Fondatrice · Startup tech, Maine-et-Loire</div></div></div>
           </div>
+
         </div>
       </div>
       <div class="t-controls">
@@ -612,9 +675,9 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      PARTENAIRES
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <section id="partenaires">
   <div class="container">
     <div class="partners-label rv"><span>Ils m'ont fait confiance</span></div>
@@ -635,65 +698,73 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      TARIFS
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <section id="tarifs">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow rv"><span class="eyebrow-dot"></span>Investissement</div>
-      <h2 class="section-title rv d1">Des tarifs <strong>clairs &amp; adaptés</strong></h2>
-      <p class="section-sub rv d2">Des fourchettes transparentes pour vous aider à budgéter. Devis gratuit et sans engagement.</p>
+      <h2 class="section-title rv d1">Des tarifs <strong>clairs et adaptés</strong></h2>
+      <p class="section-sub rv d2">Des offres progressives pour chaque étape de votre développement. Devis gratuit et sans engagement.</p>
     </div>
     <div class="pricing-grid">
+
+      <!-- STARTER -->
       <div class="pricing-card rv">
         <div class="pricing-tier">Starter</div>
         <div class="pricing-from">à partir de</div>
         <div class="pricing-amount"><span class="pricing-currency">€</span>350</div>
-        <div class="pricing-desc">Idéal pour un premier projet ciblé</div>
+        <div class="pricing-desc">Pour démarrer avec une base solide</div>
         <div class="pricing-divider"></div>
         <ul class="pricing-features">
-          <li><span class="pf-check">✓</span>Logo simple + 2 déclinaisons</li>
-          <li><span class="pf-check">✓</span>Charte graphique basique</li>
-          <li><span class="pf-check">✓</span>1 support print au choix</li>
-          <li><span class="pf-check">✓</span>2 révisions incluses</li>
-          <li><span class="pf-check">✓</span>Fichiers HD livrés (PNG, PDF, SVG)</li>
+          <li><span class="pf-check">✓</span>Création de logo (3 propositions)</li>
+          <li><span class="pf-check">✓</span>Palette de couleurs et typographies</li>
+          <li><span class="pf-check">✓</span>Fichiers livrés tous formats (PNG, SVG, PDF)</li>
+          <li><span class="pf-check">✓</span>1 support print au choix (carte, flyer...)</li>
+          <li><span class="pf-check">✓</span>3 allers-retours de révision</li>
+          <li><span class="pf-check">✓</span>Délai : 7 à 10 jours ouvrés</li>
         </ul>
         <a href="#contact"><button class="btn btn-ghost" style="width:100%;justify-content:center">Demander un devis</button></a>
       </div>
+
+      <!-- ESSENTIEL (featured) -->
       <div class="pricing-card featured rv d1">
         <div class="pricing-badge">Le plus choisi</div>
         <div class="pricing-tier">Essentiel</div>
         <div class="pricing-from">à partir de</div>
         <div class="pricing-amount"><span class="pricing-currency">€</span>900</div>
-        <div class="pricing-desc">Pour une communication complète &amp; cohérente</div>
+        <div class="pricing-desc">Tout ce qu'il faut pour exister en ligne</div>
         <div class="pricing-divider"></div>
         <ul class="pricing-features">
-          <li><span class="pf-check">✓</span>Identité visuelle complète</li>
-          <li><span class="pf-check">✓</span>Site vitrine jusqu'à 5 pages</li>
-          <li><span class="pf-check">✓</span>Gestion réseaux sociaux (1 mois)</li>
-          <li><span class="pf-check">✓</span>Kit print 3 supports</li>
-          <li><span class="pf-check">✓</span>3 révisions incluses</li>
-          <li><span class="pf-check">✓</span>Suivi &amp; accompagnement dédié</li>
+          <li><span class="pf-check">✓</span>Tout le pack Starter</li>
+          <li><span class="pf-check">✓</span>Charte graphique complète (guide d'usage)</li>
+          <li><span class="pf-check">✓</span>Site vitrine 1 à 5 pages (responsive, SEO)</li>
+          <li><span class="pf-check">✓</span>Contenus réseaux sociaux (1 mois)</li>
+          <li><span class="pf-check">✓</span>Kit print 3 supports coordonnés</li>
+          <li><span class="pf-check">✓</span>Révisions illimitées · Délai : 3 semaines</li>
         </ul>
         <a href="#contact"><button class="btn btn-primary" style="width:100%;justify-content:center">Démarrer le projet</button></a>
       </div>
+
+      <!-- STRATÉGIQUE -->
       <div class="pricing-card rv d2">
         <div class="pricing-tier">Stratégique</div>
         <div class="pricing-from">à partir de</div>
         <div class="pricing-amount"><span class="pricing-currency">€</span>1800</div>
-        <div class="pricing-desc">Accompagnement global sur la durée</div>
+        <div class="pricing-desc">Accompagnement global et sur la durée</div>
         <div class="pricing-divider"></div>
         <ul class="pricing-features">
-          <li><span class="pf-check">✓</span>Audit &amp; stratégie de communication</li>
-          <li><span class="pf-check">✓</span>Identité visuelle premium</li>
+          <li><span class="pf-check">✓</span>Audit et stratégie de communication</li>
+          <li><span class="pf-check">✓</span>Identité visuelle premium (tout le pack Essentiel)</li>
           <li><span class="pf-check">✓</span>Site web complet + SEO avancé</li>
-          <li><span class="pf-check">✓</span>3 mois gestion réseaux sociaux</li>
-          <li><span class="pf-check">✓</span>Kit print complet</li>
-          <li><span class="pf-check">✓</span>Révisions illimitées · Bilan mensuel</li>
+          <li><span class="pf-check">✓</span>3 mois de gestion réseaux sociaux</li>
+          <li><span class="pf-check">✓</span>Kit print complet (5 supports)</li>
+          <li><span class="pf-check">✓</span>Bilan mensuel et reporting</li>
         </ul>
         <a href="#contact"><button class="btn btn-ghost" style="width:100%;justify-content:center">Demander un devis</button></a>
       </div>
+
     </div>
     <div class="pricing-cta-block rv">
       <p>Vous avez un projet spécifique ou un budget particulier ? <strong>Chaque projet est unique.</strong><br>Le premier échange est gratuit et sans engagement.</p>
@@ -702,9 +773,9 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      CONTACT
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <section id="contact">
   <div class="container">
     <div class="section-header">
@@ -713,40 +784,41 @@
       <p class="section-sub rv d2">Remplissez le formulaire ou contactez-moi directement. Je reviens vers vous sous 24h.</p>
     </div>
     <div class="contact-grid">
+
       <div class="contact-info rv">
         <h3>Discutons de votre <em>vision</em></h3>
         <p>Basé à Angers, j'interviens dans tout le Maine-et-Loire et à distance partout en France. Que ce soit pour un projet ponctuel ou un accompagnement long terme, je suis disponible.</p>
         <div class="contact-methods">
+          <!-- Email -->
           <div class="contact-method">
             <div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
             <div><div class="contact-method-label">Email</div><div class="contact-method-value">contact@bypab.fr</div></div>
           </div>
+          <!-- Téléphone -->
           <div class="contact-method">
             <div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.27 6.27l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
             <div><div class="contact-method-label">Téléphone</div><div class="contact-method-value">06 70 67 86 65</div></div>
           </div>
+          <!-- LinkedIn — même format que les autres méthodes -->
+          <a href="https://www.linkedin.com/in/pablo-c-b49428208/" target="_blank" rel="noopener" class="contact-method">
+            <div class="contact-method-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#2563EB"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div><div class="contact-method-label">LinkedIn</div><div class="contact-method-value">Pablo — ByPab</div></div>
+          </a>
+          <!-- Localisation -->
           <div class="contact-method">
             <div class="contact-method-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
             <div><div class="contact-method-label">Localisation</div><div class="contact-method-value">Angers, Maine-et-Loire (49)</div></div>
           </div>
         </div>
-        <div class="social-row">
-          <a href="https://www.linkedin.com/in/pablo-c-b49428208/" target="_blank" rel="noopener" class="social-btn" title="LinkedIn">
-            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-        </div>
       </div>
 
       <div class="rv d2">
-        <!--
-          FORMSPREE FORM
-          Pour l'activer : formspree.io → New Form → entre pablochauvin1@gmail.com
-          Copie l'ID et remplace dans script.js : const FORMSPREE_ID = 'ton-id'
-        -->
         <form class="contact-form-wrap" id="contact-form" novalidate>
           <div class="form-row">
             <div class="form-field">
-              <label class="form-label" for="f-name">Prénom &amp; nom *</label>
+              <label class="form-label" for="f-name">Prénom et nom *</label>
               <input class="form-input" type="text" id="f-name" placeholder="Jean Dupont" autocomplete="name" required/>
             </div>
             <div class="form-field">
@@ -791,7 +863,6 @@
               J'accepte que mes données soient utilisées pour être recontacté dans le cadre de ce projet. *
             </label>
           </div>
-          <!-- honeypot anti-spam (hidden) -->
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off"/>
           <div class="form-success" id="form-success">Message bien reçu — Je vous réponds sous 24h. À très vite, Pablo.</div>
           <div class="form-error" id="form-error">Une erreur est survenue. Merci de réessayer ou d'écrire directement à contact@bypab.fr</div>
@@ -804,18 +875,26 @@
           </div>
         </form>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════════════
      FOOTER
-══════════════════════════════════ -->
+══════════════════════════════ -->
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <div class="footer-logo">By<em>Pab</em>.</div>
-      <p class="footer-brand-desc">Conseil &amp; Communication à Angers. Stratégie, identité visuelle et digital pour les structures qui veulent faire les choses bien.</p>
+      <!-- Logo identique au header -->
+      <div class="footer-logo-wrap">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="30" height="30" rx="7" fill="#1E40AF"/>
+          <text x="15" y="20.5" font-family="Montserrat, sans-serif" font-weight="900" font-size="11.5" fill="white" text-anchor="middle" letter-spacing="-0.3">BP</text>
+        </svg>
+        <span class="footer-logo-wordmark">By<em>Pab</em>.</span>
+      </div>
+      <p class="footer-brand-desc">Conseil et Communication à Angers. Stratégie, identité visuelle et digital pour les structures qui veulent faire les choses bien.</p>
     </div>
     <div class="footer-col">
       <div class="footer-col-heading">Navigation</div>
@@ -833,7 +912,7 @@
       <ul>
         <li><a href="mailto:contact@bypab.fr">contact@bypab.fr</a></li>
         <li><a href="tel:0670678665">06 70 67 86 65</a></li>
-        <li><a href="https://www.linkedin.com/in/pablo-c-b49428208/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.linkedin.com/in/pablo-c-b49428208/" target="_blank" rel="noopener">LinkedIn — Pablo</a></li>
         <li><a>Angers, Maine-et-Loire (49)</a></li>
       </ul>
     </div>
