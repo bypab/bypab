@@ -11,7 +11,7 @@
    5. Déploie — c'est tout. Les messages arrivent dans ta boîte.
 ═══════════════════════════════════════════════════════ */
 
-const FORMSPREE_ID = 'https://formspree.io/f/mreyjprr'; // ← remplace par ton vrai ID Formspree
+const FORMSPREE_ID = 'mreyjprr';
 
 document.addEventListener('DOMContentLoaded', () => {
   initCursor();
