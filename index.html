@@ -12,7 +12,7 @@
 <title>ByPab — Conseil et Communication · Angers</title>
 
 <!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23AAFF00'/%3E%3Ctext x='16' y='22' font-family='Syne%2C sans-serif' font-weight='800' font-size='13' fill='%230A0A0A' text-anchor='middle' letter-spacing='-0.5'%3EBP%3C/text%3E%3C/svg%3E"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='0' fill='%23AAFF00'/%3E%3Ctext x='16' y='22' font-family='Syne%2C sans-serif' font-weight='800' font-size='13' fill='%230C0C0C' text-anchor='middle' letter-spacing='-0.5'%3EBP%3C/text%3E%3C/svg%3E"/>
 
 <!-- Fonts: Syne (display) + Plus Jakarta Sans (body) -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -149,9 +149,9 @@
 <!-- ══ NAV ══ -->
 <nav id="main-nav">
   <div class="logo">
-    <svg class="logo-svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="5" fill="#AAFF00"/>
-      <text x="14" y="19.5" font-family="Syne,sans-serif" font-weight="800" font-size="11" fill="#0A0A0A" text-anchor="middle" letter-spacing="-0.3">BP</text>
+    <svg class="logo-svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+      <rect width="26" height="26" rx="0" fill="#AAFF00"/>
+      <text x="13" y="18.5" font-family="Syne,sans-serif" font-weight="800" font-size="10" fill="#0C0C0C" text-anchor="middle" letter-spacing="-0.3">BP</text>
     </svg>
     <span class="logo-wordmark">By<em>Pab</em></span>
   </div>
@@ -172,7 +172,18 @@
 <section id="accueil">
   <div class="hero-grain"></div>
   <div class="hero-accent-line"></div>
-  <div class="hero-bg-text">ByPab</div>
+
+  <!-- Animated marquee background text -->
+  <div class="hero-marquee-bg">
+    <div class="hero-marquee-inner">
+      <span>ByPab&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+      <span>Communication&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+      <span>Angers&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+      <span>ByPab&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+      <span>Communication&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+      <span>Angers&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+    </div>
+  </div>
 
   <div class="hero-inner">
     <div class="hero-badge"><span class="hero-badge-dot"></span>Conseil et Communication · Angers</div>
@@ -188,14 +199,25 @@
         <a href="#portfolio"><span class="arrow-link">Portfolio <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>
       </div>
     </div>
-    <div class="hero-stats-row">
-      <div><span class="hero-stat-num">20+</span><span class="hero-stat-label">Projets réalisés</span></div>
-      <div class="hero-stat-sep"></div>
-      <div><span class="hero-stat-num">15+</span><span class="hero-stat-label">Clients satisfaits</span></div>
-      <div class="hero-stat-sep"></div>
-      <div><span class="hero-stat-num">4,9/5</span><span class="hero-stat-label">Note moyenne</span></div>
-      <div class="hero-stat-sep"></div>
-      <div><span class="hero-stat-num">5 ans</span><span class="hero-stat-label">D'expérience</span></div>
+  </div>
+
+  <!-- Stats bar — awake style: full-width separated columns -->
+  <div class="hero-stats-row">
+    <div class="hero-stat-item">
+      <span class="hero-stat-num">20<span>+</span></span>
+      <span class="hero-stat-label">Projets réalisés</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-num">15<span>+</span></span>
+      <span class="hero-stat-label">Clients satisfaits</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-num">4,9<span>/5</span></span>
+      <span class="hero-stat-label">Note moyenne</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-num">5 <span>ans</span></span>
+      <span class="hero-stat-label">D'expérience</span>
     </div>
   </div>
 
@@ -213,51 +235,36 @@
       <div class="profile-card-col rv">
         <div class="profile-card">
           <div class="profile-photo-wrap">
-            <!-- Avatar SVG flat design -->
             <svg class="profile-avatar-svg" viewBox="0 0 400 533" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="bgG" x1="0" y1="0" x2="0" y2="533" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#141414"/><stop offset="100%" stop-color="#0A0A0A"/></linearGradient>
+                <linearGradient id="bgG" x1="0" y1="0" x2="0" y2="533" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#141414"/><stop offset="100%" stop-color="#0C0C0C"/></linearGradient>
                 <linearGradient id="shirtG" x1="0" y1="0" x2="0" y2="533" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1A1A1A"/><stop offset="100%" stop-color="#111111"/></linearGradient>
               </defs>
               <rect width="400" height="533" fill="url(#bgG)"/>
-              <!-- Grid -->
-              <pattern id="g2" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0L0 0 0 28" fill="none" stroke="rgba(170,255,0,.05)" stroke-width="1"/></pattern>
+              <pattern id="g2" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0L0 0 0 28" fill="none" stroke="rgba(170,255,0,.04)" stroke-width="1"/></pattern>
               <rect width="400" height="533" fill="url(#g2)"/>
-              <!-- Accent circle top right -->
-              <circle cx="350" cy="70" r="50" fill="rgba(170,255,0,.04)"/>
-              <circle cx="350" cy="70" r="28" fill="rgba(170,255,0,.07)"/>
-              <!-- Body -->
+              <circle cx="350" cy="70" r="50" fill="rgba(170,255,0,.03)"/>
+              <circle cx="350" cy="70" r="28" fill="rgba(170,255,0,.06)"/>
               <ellipse cx="200" cy="480" rx="140" ry="100" fill="url(#shirtG)"/>
               <rect x="60" y="380" width="280" height="153" fill="url(#shirtG)" rx="0"/>
-              <!-- Neck -->
               <rect x="180" y="282" width="40" height="52" fill="#D4956A" rx="3"/>
-              <!-- Head -->
               <circle cx="200" cy="198" r="80" fill="#D4956A"/>
-              <!-- Hair -->
               <ellipse cx="200" cy="132" rx="80" ry="42" fill="#1A0D05"/>
               <rect x="120" y="132" width="160" height="34" fill="#1A0D05"/>
-              <!-- Ears -->
               <ellipse cx="120" cy="200" rx="11" ry="15" fill="#C4855A"/>
               <ellipse cx="280" cy="200" rx="11" ry="15" fill="#C4855A"/>
-              <!-- Eyes -->
-              <ellipse cx="173" cy="202" rx="10" ry="11" fill="#0A0A0A"/>
-              <ellipse cx="227" cy="202" rx="10" ry="11" fill="#0A0A0A"/>
+              <ellipse cx="173" cy="202" rx="10" ry="11" fill="#0C0C0C"/>
+              <ellipse cx="227" cy="202" rx="10" ry="11" fill="#0C0C0C"/>
               <circle cx="176" cy="199" r="3" fill="#fff"/>
               <circle cx="230" cy="199" r="3" fill="#fff"/>
-              <!-- Eyebrows -->
               <path d="M161 185 Q173 179 185 185" stroke="#1A0D05" stroke-width="3.5" fill="none" stroke-linecap="round"/>
               <path d="M215 185 Q227 179 239 185" stroke="#1A0D05" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-              <!-- Nose -->
               <path d="M200 211 Q193 225 197 231 Q200 234 203 231 Q207 225 200 211" fill="#B87550" opacity=".6"/>
-              <!-- Smile -->
               <path d="M184 245 Q200 260 216 245" stroke="#9A5030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-              <!-- Shirt collar V -->
-              <path d="M162 380 L200 348 L238 380" fill="rgba(170,255,0,.06)"/>
-              <!-- BP accent on shirt -->
-              <rect x="183" y="400" width="34" height="20" rx="3" fill="rgba(170,255,0,.12)" stroke="rgba(170,255,0,.2)" stroke-width="1"/>
-              <text x="200" y="415" font-family="Syne,sans-serif" font-weight="800" font-size="9" fill="rgba(170,255,0,.8)" text-anchor="middle">BP</text>
-              <!-- Accent bottom line -->
-              <rect x="0" y="530" width="400" height="3" fill="#AAFF00" opacity=".6"/>
+              <path d="M162 380 L200 348 L238 380" fill="rgba(170,255,0,.05)"/>
+              <rect x="183" y="400" width="34" height="20" rx="0" fill="rgba(170,255,0,.1)" stroke="rgba(170,255,0,.18)" stroke-width="1"/>
+              <text x="200" y="415" font-family="Syne,sans-serif" font-weight="800" font-size="9" fill="rgba(170,255,0,.75)" text-anchor="middle">BP</text>
+              <rect x="0" y="530" width="400" height="3" fill="#AAFF00" opacity=".5"/>
             </svg>
           </div>
           <div class="profile-overlay"></div>
@@ -294,7 +301,7 @@
           <span class="skill-pill">Rédaction</span>
           <span class="skill-pill">Print</span>
         </div>
-        <div style="margin-top:28px">
+        <div style="margin-top:32px">
           <a href="#contact"><button class="btn btn-accent">Parlons de votre projet</button></a>
         </div>
       </div>
@@ -317,62 +324,80 @@
         <p class="section-sub rv d2">Une offre complète adaptée à chaque profil — startup, PME, association ou artisan.</p>
       </div>
     </div>
-    <div class="services-grid rv d1">
 
-      <div class="service-card">
-        <div class="svc-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+    <!-- Awake-style: full-width service rows -->
+    <div class="services-list rv d1">
+
+      <div class="service-row">
         <div class="svc-num">01</div>
-        <div class="svc-label">Branding</div>
-        <h3>Identité visuelle</h3>
-        <p>Création ou refonte de votre image de marque pour vous démarquer avec cohérence et impact durable. Du logo à la charte complète.</p>
-        <ul class="svc-list">
-          <li>Création de logo et variantes</li>
-          <li>Charte graphique complète</li>
-          <li>Guide d'identité visuelle</li>
-          <li>Direction artistique</li>
-        </ul>
+        <div class="svc-main">
+          <div class="svc-label">Branding</div>
+          <h3>Identité visuelle</h3>
+        </div>
+        <div class="svc-detail">
+          <p>Création ou refonte de votre image de marque pour vous démarquer avec cohérence et impact durable. Du logo à la charte complète.</p>
+          <ul class="svc-list">
+            <li>Création de logo et variantes</li>
+            <li>Charte graphique complète</li>
+            <li>Guide d'identité visuelle</li>
+            <li>Direction artistique</li>
+          </ul>
+        </div>
+        <div class="svc-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
       </div>
 
-      <div class="service-card">
-        <div class="svc-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+      <div class="service-row">
         <div class="svc-num">02</div>
-        <div class="svc-label">Social Media</div>
-        <h3>Réseaux sociaux</h3>
-        <p>Gestion stratégique de vos comptes pour développer votre communauté, renforcer votre présence et générer de l'engagement qualifié.</p>
-        <ul class="svc-list">
-          <li>Stratégie éditoriale et calendrier</li>
-          <li>Création de contenus visuels</li>
-          <li>Rédaction et planification</li>
-          <li>Reporting et analyse</li>
-        </ul>
+        <div class="svc-main">
+          <div class="svc-label">Social Media</div>
+          <h3>Réseaux sociaux</h3>
+        </div>
+        <div class="svc-detail">
+          <p>Gestion stratégique de vos comptes pour développer votre communauté, renforcer votre présence et générer de l'engagement qualifié.</p>
+          <ul class="svc-list">
+            <li>Stratégie éditoriale et calendrier</li>
+            <li>Création de contenus visuels</li>
+            <li>Rédaction et planification</li>
+            <li>Reporting et analyse</li>
+          </ul>
+        </div>
+        <div class="svc-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
       </div>
 
-      <div class="service-card">
-        <div class="svc-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+      <div class="service-row">
         <div class="svc-num">03</div>
-        <div class="svc-label">Web et Rédaction</div>
-        <h3>Création web</h3>
-        <p>Sites vitrines, landing pages et textes percutants pour convertir vos visiteurs et faire rayonner votre message en ligne.</p>
-        <ul class="svc-list">
-          <li>Site vitrine responsive et optimisé</li>
-          <li>SEO et intégration CMS</li>
-          <li>Textes web et pages de vente</li>
-          <li>Articles, newsletters et scripts</li>
-        </ul>
+        <div class="svc-main">
+          <div class="svc-label">Web et Rédaction</div>
+          <h3>Création web</h3>
+        </div>
+        <div class="svc-detail">
+          <p>Sites vitrines, landing pages et textes percutants pour convertir vos visiteurs et faire rayonner votre message en ligne.</p>
+          <ul class="svc-list">
+            <li>Site vitrine responsive et optimisé</li>
+            <li>SEO et intégration CMS</li>
+            <li>Textes web et pages de vente</li>
+            <li>Articles, newsletters et scripts</li>
+          </ul>
+        </div>
+        <div class="svc-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
       </div>
 
-      <div class="service-card">
-        <div class="svc-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+      <div class="service-row">
         <div class="svc-num">04</div>
-        <div class="svc-label">Print</div>
-        <h3>Communication physique</h3>
-        <p>Tous vos supports imprimés conçus avec soin pour laisser une impression professionnelle et mémorable auprès de vos clients.</p>
-        <ul class="svc-list">
-          <li>Flyers, affiches et kakémonos</li>
-          <li>Cartes de visite et papeterie</li>
-          <li>Brochures, catalogues et packaging</li>
-          <li>Panneaux chantier et signalétique</li>
-        </ul>
+        <div class="svc-main">
+          <div class="svc-label">Print</div>
+          <h3>Communication physique</h3>
+        </div>
+        <div class="svc-detail">
+          <p>Tous vos supports imprimés conçus avec soin pour laisser une impression professionnelle et mémorable auprès de vos clients.</p>
+          <ul class="svc-list">
+            <li>Flyers, affiches et kakémonos</li>
+            <li>Cartes de visite et papeterie</li>
+            <li>Brochures, catalogues et packaging</li>
+            <li>Panneaux chantier et signalétique</li>
+          </ul>
+        </div>
+        <div class="svc-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
       </div>
 
     </div>
@@ -533,12 +558,12 @@
 </section>
 
 <!-- ══════════════════════════════
-     PARTENAIRES
+     PARTENAIRES — Awake marquee row
 ══════════════════════════════ -->
 <section id="partenaires">
-  <div class="container">
-    <div class="partners-label rv"><span>Ils m'ont fait confiance</span></div>
-    <div class="marquee-wrap rv">
+  <div class="partners-inner">
+    <div class="partners-label">Ils m'ont fait confiance</div>
+    <div class="marquee-wrap">
       <div class="marquee-track">
         <div class="partner-pill">Transports Naulet</div>
         <div class="partner-pill">Scania France</div>
@@ -625,7 +650,7 @@
 
     </div>
     <div class="pricing-cta-block rv">
-      <p>Vous avez un projet spécifique ou un budget particulier ? <strong style="color:#fff">Chaque projet est unique.</strong> Le premier échange est gratuit et sans engagement.</p>
+      <p>Vous avez un projet spécifique ou un budget particulier ? <strong style="color:var(--white)">Chaque projet est unique.</strong> Le premier échange est gratuit et sans engagement.</p>
       <a href="#contact"><button class="btn btn-accent">Obtenir un devis gratuit</button></a>
     </div>
   </div>
@@ -697,15 +722,21 @@
 </section>
 
 <!-- ══════════════════════════════
-     FOOTER
+     FOOTER — Awake style with mega text
 ══════════════════════════════ -->
 <footer>
+  <!-- Mega brand statement — Awake signature -->
+  <div class="footer-brand-row">
+    <div class="footer-mega-text">By<em>Pab</em>.</div>
+    <p class="footer-brand-tagline">Conseil et Communication · Angers<br>Stratégie, identité visuelle et digital.</p>
+  </div>
+
   <div class="footer-top">
     <div class="footer-brand">
       <div class="footer-logo-wrap">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-          <rect width="28" height="28" rx="5" fill="#AAFF00"/>
-          <text x="14" y="19.5" font-family="Syne,sans-serif" font-weight="800" font-size="11" fill="#0A0A0A" text-anchor="middle" letter-spacing="-0.3">BP</text>
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+          <rect width="26" height="26" rx="0" fill="#AAFF00"/>
+          <text x="13" y="18.5" font-family="Syne,sans-serif" font-weight="800" font-size="10" fill="#0C0C0C" text-anchor="middle" letter-spacing="-0.3">BP</text>
         </svg>
         <span class="footer-logo-wordmark">By<em>Pab</em>.</span>
       </div>
