@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════
    BYPAB — script.js
-   Formulaire via Formspree → pablochauvin1@gmail.com
+   Formspree → pablochauvin1@gmail.com
 ═══════════════════════════════════════════════ */
 const FORMSPREE_ID = 'mreyjprr';
 
@@ -70,7 +70,7 @@ function initReveal() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
   }, { threshold: .06, rootMargin: '0px 0px -28px 0px' });
-  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+  document.querySelectorAll('.rv, .rv-left').forEach(el => obs.observe(el));
 }
 
 function initPortfolioFilter() {
@@ -81,7 +81,7 @@ function initPortfolioFilter() {
       const cat = btn.dataset.cat;
       document.querySelectorAll('.p-card').forEach(card => {
         const show = cat === 'all' || card.dataset.cat === cat;
-        card.style.opacity       = show ? '1' : '.15';
+        card.style.opacity       = show ? '1' : '.12';
         card.style.pointerEvents = show ? ''  : 'none';
       });
     });
@@ -114,7 +114,6 @@ window.openCVModal        = () => { document.getElementById('cv-overlay').classL
 window.closeCVModal       = e  => { if (e.target === document.getElementById('cv-overlay')) closeCVModalDirect(); };
 window.closeCVModalDirect = () => { document.getElementById('cv-overlay').classList.remove('open'); document.body.style.overflow = ''; };
 
-/* ── TESTIMONIALS slider ── */
 function initTestimonials() {
   const track   = document.getElementById('t-track');
   const pipsEl  = document.getElementById('t-pips');
@@ -129,7 +128,7 @@ function initTestimonials() {
     const ts = totalSlides();
     cur = ((idx % ts) + ts) % ts;
     const cardW = cards[0].offsetWidth;
-    const gap = 19.2;
+    const gap = 0;
     track.style.transform = `translateX(-${cur * (cardW + gap)}px)`;
     pipsEl.querySelectorAll('.t-pip').forEach((p, i) => p.classList.toggle('active', i === cur));
   }
@@ -145,7 +144,7 @@ function initTestimonials() {
   }
   function resetAuto() {
     clearInterval(auto);
-    auto = setInterval(() => go(cur + 1), 5000);
+    auto = setInterval(() => go(cur + 1), 5500);
   }
   prevBtn.addEventListener('click', () => { go(cur - 1); resetAuto(); });
   nextBtn.addEventListener('click', () => { go(cur + 1); resetAuto(); });
@@ -158,8 +157,7 @@ function initTestimonials() {
     if (Math.abs(dx) > 40) { go(dx < 0 ? cur + 1 : cur - 1); resetAuto(); }
   });
   window.addEventListener('resize', () => { cur = 0; buildPips(); go(0); });
-  buildPips();
-  resetAuto();
+  buildPips(); resetAuto();
 }
 
 function initCookie() {
@@ -175,7 +173,6 @@ document.querySelectorAll('.legal-overlay').forEach(ov =>
   ov.addEventListener('click', e => { if (e.target === ov) window.closeLegal(ov.id.replace('legal-', '')); })
 );
 
-/* ── FORM via Formspree ── */
 function initForm() {
   const form    = document.getElementById('contact-form');
   const btnEl   = document.getElementById('f-submit');
@@ -208,7 +205,7 @@ function initForm() {
       if (res.ok) { success.classList.add('visible'); form.reset(); }
       else { errEl.classList.add('visible'); }
     } catch { errEl.classList.add('visible'); }
-    btnEl.textContent = 'Envoyer le message'; btnEl.classList.remove('loading');
+    btnEl.textContent = 'Envoyer'; btnEl.classList.remove('loading');
   });
 }
 
