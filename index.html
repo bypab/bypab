@@ -7,6 +7,8 @@
   <title>ClinDoc Innovation – Team Accomplishments</title>
   <meta name="description" content="ClinDoc Innovation team accomplishment tracker and celebration board" />
   <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%86%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>" />
   <style>
     /* ============================================================
        CSS CUSTOM PROPERTIES – Edit these to retheme the entire app
@@ -1378,6 +1380,44 @@
   <!-- ============================================================
        JAVASCRIPT APPLICATION
        ============================================================ -->
+  <!-- Firebase SDK (module) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue, push, remove, update, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2gdbnfALS_SnV0ebVOPZS_8vnnALx02k",
+      authDomain: "clindoc-tracker.firebaseapp.com",
+      databaseURL: "https://clindoc-tracker-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "clindoc-tracker",
+      storageBucket: "clindoc-tracker.firebasestorage.app",
+      messagingSenderId: "288975950208",
+      appId: "1:288975950208:web:9bbb2e80ef72937e64b165"
+    };
+
+    let db, dbRef, fbOnValue, fbPush, fbRemove, fbUpdate, fbSet;
+    let firebaseAvailable = false;
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      db = getDatabase(app);
+      dbRef = ref;
+      fbOnValue = onValue;
+      fbPush = push;
+      fbRemove = remove;
+      fbUpdate = update;
+      fbSet = set;
+      firebaseAvailable = true;
+      console.log('✅ Firebase connected – clindoc-tracker');
+    } catch(e) {
+      console.warn('Firebase init failed, falling back to localStorage:', e);
+    }
+
+    // Expose to global scope for the main app script
+    window.__fb = { db, dbRef, fbOnValue, fbPush, fbRemove, fbUpdate, fbSet, firebaseAvailable };
+    document.dispatchEvent(new Event('firebase-ready'));
+  </script>
+
   <script>
     (function () {
     'use strict';
@@ -1387,15 +1427,14 @@
        ============================================================ */
     const CONFIG = {
       APP_VERSION: '1.0.0',
+      // localStorage keys (fallback seulement)
       STORAGE_KEY: 'clindoc_accomplishments',
-      BACKUP_KEY_1: 'clindoc_backup_1',
-      BACKUP_KEY_2: 'clindoc_backup_2',
       DRAFT_KEY: 'clindoc_draft',
       REACTIONS_KEY: 'clindoc_my_reactions',
-      MAX_IMAGE_SIZE: 204800, // ~200KB in bytes
-      AUTO_SAVE_INTERVAL: 30000, // 30 seconds
-      STORAGE_WARNING_THRESHOLD: 0.8, // 80%
-      FLOWER_STAGES: [0, 1, 2, 3, 4, 5], // Accomplishment thresholds
+      MAX_IMAGE_SIZE: 204800,
+      AUTO_SAVE_INTERVAL: 30000,
+      STORAGE_WARNING_THRESHOLD: 0.8,
+      FLOWER_STAGES: [0, 1, 2, 3, 4, 5],
       BADGE_THRESHOLDS: { bronze: 1, silver: 3, gold: 5 },
       MOTIVATIONAL_MESSAGES: {
         0: "Plant your first seed of success! 🌱",
@@ -1426,24 +1465,21 @@
       editingId: null,
       undoStack: [],
       autoSaveTimer: null,
-      myReactions: {} // { accomplishmentId: 'applause' | 'confetti' | 'happy' | 'surprised' }
+      myReactions: {},
+      // Firebase
+      useFirebase: false,
+      fbReady: false,
+      unsubscribe: null
     };
 
     /* ============================================================
        3. UTILITY FUNCTIONS
        ============================================================ */
-
-    /**
-     * Get current month in YYYY-MM format
-     */
     function getCurrentMonth() {
       const now = new Date();
       return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     }
 
-    /**
-     * Generate UUID v4
-     */
     function generateUUID() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         const r = Math.random() * 16 | 0;
@@ -1452,180 +1488,104 @@
       });
     }
 
-    /**
-     * Sanitize HTML to prevent XSS
-     */
     function sanitizeHTML(str) {
       const div = document.createElement('div');
       div.textContent = str;
       return div.innerHTML;
     }
 
-    /**
-     * Format date to readable string
-     */
     function formatDate(dateString) {
-      const date = new Date(dateString + 'T00:00:00'); // Force local timezone
+      const date = new Date(dateString + 'T00:00:00');
       const options = { year: 'numeric', month: 'short', day: 'numeric' };
       return date.toLocaleDateString('en-US', options);
     }
 
-    /**
-     * Format month to readable string
-     */
     function formatMonth(monthString) {
       const [year, month] = monthString.split('-');
       const date = new Date(year, parseInt(month) - 1, 1);
       return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
     }
 
-    /**
-     * Calculate days since last accomplishment
-     */
     function daysSinceLastAccomplishment(accomplishments) {
       if (!accomplishments || accomplishments.length === 0) return Infinity;
-      
-      const sortedDates = accomplishments
-        .map(a => new Date(a.date))
-        .sort((a, b) => b - a);
-      
+      const sortedDates = accomplishments.map(a => new Date(a.date)).sort((a, b) => b - a);
       const lastDate = sortedDates[0];
       const now = new Date();
       const diffTime = Math.abs(now - lastDate);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-      return diffDays;
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     }
 
-    /**
-     * Validate URL format
-     */
     function isValidURL(string) {
       try {
         const url = new URL(string);
         return url.protocol === 'http:' || url.protocol === 'https:';
-      } catch (_) {
-        return false;
-      }
+      } catch (_) { return false; }
     }
 
-    /**
-     * Compress image to base64 with max size
-     */
     function compressImage(file, maxSizeBytes) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        
         reader.onload = function(e) {
           const img = new Image();
-          
           img.onload = function() {
             const canvas = document.createElement('canvas');
-            let width = img.width;
-            let height = img.height;
-            
-            // Calculate scaling to fit within reasonable dimensions
+            let width = img.width, height = img.height;
             const maxDimension = 800;
             if (width > height && width > maxDimension) {
-              height = (height / width) * maxDimension;
-              width = maxDimension;
+              height = (height / width) * maxDimension; width = maxDimension;
             } else if (height > maxDimension) {
-              width = (width / height) * maxDimension;
-              height = maxDimension;
+              width = (width / height) * maxDimension; height = maxDimension;
             }
-            
-            canvas.width = width;
-            canvas.height = height;
-            
+            canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
-            
-            // Try different quality levels to meet size requirement
             let quality = 0.9;
             let dataUrl = canvas.toDataURL('image/jpeg', quality);
-            
             while (dataUrl.length > maxSizeBytes && quality > 0.1) {
               quality -= 0.1;
               dataUrl = canvas.toDataURL('image/jpeg', quality);
             }
-            
-            if (dataUrl.length > maxSizeBytes) {
-              reject(new Error('Image too large even after compression'));
-            } else {
-              resolve(dataUrl);
-            }
+            if (dataUrl.length > maxSizeBytes) reject(new Error('Image too large'));
+            else resolve(dataUrl);
           };
-          
           img.onerror = () => reject(new Error('Failed to load image'));
           img.src = e.target.result;
         };
-        
         reader.onerror = () => reject(new Error('Failed to read file'));
         reader.readAsDataURL(file);
       });
     }
 
-    /**
-     * Calculate localStorage usage percentage
-     */
     function getStorageUsage() {
       try {
         let total = 0;
         for (let key in localStorage) {
-          if (localStorage.hasOwnProperty(key)) {
-            total += localStorage[key].length + key.length;
-          }
+          if (localStorage.hasOwnProperty(key)) total += localStorage[key].length + key.length;
         }
-        // Approximate 5MB limit for most browsers
-        const limit = 5 * 1024 * 1024;
-        return (total / limit) * 100;
-      } catch (e) {
-        return 0;
-      }
+        return (total / (5 * 1024 * 1024)) * 100;
+      } catch (e) { return 0; }
     }
 
-    /**
-     * Show toast notification
-     */
     function showToast(message, type = 'info', duration = 4000, onUndo = null) {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
-      
-      const icon = {
-        success: '✓',
-        error: '✕',
-        warning: '⚠',
-        info: 'ℹ'
-      }[type] || 'ℹ';
-      
-      toast.innerHTML = `
-        <span aria-hidden="true">${icon}</span>
-        <span>${sanitizeHTML(message)}</span>
-      `;
-      
+      const icon = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' }[type] || 'ℹ';
+      toast.innerHTML = `<span aria-hidden="true">${icon}</span><span>${sanitizeHTML(message)}</span>`;
       if (onUndo) {
         const undoBtn = document.createElement('button');
         undoBtn.className = 'toast-undo';
         undoBtn.textContent = 'Undo';
-        undoBtn.onclick = () => {
-          onUndo();
-          toast.remove();
-        };
+        undoBtn.onclick = () => { onUndo(); toast.remove(); };
         toast.appendChild(undoBtn);
       }
-      
       container.appendChild(toast);
-      
       setTimeout(() => {
         toast.style.animation = 'toastOut 0.3s ease forwards';
         setTimeout(() => toast.remove(), 300);
       }, duration);
     }
 
-    /**
-     * Show modal dialog
-     */
     function showModal(title, body, actions = []) {
       return new Promise((resolve) => {
         const overlay = document.createElement('div');
@@ -1637,149 +1597,43 @@
             <div class="modal-actions" id="modal-actions"></div>
           </div>
         `;
-        
         document.body.appendChild(overlay);
-        
         const actionsContainer = overlay.querySelector('#modal-actions');
-        
         actions.forEach(action => {
           const btn = document.createElement('button');
           btn.className = `btn ${action.class || 'btn-secondary'}`;
           btn.textContent = action.label;
-          btn.onclick = () => {
-            overlay.remove();
-            resolve(action.value);
-          };
+          btn.onclick = () => { overlay.remove(); resolve(action.value); };
           actionsContainer.appendChild(btn);
         });
-        
-        // Close on overlay click
-        overlay.onclick = (e) => {
-          if (e.target === overlay) {
-            overlay.remove();
-            resolve(null);
-          }
-        };
+        overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); resolve(null); } };
       });
     }
 
     /* ============================================================
-       4. LOCALSTORAGE MANAGEMENT
+       4. FIREBASE / STORAGE LAYER
        ============================================================ */
 
-    /**
-     * Check if localStorage is available
-     */
     function isLocalStorageAvailable() {
       try {
         const test = '__storage_test__';
         localStorage.setItem(test, test);
         localStorage.removeItem(test);
         return true;
-      } catch (e) {
-        return false;
-      }
+      } catch (e) { return false; }
     }
 
-    /**
-     * Load data from localStorage with backup fallback
-     */
-    function loadData() {
-      if (!isLocalStorageAvailable()) {
-        console.warn('localStorage not available, using in-memory storage');
-        showToast('Running in private mode - data will not persist', 'warning', 6000);
-        return getDefaultData();
-      }
-      
-      try {
-        // Try main storage
-        let dataStr = localStorage.getItem(CONFIG.STORAGE_KEY);
-        if (dataStr) {
-          const data = JSON.parse(dataStr);
-          if (validateData(data)) {
-            return data;
-          }
-        }
-        
-        // Try backup 1
-        dataStr = localStorage.getItem(CONFIG.BACKUP_KEY_1);
-        if (dataStr) {
-          const data = JSON.parse(dataStr);
-          if (validateData(data)) {
-            console.warn('Loaded from backup 1');
-            showToast('Data restored from backup', 'warning');
-            return data;
-          }
-        }
-        
-        // Try backup 2
-        dataStr = localStorage.getItem(CONFIG.BACKUP_KEY_2);
-        if (dataStr) {
-          const data = JSON.parse(dataStr);
-          if (validateData(data)) {
-            console.warn('Loaded from backup 2');
-            showToast('Data restored from backup', 'warning');
-            return data;
-          }
-        }
-        
-        // No valid data found
-        return getDefaultData();
-        
-      } catch (e) {
-        console.error('Error loading data:', e);
-        showToast('Error loading data, starting fresh', 'error');
-        return getDefaultData();
-      }
+    function getDefaultData() {
+      return {
+        version: CONFIG.APP_VERSION,
+        accomplishments: [],
+        categories: [],
+        people: [],
+        settings: { lastBackup: null },
+        monthlySnapshots: {}
+      };
     }
 
-    /**
-     * Save data to localStorage with backups
-     */
-    function saveData(data) {
-      if (!isLocalStorageAvailable()) {
-        console.warn('localStorage not available, data not persisted');
-        return false;
-      }
-      
-      try {
-        const dataStr = JSON.stringify(data);
-        
-        // Rotate backups
-        const backup1 = localStorage.getItem(CONFIG.STORAGE_KEY);
-        if (backup1) {
-          localStorage.setItem(CONFIG.BACKUP_KEY_2, backup1);
-        }
-        localStorage.setItem(CONFIG.BACKUP_KEY_1, dataStr);
-        
-        // Save main data
-        localStorage.setItem(CONFIG.STORAGE_KEY, dataStr);
-        
-        // Update last backup timestamp
-        data.settings.lastBackup = new Date().toISOString();
-        
-        // Check storage usage
-        const usage = getStorageUsage();
-        updateStorageWarning(usage);
-        
-        return true;
-        
-      } catch (e) {
-        console.error('Error saving data:', e);
-        
-        if (e.name === 'QuotaExceededError') {
-          showToast('Storage quota exceeded! Please export and clear old data.', 'error', 8000);
-        } else {
-          showToast('Error saving data', 'error');
-        }
-        
-        return false;
-      }
-    }
-
-    /**
-     * Validate data structure
-     */
     function validateData(data) {
       if (!data || typeof data !== 'object') return false;
       if (!data.version || !data.accomplishments || !Array.isArray(data.accomplishments)) return false;
@@ -1790,59 +1644,167 @@
       return true;
     }
 
-    /**
-     * Get default data structure
-     */
-    function getDefaultData() {
-      return {
-        version: CONFIG.APP_VERSION,
-        accomplishments: [],
-        categories: [],
-        people: [],
-        settings: {
-          lastBackup: null
-        },
-        monthlySnapshots: {}
-      };
+    // ── Firebase helpers ─────────────────────────────────────────────────────
+
+    function fbDataRef() {
+      const { db, dbRef } = window.__fb;
+      return dbRef(db, 'clindoc/data');
+    }
+
+    function fbAccomplishmentsRef() {
+      const { db, dbRef } = window.__fb;
+      return dbRef(db, 'clindoc/accomplishments');
+    }
+
+    function fbAccomplishmentRef(id) {
+      const { db, dbRef } = window.__fb;
+      return dbRef(db, `clindoc/accomplishments/${id}`);
     }
 
     /**
-     * Load my reactions from localStorage
+     * Sync data from Firebase snapshot into AppState
      */
+    function syncFromSnapshot(snapshot) {
+      const raw = snapshot.val();
+      if (!raw) {
+        AppState.data = getDefaultData();
+      } else {
+        // accomplishments stored as object keyed by id in Firebase
+        const accomplishments = raw.accomplishments
+          ? Object.values(raw.accomplishments)
+          : [];
+        AppState.data = {
+          version: raw.version || CONFIG.APP_VERSION,
+          accomplishments,
+          categories: raw.categories || [],
+          people: raw.people || [],
+          settings: raw.settings || { lastBackup: null },
+          monthlySnapshots: raw.monthlySnapshots || {}
+        };
+      }
+
+      // Refresh entire UI
+      checkMonthlySnapshot();
+      updateFlowerDisplay();
+      renderMonthlyShelf();
+      applyFilters();
+      renderFilters();
+      updateDatalist();
+      updateFooter();
+    }
+
+    /**
+     * Subscribe to realtime Firebase updates
+     */
+    function subscribeFirebase() {
+      const { fbOnValue } = window.__fb;
+      const dataRef = fbDataRef();
+      // fbOnValue returns unsubscribe function
+      AppState.unsubscribe = fbOnValue(dataRef, syncFromSnapshot, (err) => {
+        console.error('Firebase read error:', err);
+        showToast('Connexion Firebase perdue – mode hors ligne', 'warning');
+        fallbackToLocalStorage();
+      });
+    }
+
+    /**
+     * Save full data object to Firebase
+     */
+    async function saveToFirebase(data) {
+      const { fbSet } = window.__fb;
+      // Convert accomplishments array to object keyed by id for Firebase
+      const accomplishmentsObj = {};
+      data.accomplishments.forEach(a => { accomplishmentsObj[a.id] = a; });
+      const payload = {
+        version: data.version,
+        accomplishments: accomplishmentsObj,
+        categories: data.categories,
+        people: data.people,
+        settings: { ...data.settings, lastBackup: new Date().toISOString() },
+        monthlySnapshots: data.monthlySnapshots
+      };
+      try {
+        await fbSet(fbDataRef(), payload);
+        return true;
+      } catch(e) {
+        console.error('Firebase write error:', e);
+        showToast('Erreur de sauvegarde Firebase', 'error');
+        return false;
+      }
+    }
+
+    // ── LocalStorage fallback ────────────────────────────────────────────────
+
+    function fallbackToLocalStorage() {
+      AppState.useFirebase = false;
+      AppState.data = loadFromLocalStorage();
+      checkMonthlySnapshot();
+      updateFlowerDisplay();
+      renderMonthlyShelf();
+      applyFilters();
+      renderFilters();
+      updateDatalist();
+      updateFooter();
+    }
+
+    function loadFromLocalStorage() {
+      if (!isLocalStorageAvailable()) {
+        showToast('Mode privé – les données ne seront pas sauvegardées', 'warning', 6000);
+        return getDefaultData();
+      }
+      try {
+        const dataStr = localStorage.getItem(CONFIG.STORAGE_KEY);
+        if (dataStr) {
+          const data = JSON.parse(dataStr);
+          if (validateData(data)) return data;
+        }
+        return getDefaultData();
+      } catch (e) {
+        return getDefaultData();
+      }
+    }
+
+    function saveToLocalStorage(data) {
+      if (!isLocalStorageAvailable()) return false;
+      try {
+        localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(data));
+        return true;
+      } catch (e) {
+        if (e.name === 'QuotaExceededError') showToast('Stockage local plein!', 'error', 8000);
+        return false;
+      }
+    }
+
+    // ── Universal save ───────────────────────────────────────────────────────
+
+    async function saveData(data) {
+      if (AppState.useFirebase) {
+        return await saveToFirebase(data);
+      } else {
+        return saveToLocalStorage(data);
+      }
+    }
+
+    // ── Reactions (stored per-browser in localStorage) ───────────────────────
+
     function loadMyReactions() {
       if (!isLocalStorageAvailable()) return {};
-      
       try {
-        const reactionsStr = localStorage.getItem(CONFIG.REACTIONS_KEY);
-        return reactionsStr ? JSON.parse(reactionsStr) : {};
-      } catch (e) {
-        console.error('Error loading reactions:', e);
-        return {};
-      }
+        const r = localStorage.getItem(CONFIG.REACTIONS_KEY);
+        return r ? JSON.parse(r) : {};
+      } catch (e) { return {}; }
     }
 
-    /**
-     * Save my reactions to localStorage
-     */
     function saveMyReactions(reactions) {
       if (!isLocalStorageAvailable()) return;
-      
-      try {
-        localStorage.setItem(CONFIG.REACTIONS_KEY, JSON.stringify(reactions));
-      } catch (e) {
-        console.error('Error saving reactions:', e);
-      }
+      try { localStorage.setItem(CONFIG.REACTIONS_KEY, JSON.stringify(reactions)); } catch (e) {}
     }
 
-    /**
-     * Update storage warning banner
-     */
     function updateStorageWarning(usagePercent) {
       const banner = document.getElementById('storage-warning');
       const text = document.getElementById('storage-warning-text');
-      
       if (usagePercent >= CONFIG.STORAGE_WARNING_THRESHOLD * 100) {
-        text.textContent = `Storage ${Math.round(usagePercent)}% full. Consider exporting and clearing old data.`;
+        text.textContent = `Stockage ${Math.round(usagePercent)}% plein. Exportez et nettoyez d'anciennes données.`;
         banner.style.display = 'flex';
       } else {
         banner.style.display = 'none';
@@ -1853,10 +1815,7 @@
        5. DATA OPERATIONS (CRUD)
        ============================================================ */
 
-    /**
-     * Add new accomplishment
-     */
-    function addAccomplishment(accomplishmentData) {
+    async function addAccomplishment(accomplishmentData) {
       const accomplishment = {
         id: generateUUID(),
         title: accomplishmentData.title.trim(),
@@ -1867,40 +1826,23 @@
         links: accomplishmentData.links || [],
         image: accomplishmentData.image || null,
         private: accomplishmentData.private || false,
-        reactions: {
-          applause: [],
-          confetti: [],
-          happy: [],
-          surprised: []
-        },
+        reactions: { applause: [], confetti: [], happy: [], surprised: [] },
         createdAt: new Date().toISOString(),
         modifiedAt: new Date().toISOString()
       };
-      
+
       AppState.data.accomplishments.push(accomplishment);
-      
-      // Update categories and people lists
-      if (!AppState.data.categories.includes(accomplishment.category)) {
-        AppState.data.categories.push(accomplishment.category);
-      }
-      if (!AppState.data.people.includes(accomplishment.person)) {
-        AppState.data.people.push(accomplishment.person);
-      }
-      
-      saveData(AppState.data);
+      if (!AppState.data.categories.includes(accomplishment.category)) AppState.data.categories.push(accomplishment.category);
+      if (!AppState.data.people.includes(accomplishment.person)) AppState.data.people.push(accomplishment.person);
+
+      await saveData(AppState.data);
       return accomplishment;
     }
 
-    /**
-     * Update existing accomplishment
-     */
-    function updateAccomplishment(id, updates) {
+    async function updateAccomplishment(id, updates) {
       const index = AppState.data.accomplishments.findIndex(a => a.id === id);
       if (index === -1) return null;
-      
       const accomplishment = AppState.data.accomplishments[index];
-      
-      // Update fields
       if (updates.title !== undefined) accomplishment.title = updates.title.trim();
       if (updates.summary !== undefined) accomplishment.summary = updates.summary.trim();
       if (updates.date !== undefined) accomplishment.date = updates.date;
@@ -1909,100 +1851,56 @@
       if (updates.links !== undefined) accomplishment.links = updates.links;
       if (updates.image !== undefined) accomplishment.image = updates.image;
       if (updates.private !== undefined) accomplishment.private = updates.private;
-      
       accomplishment.modifiedAt = new Date().toISOString();
-      
-      // Update categories and people lists
-      if (updates.category && !AppState.data.categories.includes(updates.category)) {
-        AppState.data.categories.push(updates.category);
-      }
-      if (updates.person && !AppState.data.people.includes(updates.person)) {
-        AppState.data.people.push(updates.person);
-      }
-      
-      saveData(AppState.data);
+      if (updates.category && !AppState.data.categories.includes(updates.category)) AppState.data.categories.push(updates.category);
+      if (updates.person && !AppState.data.people.includes(updates.person)) AppState.data.people.push(updates.person);
+      await saveData(AppState.data);
       return accomplishment;
     }
 
-    /**
-     * Delete accomplishment
-     */
-    function deleteAccomplishment(id) {
+    async function deleteAccomplishment(id) {
       const index = AppState.data.accomplishments.findIndex(a => a.id === id);
       if (index === -1) return null;
-      
       const deleted = AppState.data.accomplishments.splice(index, 1)[0];
-      
-      // Add to undo stack
-      AppState.undoStack.push({
-        type: 'delete',
-        data: deleted,
-        timestamp: Date.now()
-      });
-      
-      // Keep only last 10 undo actions
-      if (AppState.undoStack.length > 10) {
-        AppState.undoStack.shift();
-      }
-      
-      saveData(AppState.data);
+      AppState.undoStack.push({ type: 'delete', data: deleted, timestamp: Date.now() });
+      if (AppState.undoStack.length > 10) AppState.undoStack.shift();
+      await saveData(AppState.data);
       return deleted;
     }
 
-    /**
-     * Undo last delete
-     */
-    function undoDelete() {
+    async function undoDelete() {
       const lastAction = AppState.undoStack.pop();
       if (!lastAction || lastAction.type !== 'delete') return null;
-      
       AppState.data.accomplishments.push(lastAction.data);
-      saveData(AppState.data);
+      await saveData(AppState.data);
       return lastAction.data;
     }
 
-    /**
-     * Toggle reaction on accomplishment
-     */
-    function toggleReaction(accomplishmentId, reactionType) {
+    async function toggleReaction(accomplishmentId, reactionType) {
       const accomplishment = AppState.data.accomplishments.find(a => a.id === accomplishmentId);
       if (!accomplishment) return;
-      
       const deviceId = getDeviceId();
       const currentReaction = AppState.myReactions[accomplishmentId];
-      
-      // Remove from previous reaction if exists
       if (currentReaction) {
         const prevArray = accomplishment.reactions[currentReaction];
         const prevIndex = prevArray.indexOf(deviceId);
-        if (prevIndex > -1) {
-          prevArray.splice(prevIndex, 1);
-        }
+        if (prevIndex > -1) prevArray.splice(prevIndex, 1);
       }
-      
-      // If clicking same reaction, just remove it (toggle off)
       if (currentReaction === reactionType) {
         delete AppState.myReactions[accomplishmentId];
       } else {
-        // Add to new reaction
-        if (!accomplishment.reactions[reactionType].includes(deviceId)) {
-          accomplishment.reactions[reactionType].push(deviceId);
-        }
+        if (!accomplishment.reactions[reactionType].includes(deviceId)) accomplishment.reactions[reactionType].push(deviceId);
         AppState.myReactions[accomplishmentId] = reactionType;
       }
-      
-      saveData(AppState.data);
+      await saveData(AppState.data);
       saveMyReactions(AppState.myReactions);
     }
 
-    /**
-     * Get device ID for reaction tracking
-     */
     function getDeviceId() {
-      let deviceId = localStorage.getItem('clindoc_device_id');
+      let deviceId = isLocalStorageAvailable() ? localStorage.getItem('clindoc_device_id') : null;
       if (!deviceId) {
         deviceId = generateUUID();
-        localStorage.setItem('clindoc_device_id', deviceId);
+        if (isLocalStorageAvailable()) localStorage.setItem('clindoc_device_id', deviceId);
       }
       return deviceId;
     }
@@ -2011,21 +1909,15 @@
        6. FLOWER GROWTH SYSTEM
        ============================================================ */
 
-    /**
-     * Get flower stage based on accomplishment count
-     */
     function getFlowerStage(count) {
       if (count === 0) return 0;
       if (count === 1) return 1;
       if (count === 2) return 2;
       if (count === 3) return 3;
       if (count === 4) return 4;
-      return 5; // 5+
+      return 5;
     }
 
-    /**
-     * Get badge type based on accomplishment count
-     */
     function getBadgeType(count) {
       if (count >= CONFIG.BADGE_THRESHOLDS.gold) return 'gold';
       if (count >= CONFIG.BADGE_THRESHOLDS.silver) return 'silver';
@@ -2033,9 +1925,6 @@
       return null;
     }
 
-    /**
-     * Render SVG flower based on stage
-     */
     function renderFlower(stage) {
       const stem = document.getElementById('stem');
       const leafLeft = document.getElementById('leaf-left');
@@ -2045,103 +1934,48 @@
       const sparkles = document.querySelectorAll('#sparkles circle');
       const flowerDisplay = document.getElementById('flower-display');
       const celebrationParticles = document.getElementById('celebration-particles');
-      
-      // Reset all elements
+
       stem.style.animation = 'none';
       leafLeft.style.animation = 'none';
       leafRight.style.animation = 'none';
       bud.style.animation = 'none';
       bloom.style.animation = 'none';
-      
-      // Clear previous particles
       celebrationParticles.innerHTML = '';
       flowerDisplay.classList.remove('blooming');
-      
-      // Stage 0: Just pot
+
       if (stage === 0) {
         stem.style.transform = 'scaleY(0)';
-        leafLeft.style.transform = 'scale(0)';
-        leafLeft.style.opacity = '0';
-        leafRight.style.transform = 'scale(0)';
-        leafRight.style.opacity = '0';
-        bud.style.transform = 'scale(0)';
-        bud.style.opacity = '0';
-        bloom.style.transform = 'scale(0)';
-        bloom.style.opacity = '0';
+        leafLeft.style.transform = 'scale(0)'; leafLeft.style.opacity = '0';
+        leafRight.style.transform = 'scale(0)'; leafRight.style.opacity = '0';
+        bud.style.transform = 'scale(0)'; bud.style.opacity = '0';
+        bloom.style.transform = 'scale(0)'; bloom.style.opacity = '0';
         return;
       }
-      
-      // Stage 1+: Grow stem
-      setTimeout(() => {
-        stem.style.animation = 'growStem 0.8s ease-out forwards';
-      }, 100);
-      
-      // Stage 2+: Add left leaf
-      if (stage >= 2) {
-        setTimeout(() => {
-          leafLeft.style.animation = 'growLeaf 0.6s ease-out forwards';
-        }, 900);
-      } else {
-        leafLeft.style.transform = 'scale(0)';
-        leafLeft.style.opacity = '0';
-      }
-      
-      // Stage 3+: Add right leaf
-      if (stage >= 3) {
-        setTimeout(() => {
-          leafRight.style.animation = 'growLeaf 0.6s ease-out forwards';
-        }, 1200);
-      } else {
-        leafRight.style.transform = 'scale(0)';
-        leafRight.style.opacity = '0';
-      }
-      
-      // Stage 4: Show bud
+      setTimeout(() => { stem.style.animation = 'growStem 0.8s ease-out forwards'; }, 100);
+      if (stage >= 2) { setTimeout(() => { leafLeft.style.animation = 'growLeaf 0.6s ease-out forwards'; }, 900); }
+      else { leafLeft.style.transform = 'scale(0)'; leafLeft.style.opacity = '0'; }
+      if (stage >= 3) { setTimeout(() => { leafRight.style.animation = 'growLeaf 0.6s ease-out forwards'; }, 1200); }
+      else { leafRight.style.transform = 'scale(0)'; leafRight.style.opacity = '0'; }
       if (stage === 4) {
-        setTimeout(() => {
-          bud.style.animation = 'growBud 0.5s ease-out forwards';
-        }, 1500);
-        bloom.style.transform = 'scale(0)';
-        bloom.style.opacity = '0';
-      } else {
-        bud.style.transform = 'scale(0)';
-        bud.style.opacity = '0';
-      }
-      
-      // Stage 5: Full bloom with celebration
+        setTimeout(() => { bud.style.animation = 'growBud 0.5s ease-out forwards'; }, 1500);
+        bloom.style.transform = 'scale(0)'; bloom.style.opacity = '0';
+      } else { bud.style.transform = 'scale(0)'; bud.style.opacity = '0'; }
       if (stage >= 5) {
-        bud.style.transform = 'scale(0)';
-        bud.style.opacity = '0';
-        
+        bud.style.transform = 'scale(0)'; bud.style.opacity = '0';
         setTimeout(() => {
           bloom.style.animation = 'bloomPetal 0.8s ease-out forwards';
-          
-          // Animate sparkles
           sparkles.forEach((sparkle, i) => {
-            setTimeout(() => {
-              sparkle.style.animation = 'sparkle 1.5s ease-in-out infinite';
-              sparkle.style.animationDelay = `${i * 0.3}s`;
-            }, 800 + i * 100);
+            setTimeout(() => { sparkle.style.animation = 'sparkle 1.5s ease-in-out infinite'; sparkle.style.animationDelay = `${i * 0.3}s`; }, 800 + i * 100);
           });
-          
-          // Add celebration particles
           flowerDisplay.classList.add('blooming');
           createCelebrationParticles();
-          
         }, 1500);
-      } else {
-        bloom.style.transform = 'scale(0)';
-        bloom.style.opacity = '0';
-      }
+      } else { bloom.style.transform = 'scale(0)'; bloom.style.opacity = '0'; }
     }
 
-    /**
-     * Create celebration particles for full bloom
-     */
     function createCelebrationParticles() {
       const container = document.getElementById('celebration-particles');
       const colors = ['#E91E63', '#9C27B0', '#FDD835', '#4CAF50', '#2196F3'];
-      
       for (let i = 0; i < 20; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
@@ -2153,38 +1987,20 @@
       }
     }
 
-    /**
-     * Update flower display
-     */
     function updateFlowerDisplay() {
-      const currentMonthAccomplishments = AppState.data.accomplishments.filter(a => {
-        return a.date.startsWith(AppState.currentMonth);
-      });
-      
+      const currentMonthAccomplishments = AppState.data.accomplishments.filter(a => a.date.startsWith(AppState.currentMonth));
       const count = currentMonthAccomplishments.length;
       const stage = getFlowerStage(count);
-      
-      // Update stage label
       document.getElementById('flower-stage-label').textContent = `Stage ${stage} / 5`;
-      
-      // Update progress bar
       const progress = (stage / 5) * 100;
       document.getElementById('flower-progress-fill').style.width = `${progress}%`;
       document.querySelector('.flower-progress-bar').setAttribute('aria-valuenow', stage);
-      
-      // Update message
       let message = CONFIG.MOTIVATIONAL_MESSAGES[stage];
       const daysSince = daysSinceLastAccomplishment(AppState.data.accomplishments);
-      if (daysSince >= 10 && count > 0) {
-        message = CONFIG.MOTIVATIONAL_MESSAGES.idle;
-      }
+      if (daysSince >= 10 && count > 0) message = CONFIG.MOTIVATIONAL_MESSAGES.idle;
       document.getElementById('flower-message').textContent = message;
-      
-      // Update stats
       document.getElementById('stat-month-count').textContent = count;
       document.getElementById('stat-total-count').textContent = AppState.data.accomplishments.length;
-      
-      // Render flower
       renderFlower(stage);
     }
 
@@ -2192,107 +2008,62 @@
        7. MONTHLY SNAPSHOT SYSTEM
        ============================================================ */
 
-    /**
-     * Check and create monthly snapshot if needed
-     */
     function checkMonthlySnapshot() {
-      const now = new Date();
       const currentMonth = getCurrentMonth();
-      
-      // Get all months that have accomplishments
       const monthsWithData = {};
       AppState.data.accomplishments.forEach(a => {
-        const month = a.date.substring(0, 7); // YYYY-MM
-        if (!monthsWithData[month]) {
-          monthsWithData[month] = [];
-        }
+        const month = a.date.substring(0, 7);
+        if (!monthsWithData[month]) monthsWithData[month] = [];
         monthsWithData[month].push(a);
       });
-      
-      // Create snapshots for months that don't have one
       Object.keys(monthsWithData).forEach(month => {
         if (!AppState.data.monthlySnapshots[month] && month !== currentMonth) {
           const count = monthsWithData[month].length;
-          const stage = getFlowerStage(count);
-          const badge = getBadgeType(count);
-          
           AppState.data.monthlySnapshots[month] = {
             accomplishmentCount: count,
-            flowerStage: stage,
-            badge: badge,
+            flowerStage: getFlowerStage(count),
+            badge: getBadgeType(count),
             snapshotDate: new Date().toISOString()
           };
         }
       });
-      
-      saveData(AppState.data);
+      // Note: don't save here to avoid infinite loop with Firebase listener
     }
 
-    /**
-     * Render monthly shelf
-     */
     function renderMonthlyShelf() {
       const container = document.getElementById('shelf-container');
       container.innerHTML = '';
-      
-      // Get all unique months (from accomplishments and snapshots)
       const allMonths = new Set();
-      AppState.data.accomplishments.forEach(a => {
-        allMonths.add(a.date.substring(0, 7));
-      });
-      Object.keys(AppState.data.monthlySnapshots).forEach(month => {
-        allMonths.add(month);
-      });
-      
-      // Sort months descending
+      AppState.data.accomplishments.forEach(a => allMonths.add(a.date.substring(0, 7)));
+      Object.keys(AppState.data.monthlySnapshots).forEach(month => allMonths.add(month));
       const sortedMonths = Array.from(allMonths).sort().reverse();
-      
       if (sortedMonths.length === 0) {
         container.innerHTML = '<p style="color: var(--gray); text-align: center; padding: 20px;">No archived months yet</p>';
         return;
       }
-      
       sortedMonths.forEach(month => {
         const isCurrent = month === AppState.currentMonth;
-        const snapshot = AppState.data.monthlySnapshots[month];
-        
-        // Calculate current data for this month
         const monthAccomplishments = AppState.data.accomplishments.filter(a => a.date.startsWith(month));
         const count = monthAccomplishments.length;
         const badge = getBadgeType(count);
-        
         const monthDiv = document.createElement('div');
         monthDiv.className = `shelf-month ${isCurrent ? 'current' : ''}`;
         monthDiv.setAttribute('role', 'listitem');
         monthDiv.setAttribute('tabindex', '0');
-        
         let badgeHTML = '';
         if (badge) {
           const badgeEmoji = badge === 'gold' ? '🥇' : badge === 'silver' ? '🥈' : '🥉';
           badgeHTML = `<div class="shelf-badge ${badge}" aria-label="${badge} badge">${badgeEmoji}</div>`;
         }
-        
         const flowerEmoji = count === 0 ? '🪴' : count >= 5 ? '🌸' : count >= 4 ? '🌺' : count >= 3 ? '🌼' : count >= 2 ? '🌿' : '🌱';
-        
-        monthDiv.innerHTML = `
-          ${badgeHTML}
-          <div class="shelf-month-name">${formatMonth(month)}</div>
-          <div class="shelf-flower-mini" aria-hidden="true">${flowerEmoji}</div>
-          <div class="shelf-count">${count} accomplishment${count !== 1 ? 's' : ''}</div>
-        `;
-        
+        monthDiv.innerHTML = `${badgeHTML}<div class="shelf-month-name">${formatMonth(month)}</div><div class="shelf-flower-mini" aria-hidden="true">${flowerEmoji}</div><div class="shelf-count">${count} accomplishment${count !== 1 ? 's' : ''}</div>`;
         monthDiv.onclick = () => {
-          // Filter to show this month's accomplishments
           AppState.filters.dateFrom = `${month}-01`;
           const lastDay = new Date(month.split('-')[0], month.split('-')[1], 0).getDate();
           AppState.filters.dateTo = `${month}-${lastDay}`;
-          applyFilters();
-          renderFilters();
-          
-          // Scroll to cards
+          applyFilters(); renderFilters();
           document.getElementById('cards-section').scrollIntoView({ behavior: 'smooth' });
         };
-        
         container.appendChild(monthDiv);
       });
     }
@@ -2301,188 +2072,97 @@
        8. FILTERING & SEARCH
        ============================================================ */
 
-    /**
-     * Apply filters to accomplishments
-     */
     function applyFilters() {
       let filtered = [...AppState.data.accomplishments];
-      
-      // Search filter
       if (AppState.filters.search) {
         const searchLower = AppState.filters.search.toLowerCase();
-        filtered = filtered.filter(a => 
-          a.title.toLowerCase().includes(searchLower) ||
-          a.summary.toLowerCase().includes(searchLower)
-        );
+        filtered = filtered.filter(a => a.title.toLowerCase().includes(searchLower) || a.summary.toLowerCase().includes(searchLower));
       }
-      
-      // Person filter
-      if (AppState.filters.person) {
-        filtered = filtered.filter(a => a.person === AppState.filters.person);
-      }
-      
-      // Category filter
-      if (AppState.filters.category) {
-        filtered = filtered.filter(a => a.category === AppState.filters.category);
-      }
-      
-      // Date range filter
-      if (AppState.filters.dateFrom) {
-        filtered = filtered.filter(a => a.date >= AppState.filters.dateFrom);
-      }
-      if (AppState.filters.dateTo) {
-        filtered = filtered.filter(a => a.date <= AppState.filters.dateTo);
-      }
-      
-      // Sort
+      if (AppState.filters.person) filtered = filtered.filter(a => a.person === AppState.filters.person);
+      if (AppState.filters.category) filtered = filtered.filter(a => a.category === AppState.filters.category);
+      if (AppState.filters.dateFrom) filtered = filtered.filter(a => a.date >= AppState.filters.dateFrom);
+      if (AppState.filters.dateTo) filtered = filtered.filter(a => a.date <= AppState.filters.dateTo);
       switch (AppState.filters.sort) {
-        case 'date-desc':
-          filtered.sort((a, b) => b.date.localeCompare(a.date));
-          break;
-        case 'date-asc':
-          filtered.sort((a, b) => a.date.localeCompare(b.date));
-          break;
-        case 'reactions-desc':
-          filtered.sort((a, b) => {
-            const aTotal = Object.values(a.reactions).reduce((sum, arr) => sum + arr.length, 0);
-            const bTotal = Object.values(b.reactions).reduce((sum, arr) => sum + arr.length, 0);
-            return bTotal - aTotal;
-          });
-          break;
-        case 'title-asc':
-          filtered.sort((a, b) => a.title.localeCompare(b.title));
-          break;
+        case 'date-desc': filtered.sort((a, b) => b.date.localeCompare(a.date)); break;
+        case 'date-asc':  filtered.sort((a, b) => a.date.localeCompare(b.date)); break;
+        case 'reactions-desc': filtered.sort((a, b) => Object.values(b.reactions).reduce((s,arr)=>s+arr.length,0) - Object.values(a.reactions).reduce((s,arr)=>s+arr.length,0)); break;
+        case 'title-asc': filtered.sort((a, b) => a.title.localeCompare(b.title)); break;
       }
-      
       AppState.filteredData = filtered;
       renderCards();
       updateResultsCount();
     }
 
-    /**
-     * Clear all filters
-     */
     function clearFilters() {
-      AppState.filters = {
-        search: '',
-        person: '',
-        category: '',
-        dateFrom: '',
-        dateTo: '',
-        sort: 'date-desc'
-      };
-      
+      AppState.filters = { search: '', person: '', category: '', dateFrom: '', dateTo: '', sort: 'date-desc' };
       document.getElementById('search-input').value = '';
       document.getElementById('filter-person').value = '';
       document.getElementById('filter-category').value = '';
       document.getElementById('filter-date-from').value = '';
       document.getElementById('filter-date-to').value = '';
       document.getElementById('filter-sort').value = 'date-desc';
-      
-      applyFilters();
-      renderFilters();
+      applyFilters(); renderFilters();
     }
 
-    /**
-     * Render filter UI
-     */
     function renderFilters() {
-      // Update person dropdown
       const personSelect = document.getElementById('filter-person');
       const currentPerson = personSelect.value;
       personSelect.innerHTML = '<option value="">All People</option>';
       AppState.data.people.sort().forEach(person => {
         const option = document.createElement('option');
-        option.value = person;
-        option.textContent = person;
+        option.value = person; option.textContent = person;
         if (person === currentPerson) option.selected = true;
         personSelect.appendChild(option);
       });
-      
-      // Update category dropdown
       const categorySelect = document.getElementById('filter-category');
       const currentCategory = categorySelect.value;
       categorySelect.innerHTML = '<option value="">All Categories</option>';
       AppState.data.categories.sort().forEach(category => {
         const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
+        option.value = category; option.textContent = category;
         if (category === currentCategory) option.selected = true;
         categorySelect.appendChild(option);
       });
-      
-      // Update filter tags
       const tagsContainer = document.getElementById('filter-tags');
       tagsContainer.innerHTML = '';
-      
       const activeFilters = [];
       if (AppState.filters.search) activeFilters.push({ label: `Search: "${AppState.filters.search}"`, key: 'search' });
       if (AppState.filters.person) activeFilters.push({ label: `Person: ${AppState.filters.person}`, key: 'person' });
       if (AppState.filters.category) activeFilters.push({ label: `Category: ${AppState.filters.category}`, key: 'category' });
-      if (AppState.filters.dateFrom || AppState.filters.dateTo) {
-        const from = AppState.filters.dateFrom || 'start';
-        const to = AppState.filters.dateTo || 'end';
-        activeFilters.push({ label: `Date: ${from} to ${to}`, key: 'date' });
-      }
-      
+      if (AppState.filters.dateFrom || AppState.filters.dateTo) activeFilters.push({ label: `Date: ${AppState.filters.dateFrom || 'start'} to ${AppState.filters.dateTo || 'end'}`, key: 'date' });
       activeFilters.forEach(filter => {
         const tag = document.createElement('div');
         tag.className = 'filter-tag';
-        tag.innerHTML = `
-          <span>${sanitizeHTML(filter.label)}</span>
-          <button class="filter-tag-remove" aria-label="Remove ${filter.label} filter">×</button>
-        `;
+        tag.innerHTML = `<span>${sanitizeHTML(filter.label)}</span><button class="filter-tag-remove" aria-label="Remove filter">×</button>`;
         tag.querySelector('button').onclick = () => {
-          if (filter.key === 'search') {
-            AppState.filters.search = '';
-            document.getElementById('search-input').value = '';
-          } else if (filter.key === 'person') {
-            AppState.filters.person = '';
-            document.getElementById('filter-person').value = '';
-          } else if (filter.key === 'category') {
-            AppState.filters.category = '';
-            document.getElementById('filter-category').value = '';
-          } else if (filter.key === 'date') {
-            AppState.filters.dateFrom = '';
-            AppState.filters.dateTo = '';
-            document.getElementById('filter-date-from').value = '';
-            document.getElementById('filter-date-to').value = '';
-          }
-          applyFilters();
-          renderFilters();
+          if (filter.key === 'search') { AppState.filters.search = ''; document.getElementById('search-input').value = ''; }
+          else if (filter.key === 'person') { AppState.filters.person = ''; document.getElementById('filter-person').value = ''; }
+          else if (filter.key === 'category') { AppState.filters.category = ''; document.getElementById('filter-category').value = ''; }
+          else if (filter.key === 'date') { AppState.filters.dateFrom = ''; AppState.filters.dateTo = ''; document.getElementById('filter-date-from').value = ''; document.getElementById('filter-date-to').value = ''; }
+          applyFilters(); renderFilters();
         };
         tagsContainer.appendChild(tag);
       });
     }
 
-    /**
-     * Update results count
-     */
     function updateResultsCount() {
       const count = AppState.filteredData.length;
       const total = AppState.data.accomplishments.length;
-      const text = count === total 
+      const text = count === total
         ? `Showing all ${total} accomplishment${total !== 1 ? 's' : ''}`
         : `Showing ${count} of ${total} accomplishment${total !== 1 ? 's' : ''}`;
       document.getElementById('results-count').textContent = text;
     }
 
-    /**
-     * Highlight search terms in text
-     */
     function highlightSearchTerms(text) {
       if (!AppState.filters.search) return sanitizeHTML(text);
-      
       const searchLower = AppState.filters.search.toLowerCase();
       const textLower = text.toLowerCase();
       const index = textLower.indexOf(searchLower);
-      
       if (index === -1) return sanitizeHTML(text);
-      
       const before = text.substring(0, index);
       const match = text.substring(index, index + AppState.filters.search.length);
       const after = text.substring(index + AppState.filters.search.length);
-      
       return `${sanitizeHTML(before)}<mark>${sanitizeHTML(match)}</mark>${highlightSearchTerms(after)}`;
     }
 
@@ -2490,48 +2170,29 @@
        9. CARD RENDERING
        ============================================================ */
 
-    /**
-     * Render accomplishment cards
-     */
     function renderCards() {
       const grid = document.getElementById('cards-grid');
       grid.innerHTML = '';
-      
       if (AppState.filteredData.length === 0) {
         grid.innerHTML = `
           <div class="empty-state" style="grid-column: 1 / -1;">
             <div class="empty-state-icon" aria-hidden="true">🌱</div>
             <h3 class="empty-state-title">No accomplishments found</h3>
-            <p class="empty-state-text">
-              ${AppState.data.accomplishments.length === 0 
-                ? 'Start by adding your first accomplishment!' 
-                : 'Try adjusting your filters or search terms.'}
-            </p>
-          </div>
-        `;
+            <p class="empty-state-text">${AppState.data.accomplishments.length === 0 ? 'Start by adding your first accomplishment!' : 'Try adjusting your filters or search terms.'}</p>
+          </div>`;
         return;
       }
-      
       AppState.filteredData.forEach(accomplishment => {
         const card = createCard(accomplishment);
         grid.appendChild(card);
       });
     }
 
-    /**
-     * Create a single accomplishment card
-     */
     function createCard(accomplishment) {
       const card = document.createElement('div');
       card.className = 'card';
       card.setAttribute('role', 'listitem');
-      
-      // Private badge
-      const privateBadge = accomplishment.private 
-        ? '<div class="card-private-badge">Private</div>' 
-        : '';
-      
-      // Image or placeholder
+      const privateBadge = accomplishment.private ? '<div class="card-private-badge">Private</div>' : '';
       let imageHTML = '';
       if (accomplishment.image) {
         imageHTML = `<img src="${accomplishment.image}" alt="" class="card-image" loading="lazy"/>`;
@@ -2539,22 +2200,14 @@
         const emoji = ['🎯', '🚀', '💡', '⭐', '🏆', '✨'][Math.floor(Math.random() * 6)];
         imageHTML = `<div class="card-image-placeholder" aria-hidden="true">${emoji}</div>`;
       }
-      
-      // Links
       let linksHTML = '';
       if (accomplishment.links && accomplishment.links.length > 0) {
         linksHTML = '<div class="card-links">';
         accomplishment.links.forEach((link, i) => {
-          linksHTML += `
-            <a href="${sanitizeHTML(link)}" target="_blank" rel="noopener noreferrer" class="card-link">
-              <span aria-hidden="true">🔗</span> Link ${i + 1}
-            </a>
-          `;
+          linksHTML += `<a href="${sanitizeHTML(link)}" target="_blank" rel="noopener noreferrer" class="card-link"><span aria-hidden="true">🔗</span> Link ${i + 1}</a>`;
         });
         linksHTML += '</div>';
       }
-      
-      // Reactions
       const deviceId = getDeviceId();
       const myReaction = AppState.myReactions[accomplishment.id];
       const reactionButtons = [
@@ -2565,68 +2218,33 @@
       ].map(r => {
         const count = accomplishment.reactions[r.type].length;
         const isActive = myReaction === r.type;
-        return `
-          <button 
-            class="reaction-btn ${isActive ? 'active' : ''}" 
-            data-id="${accomplishment.id}" 
-            data-reaction="${r.type}"
-            aria-label="${r.label} reaction${count > 0 ? `, ${count} reactions` : ''}"
-            aria-pressed="${isActive}"
-          >
-            <span aria-hidden="true">${r.emoji}</span>
-            ${count > 0 ? `<span class="reaction-count">${count}</span>` : ''}
-          </button>
-        `;
+        return `<button class="reaction-btn ${isActive ? 'active' : ''}" data-id="${accomplishment.id}" data-reaction="${r.type}" aria-label="${r.label}${count > 0 ? `, ${count}` : ''}" aria-pressed="${isActive}"><span aria-hidden="true">${r.emoji}</span>${count > 0 ? `<span class="reaction-count">${count}</span>` : ''}</button>`;
       }).join('');
-      
       card.innerHTML = `
-        ${privateBadge}
-        ${imageHTML}
+        ${privateBadge}${imageHTML}
         <div class="card-body">
           <span class="card-category">${sanitizeHTML(accomplishment.category)}</span>
           <h3 class="card-title">${highlightSearchTerms(accomplishment.title)}</h3>
           <p class="card-summary">${highlightSearchTerms(accomplishment.summary)}</p>
           <div class="card-meta">
-            <span class="card-meta-item">
-              <span aria-hidden="true">👤</span> ${sanitizeHTML(accomplishment.person)}
-            </span>
-            <span class="card-meta-item">
-              <span aria-hidden="true">📅</span> ${formatDate(accomplishment.date)}
-            </span>
+            <span class="card-meta-item"><span aria-hidden="true">👤</span> ${sanitizeHTML(accomplishment.person)}</span>
+            <span class="card-meta-item"><span aria-hidden="true">📅</span> ${formatDate(accomplishment.date)}</span>
           </div>
           ${linksHTML}
-          <div class="card-reactions">
-            ${reactionButtons}
-          </div>
+          <div class="card-reactions">${reactionButtons}</div>
         </div>
         <div class="card-footer">
-          <button class="btn btn-ghost btn-sm" data-action="edit" data-id="${accomplishment.id}" aria-label="Edit accomplishment">
-            <span aria-hidden="true">✏️</span> Edit
-          </button>
-          <button class="btn btn-danger btn-sm" data-action="delete" data-id="${accomplishment.id}" aria-label="Delete accomplishment">
-            <span aria-hidden="true">🗑️</span> Delete
-          </button>
-        </div>
-      `;
-      
-      // Attach event listeners
+          <button class="btn btn-ghost btn-sm" data-action="edit" data-id="${accomplishment.id}" aria-label="Edit">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" data-action="delete" data-id="${accomplishment.id}" aria-label="Delete">🗑️ Delete</button>
+        </div>`;
       card.querySelectorAll('.reaction-btn').forEach(btn => {
-        btn.onclick = () => {
-          const id = btn.dataset.id;
-          const reaction = btn.dataset.reaction;
-          toggleReaction(id, reaction);
-          renderCards();
+        btn.onclick = async () => {
+          await toggleReaction(btn.dataset.id, btn.dataset.reaction);
+          if (!AppState.useFirebase) renderCards(); // Firebase listener handles it otherwise
         };
       });
-      
-      card.querySelector('[data-action="edit"]').onclick = () => {
-        editAccomplishment(accomplishment.id);
-      };
-      
-      card.querySelector('[data-action="delete"]').onclick = () => {
-        confirmDelete(accomplishment.id);
-      };
-      
+      card.querySelector('[data-action="edit"]').onclick = () => editAccomplishment(accomplishment.id);
+      card.querySelector('[data-action="delete"]').onclick = () => confirmDelete(accomplishment.id);
       return card;
     }
 
@@ -2634,188 +2252,74 @@
        10. FORM HANDLING
        ============================================================ */
 
-    /**
-     * Toggle form visibility
-     */
     function toggleForm() {
       const formBody = document.getElementById('form-body');
       const formHeader = document.getElementById('form-header');
       const icon = formHeader.querySelector('.form-toggle-icon');
-      
       const isOpen = formBody.classList.toggle('open');
       icon.classList.toggle('open', isOpen);
       formHeader.setAttribute('aria-expanded', isOpen);
-      
       if (isOpen) {
-        // Set default date to today
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('form-date-input').value = today;
-        
-        // Focus first input
         document.getElementById('form-title-input').focus();
       } else {
-        // Clear form if not editing
-        if (!AppState.editingId) {
-          clearForm();
-        }
+        if (!AppState.editingId) clearForm();
       }
     }
 
-    /**
-     * Clear form
-     */
     function clearForm() {
       document.getElementById('accomplishment-form').reset();
       document.getElementById('form-image-preview').style.display = 'none';
       document.getElementById('form-image-preview').src = '';
-      
-      // Reset links to single input
       const linksList = document.getElementById('form-links-list');
-      linksList.innerHTML = `
-        <div class="form-link-item">
-          <input 
-            type="url" 
-            class="form-input" 
-            id="form-link-input-0" 
-            name="link-0"
-            placeholder="https://example.com"
-            aria-label="Link 1"
-          />
-        </div>
-      `;
-      
-      // Clear all errors
+      linksList.innerHTML = `<div class="form-link-item"><input type="url" class="form-input" id="form-link-input-0" name="link-0" placeholder="https://example.com" aria-label="Link 1"/></div>`;
       document.querySelectorAll('.form-error').forEach(el => el.textContent = '');
-      document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(el => {
-        el.classList.remove('error', 'valid');
-      });
-      
-      // Reset character counts
+      document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(el => el.classList.remove('error', 'valid'));
       document.getElementById('form-title-count').textContent = '0 / 100';
       document.getElementById('form-summary-count').textContent = '0 / 500';
-      
       AppState.editingId = null;
-      
-      // Update button text
       document.getElementById('btn-submit-form').innerHTML = '<span aria-hidden="true">✨</span> Add Accomplishment';
     }
 
-    /**
-     * Validate form field
-     */
     function validateField(fieldName, value) {
       const errors = [];
-      
       switch (fieldName) {
-        case 'title':
-          if (!value || value.trim().length === 0) {
-            errors.push('Title is required');
-          } else if (value.trim().length > 100) {
-            errors.push('Title must be 100 characters or less');
-          }
-          break;
-          
-        case 'summary':
-          if (!value || value.trim().length === 0) {
-            errors.push('Summary is required');
-          } else if (value.trim().length > 500) {
-            errors.push('Summary must be 500 characters or less');
-          }
-          break;
-          
-        case 'date':
-          if (!value) {
-            errors.push('Date is required');
-          } else {
-            const date = new Date(value);
-            const minDate = new Date('2000-01-01');
-            const maxDate = new Date();
-            maxDate.setFullYear(maxDate.getFullYear() + 1);
-            if (date < minDate || date > maxDate) {
-              errors.push('Please enter a valid date');
-            }
-          }
-          break;
-          
-        case 'person':
-          if (!value || value.trim().length === 0) {
-            errors.push('Person name is required');
-          } else if (value.trim().length > 50) {
-            errors.push('Name must be 50 characters or less');
-          }
-          break;
-          
-        case 'category':
-          if (!value || value.trim().length === 0) {
-            errors.push('Category is required');
-          } else if (value.trim().length > 30) {
-            errors.push('Category must be 30 characters or less');
-          }
-          break;
+        case 'title': if (!value || !value.trim()) errors.push('Title is required'); else if (value.trim().length > 100) errors.push('Max 100 characters'); break;
+        case 'summary': if (!value || !value.trim()) errors.push('Summary is required'); else if (value.trim().length > 500) errors.push('Max 500 characters'); break;
+        case 'date': if (!value) errors.push('Date is required'); break;
+        case 'person': if (!value || !value.trim()) errors.push('Person name is required'); break;
+        case 'category': if (!value || !value.trim()) errors.push('Category is required'); break;
       }
-      
       return errors;
     }
 
-    /**
-     * Show field error
-     */
     function showFieldError(fieldName, errors) {
       const input = document.getElementById(`form-${fieldName}-input`);
       const errorDiv = document.getElementById(`form-${fieldName}-error`);
-      
-      if (errors.length > 0) {
-        input.classList.add('error');
-        input.classList.remove('valid');
-        errorDiv.textContent = errors[0];
-      } else {
-        input.classList.remove('error');
-        input.classList.add('valid');
-        errorDiv.textContent = '';
-      }
+      if (errors.length > 0) { input.classList.add('error'); input.classList.remove('valid'); errorDiv.textContent = errors[0]; }
+      else { input.classList.remove('error'); input.classList.add('valid'); errorDiv.textContent = ''; }
     }
 
-    /**
-     * Validate entire form
-     */
     function validateForm() {
       const formData = getFormData();
       let isValid = true;
-      
-      // Validate required fields
       ['title', 'summary', 'date', 'person', 'category'].forEach(field => {
         const errors = validateField(field, formData[field]);
         showFieldError(field, errors);
         if (errors.length > 0) isValid = false;
       });
-      
-      // Validate links
       const linkErrors = [];
-      formData.links.forEach((link, i) => {
-        if (link && !isValidURL(link)) {
-          linkErrors.push(`Link ${i + 1} is not a valid URL`);
-        }
-      });
-      
+      formData.links.forEach((link, i) => { if (link && !isValidURL(link)) linkErrors.push(`Link ${i + 1} is not a valid URL`); });
       const linksErrorDiv = document.getElementById('form-links-error');
-      if (linkErrors.length > 0) {
-        linksErrorDiv.textContent = linkErrors[0];
-        isValid = false;
-      } else {
-        linksErrorDiv.textContent = '';
-      }
-      
+      if (linkErrors.length > 0) { linksErrorDiv.textContent = linkErrors[0]; isValid = false; }
+      else linksErrorDiv.textContent = '';
       return isValid;
     }
 
-    /**
-     * Get form data
-     */
     function getFormData() {
       const form = document.getElementById('accomplishment-form');
       const formData = new FormData(form);
-      
-      // Collect links
       const links = [];
       let linkIndex = 0;
       while (true) {
@@ -2824,11 +2328,8 @@
         if (link.trim()) links.push(link.trim());
         linkIndex++;
       }
-      
-      // Get image preview if exists
       const imagePreview = document.getElementById('form-image-preview');
       const image = imagePreview.style.display !== 'none' ? imagePreview.src : null;
-      
       return {
         title: formData.get('title') || '',
         summary: formData.get('summary') || '',
@@ -2836,238 +2337,117 @@
         person: formData.get('person') || '',
         category: formData.get('category') || '',
         private: formData.get('private') === 'on',
-        links: links,
-        image: image
+        links, image
       };
     }
 
-    /**
-     * Handle form submission
-     */
     async function handleFormSubmit(e) {
       e.preventDefault();
-      
-      if (!validateForm()) {
-        showToast('Please fix the errors in the form', 'error');
-        return;
-      }
-      
+      if (!validateForm()) { showToast('Please fix the errors in the form', 'error'); return; }
       const formData = getFormData();
-      
+      const submitBtn = document.getElementById('btn-submit-form');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving...';
       try {
         if (AppState.editingId) {
-          // Update existing
-          updateAccomplishment(AppState.editingId, formData);
-          showToast('Accomplishment updated successfully!', 'success');
+          await updateAccomplishment(AppState.editingId, formData);
+          showToast('Accomplishment updated!', 'success');
         } else {
-          // Add new
-          addAccomplishment(formData);
-          showToast('Accomplishment added successfully!', 'success');
+          await addAccomplishment(formData);
+          showToast('Accomplishment added!', 'success');
         }
-        
-        // Clear draft
-        if (isLocalStorageAvailable()) {
-          localStorage.removeItem(CONFIG.DRAFT_KEY);
+        if (isLocalStorageAvailable()) localStorage.removeItem(CONFIG.DRAFT_KEY);
+        // Firebase listener will refresh UI automatically; for localStorage fallback, refresh manually
+        if (!AppState.useFirebase) {
+          checkMonthlySnapshot();
+          updateFlowerDisplay();
+          renderMonthlyShelf();
+          applyFilters();
+          renderFilters();
         }
-        
-        // Refresh UI
-        checkMonthlySnapshot();
-        updateFlowerDisplay();
-        renderMonthlyShelf();
-        applyFilters();
-        renderFilters();
-        
-        // Close and clear form
         toggleForm();
         clearForm();
-        
-        // Scroll to cards
         document.getElementById('cards-section').scrollIntoView({ behavior: 'smooth' });
-        
       } catch (error) {
         console.error('Error submitting form:', error);
         showToast('Error saving accomplishment', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span aria-hidden="true">✨</span> Add Accomplishment';
       }
     }
 
-    /**
-     * Edit accomplishment
-     */
     function editAccomplishment(id) {
       const accomplishment = AppState.data.accomplishments.find(a => a.id === id);
       if (!accomplishment) return;
-      
       AppState.editingId = id;
-      
-      // Populate form
       document.getElementById('form-title-input').value = accomplishment.title;
       document.getElementById('form-summary-input').value = accomplishment.summary;
       document.getElementById('form-date-input').value = accomplishment.date;
       document.getElementById('form-person-input').value = accomplishment.person;
       document.getElementById('form-category-input').value = accomplishment.category;
       document.getElementById('form-private-input').checked = accomplishment.private;
-      
-      // Populate links
       const linksList = document.getElementById('form-links-list');
       linksList.innerHTML = '';
       if (accomplishment.links.length === 0) {
-        linksList.innerHTML = `
-          <div class="form-link-item">
-            <input 
-              type="url" 
-              class="form-input" 
-              id="form-link-input-0" 
-              name="link-0"
-              placeholder="https://example.com"
-              aria-label="Link 1"
-            />
-          </div>
-        `;
+        linksList.innerHTML = `<div class="form-link-item"><input type="url" class="form-input" id="form-link-input-0" name="link-0" placeholder="https://example.com" aria-label="Link 1"/></div>`;
       } else {
         accomplishment.links.forEach((link, i) => {
           const linkItem = document.createElement('div');
           linkItem.className = 'form-link-item';
-          linkItem.innerHTML = `
-            <input 
-              type="url" 
-              class="form-input" 
-              id="form-link-input-${i}" 
-              name="link-${i}"
-              value="${sanitizeHTML(link)}"
-              placeholder="https://example.com"
-              aria-label="Link ${i + 1}"
-            />
-            ${i > 0 ? '<button type="button" class="form-link-remove">Remove</button>' : ''}
-          `;
-          if (i > 0) {
-            linkItem.querySelector('.form-link-remove').onclick = () => linkItem.remove();
-          }
+          linkItem.innerHTML = `<input type="url" class="form-input" id="form-link-input-${i}" name="link-${i}" value="${sanitizeHTML(link)}" placeholder="https://example.com" aria-label="Link ${i + 1}"/>${i > 0 ? '<button type="button" class="form-link-remove">Remove</button>' : ''}`;
+          if (i > 0) linkItem.querySelector('.form-link-remove').onclick = () => linkItem.remove();
           linksList.appendChild(linkItem);
         });
       }
-      
-      // Populate image
-      if (accomplishment.image) {
-        const preview = document.getElementById('form-image-preview');
-        preview.src = accomplishment.image;
-        preview.style.display = 'block';
-      }
-      
-      // Update character counts
-      updateCharCount('title');
-      updateCharCount('summary');
-      
-      // Update button text
+      if (accomplishment.image) { const preview = document.getElementById('form-image-preview'); preview.src = accomplishment.image; preview.style.display = 'block'; }
+      updateCharCount('title'); updateCharCount('summary');
       document.getElementById('btn-submit-form').innerHTML = '<span aria-hidden="true">💾</span> Update Accomplishment';
-      
-      // Open form
-      if (!document.getElementById('form-body').classList.contains('open')) {
-        toggleForm();
-      }
-      
-      // Scroll to form
+      if (!document.getElementById('form-body').classList.contains('open')) toggleForm();
       document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
     }
 
-    /**
-     * Confirm delete accomplishment
-     */
     async function confirmDelete(id) {
       const accomplishment = AppState.data.accomplishments.find(a => a.id === id);
       if (!accomplishment) return;
-      
-      const confirmed = await showModal(
-        'Delete Accomplishment?',
-        `Are you sure you want to delete "${accomplishment.title}"? This action can be undone.`,
-        [
-          { label: 'Cancel', value: false, class: 'btn-secondary' },
-          { label: 'Delete', value: true, class: 'btn-danger' }
-        ]
-      );
-      
+      const confirmed = await showModal('Delete Accomplishment?', `Are you sure you want to delete "${accomplishment.title}"?`,
+        [{ label: 'Cancel', value: false, class: 'btn-secondary' }, { label: 'Delete', value: true, class: 'btn-danger' }]);
       if (confirmed) {
-        deleteAccomplishment(id);
-        
-        showToast('Accomplishment deleted', 'success', 5000, () => {
-          const restored = undoDelete();
+        await deleteAccomplishment(id);
+        showToast('Accomplishment deleted', 'success', 5000, async () => {
+          const restored = await undoDelete();
           if (restored) {
-            updateFlowerDisplay();
-            renderMonthlyShelf();
-            applyFilters();
+            if (!AppState.useFirebase) { updateFlowerDisplay(); renderMonthlyShelf(); applyFilters(); }
             showToast('Accomplishment restored', 'success');
           }
         });
-        
-        updateFlowerDisplay();
-        renderMonthlyShelf();
-        applyFilters();
+        if (!AppState.useFirebase) { updateFlowerDisplay(); renderMonthlyShelf(); applyFilters(); }
       }
     }
 
-    /**
-     * Add link input field
-     */
     function addLinkField() {
       const linksList = document.getElementById('form-links-list');
       const linkCount = linksList.querySelectorAll('.form-link-item').length;
-      
-      if (linkCount >= 5) {
-        showToast('Maximum 5 links allowed', 'warning');
-        return;
-      }
-      
+      if (linkCount >= 5) { showToast('Maximum 5 links allowed', 'warning'); return; }
       const linkItem = document.createElement('div');
       linkItem.className = 'form-link-item';
-      linkItem.innerHTML = `
-        <input 
-          type="url" 
-          class="form-input" 
-          id="form-link-input-${linkCount}" 
-          name="link-${linkCount}"
-          placeholder="https://example.com"
-          aria-label="Link ${linkCount + 1}"
-        />
-        <button type="button" class="form-link-remove">Remove</button>
-      `;
-      
+      linkItem.innerHTML = `<input type="url" class="form-input" id="form-link-input-${linkCount}" name="link-${linkCount}" placeholder="https://example.com" aria-label="Link ${linkCount + 1}"/><button type="button" class="form-link-remove">Remove</button>`;
       linkItem.querySelector('.form-link-remove').onclick = () => linkItem.remove();
       linksList.appendChild(linkItem);
     }
 
-    /**
-     * Handle image upload
-     */
     async function handleImageUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
-      
       const errorDiv = document.getElementById('form-image-error');
       const preview = document.getElementById('form-image-preview');
-      
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        errorDiv.textContent = 'Please select an image file';
-        preview.style.display = 'none';
-        return;
-      }
-      
-      // Validate file size (10MB max before compression)
-      if (file.size > 10 * 1024 * 1024) {
-        errorDiv.textContent = 'Image too large (max 10MB)';
-        preview.style.display = 'none';
-        return;
-      }
-      
+      if (!file.type.startsWith('image/')) { errorDiv.textContent = 'Please select an image file'; preview.style.display = 'none'; return; }
+      if (file.size > 10 * 1024 * 1024) { errorDiv.textContent = 'Image too large (max 10MB)'; preview.style.display = 'none'; return; }
       try {
         errorDiv.textContent = 'Compressing image...';
         const compressed = await compressImage(file, CONFIG.MAX_IMAGE_SIZE);
-        
-        preview.src = compressed;
-        preview.style.display = 'block';
-        errorDiv.textContent = '';
-        
+        preview.src = compressed; preview.style.display = 'block'; errorDiv.textContent = '';
         showToast('Image compressed successfully', 'success');
-        
       } catch (error) {
         console.error('Error compressing image:', error);
         errorDiv.textContent = 'Error processing image. Try a smaller file.';
@@ -3075,68 +2455,32 @@
       }
     }
 
-    /**
-     * Update character count
-     */
     function updateCharCount(fieldName) {
       const input = document.getElementById(`form-${fieldName}-input`);
       const countDiv = document.getElementById(`form-${fieldName}-count`);
       const maxLength = input.maxLength;
       const currentLength = input.value.length;
-      
       countDiv.textContent = `${currentLength} / ${maxLength}`;
-      
-      if (currentLength > maxLength * 0.9) {
-        countDiv.classList.add('warning');
-      } else {
-        countDiv.classList.remove('warning');
-      }
-      
-      if (currentLength >= maxLength) {
-        countDiv.classList.add('error');
-      } else {
-        countDiv.classList.remove('error');
-      }
+      if (currentLength > maxLength * 0.9) countDiv.classList.add('warning'); else countDiv.classList.remove('warning');
+      if (currentLength >= maxLength) countDiv.classList.add('error'); else countDiv.classList.remove('error');
     }
 
-    /**
-     * Auto-save form draft
-     */
     function autoSaveFormDraft() {
       if (!isLocalStorageAvailable()) return;
-      
       const formData = getFormData();
-      
-      // Only save if there's some content
       if (formData.title || formData.summary) {
-        try {
-          localStorage.setItem(CONFIG.DRAFT_KEY, JSON.stringify(formData));
-        } catch (e) {
-          console.error('Error saving draft:', e);
-        }
+        try { localStorage.setItem(CONFIG.DRAFT_KEY, JSON.stringify(formData)); } catch (e) {}
       }
     }
 
-    /**
-     * Load form draft
-     */
     function loadFormDraft() {
       if (!isLocalStorageAvailable()) return;
-      
       try {
         const draftStr = localStorage.getItem(CONFIG.DRAFT_KEY);
         if (!draftStr) return;
-        
         const draft = JSON.parse(draftStr);
-        
-        // Ask user if they want to restore
-        showModal(
-          'Restore Draft?',
-          'You have an unsaved draft. Would you like to restore it?',
-          [
-            { label: 'Discard', value: false, class: 'btn-ghost' },
-            { label: 'Restore', value: true, class: 'btn-primary' }
-          ]
+        showModal('Restore Draft?', 'You have an unsaved draft. Would you like to restore it?',
+          [{ label: 'Discard', value: false, class: 'btn-ghost' }, { label: 'Restore', value: true, class: 'btn-primary' }]
         ).then(restore => {
           if (restore) {
             document.getElementById('form-title-input').value = draft.title || '';
@@ -3145,190 +2489,82 @@
             document.getElementById('form-person-input').value = draft.person || '';
             document.getElementById('form-category-input').value = draft.category || '';
             document.getElementById('form-private-input').checked = draft.private || false;
-            
-            updateCharCount('title');
-            updateCharCount('summary');
-            
-            if (!document.getElementById('form-body').classList.contains('open')) {
-              toggleForm();
-            }
-          } else {
-            localStorage.removeItem(CONFIG.DRAFT_KEY);
-          }
+            updateCharCount('title'); updateCharCount('summary');
+            if (!document.getElementById('form-body').classList.contains('open')) toggleForm();
+          } else { localStorage.removeItem(CONFIG.DRAFT_KEY); }
         });
-        
-      } catch (e) {
-        console.error('Error loading draft:', e);
-      }
+      } catch (e) {}
     }
 
     /* ============================================================
        11. DATA EXPORT/IMPORT
        ============================================================ */
 
-    /**
-     * Export data as JSON
-     */
     function exportJSON() {
       try {
-        // Filter out private accomplishments
-        const exportData = {
-          ...AppState.data,
-          accomplishments: AppState.data.accomplishments.filter(a => !a.private)
-        };
-        
+        const exportData = { ...AppState.data, accomplishments: AppState.data.accomplishments.filter(a => !a.private) };
         const dataStr = JSON.stringify(exportData, null, 2);
         const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `clindoc-accomplishments-${new Date().toISOString().split('T')[0]}.json`;
-        a.click();
-        
+        a.href = url; a.download = `clindoc-accomplishments-${new Date().toISOString().split('T')[0]}.json`; a.click();
         URL.revokeObjectURL(url);
         showToast('Data exported successfully', 'success');
-        
-      } catch (error) {
-        console.error('Error exporting JSON:', error);
-        showToast('Error exporting data', 'error');
-      }
+      } catch (error) { showToast('Error exporting data', 'error'); }
     }
 
-    /**
-     * Export data as CSV
-     */
     function exportCSV() {
       try {
-        // Filter out private accomplishments
         const accomplishments = AppState.data.accomplishments.filter(a => !a.private);
-        
-        if (accomplishments.length === 0) {
-          showToast('No data to export', 'warning');
-          return;
-        }
-        
-        // CSV headers
+        if (accomplishments.length === 0) { showToast('No data to export', 'warning'); return; }
         const headers = ['Title', 'Summary', 'Date', 'Person', 'Category', 'Links', 'Total Reactions'];
-        
-        // CSV rows
         const rows = accomplishments.map(a => {
           const totalReactions = Object.values(a.reactions).reduce((sum, arr) => sum + arr.length, 0);
-          const links = a.links.join('; ');
-          
           return [
-            `"${a.title.replace(/"/g, '""')}"`,
-            `"${a.summary.replace(/"/g, '""')}"`,
-            a.date,
-            `"${a.person.replace(/"/g, '""')}"`,
-            `"${a.category.replace(/"/g, '""')}"`,
-            `"${links.replace(/"/g, '""')}"`,
-            totalReactions
+            `"${a.title.replace(/"/g, '""')}"`, `"${a.summary.replace(/"/g, '""')}"`,
+            a.date, `"${a.person.replace(/"/g, '""')}"`, `"${a.category.replace(/"/g, '""')}"`,
+            `"${a.links.join('; ').replace(/"/g, '""')}"`, totalReactions
           ].join(',');
         });
-        
         const csv = [headers.join(','), ...rows].join('\n');
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
-        
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `clindoc-accomplishments-${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        
+        a.href = url; a.download = `clindoc-accomplishments-${new Date().toISOString().split('T')[0]}.csv`; a.click();
         URL.revokeObjectURL(url);
         showToast('Data exported successfully', 'success');
-        
-      } catch (error) {
-        console.error('Error exporting CSV:', error);
-        showToast('Error exporting data', 'error');
-      }
+      } catch (error) { showToast('Error exporting data', 'error'); }
     }
 
-    /**
-     * Show export menu
-     */
     async function showExportMenu() {
-      const format = await showModal(
-        'Export Data',
-        'Choose export format:',
-        [
-          { label: 'Cancel', value: null, class: 'btn-ghost' },
-          { label: 'CSV', value: 'csv', class: 'btn-secondary' },
-          { label: 'JSON', value: 'json', class: 'btn-primary' }
-        ]
-      );
-      
-      if (format === 'json') {
-        exportJSON();
-      } else if (format === 'csv') {
-        exportCSV();
-      }
+      const format = await showModal('Export Data', 'Choose export format:',
+        [{ label: 'Cancel', value: null, class: 'btn-ghost' }, { label: 'CSV', value: 'csv', class: 'btn-secondary' }, { label: 'JSON', value: 'json', class: 'btn-primary' }]);
+      if (format === 'json') exportJSON();
+      else if (format === 'csv') exportCSV();
     }
 
-    /**
-     * Import data from JSON
-     */
     async function importData(file) {
       try {
         const text = await file.text();
         const importedData = JSON.parse(text);
-        
-        // Validate structure
-        if (!validateData(importedData)) {
-          showToast('Invalid data format', 'error');
-          return;
-        }
-        
-        // Ask for confirmation
-        const confirmed = await showModal(
-          'Import Data?',
-          `This will import ${importedData.accomplishments.length} accomplishments. Your existing data will be preserved and merged.`,
-          [
-            { label: 'Cancel', value: false, class: 'btn-ghost' },
-            { label: 'Import', value: true, class: 'btn-primary' }
-          ]
-        );
-        
+        if (!validateData(importedData)) { showToast('Invalid data format', 'error'); return; }
+        const confirmed = await showModal('Import Data?', `This will import ${importedData.accomplishments.length} accomplishments and merge with existing data.`,
+          [{ label: 'Cancel', value: false, class: 'btn-ghost' }, { label: 'Import', value: true, class: 'btn-primary' }]);
         if (!confirmed) return;
-        
-        // Merge data
         let importedCount = 0;
         importedData.accomplishments.forEach(imported => {
-          // Check for duplicates (same title, date, person)
-          const exists = AppState.data.accomplishments.some(existing => 
-            existing.title === imported.title &&
-            existing.date === imported.date &&
-            existing.person === imported.person
-          );
-          
+          const exists = AppState.data.accomplishments.some(existing => existing.title === imported.title && existing.date === imported.date && existing.person === imported.person);
           if (!exists) {
-            // Generate new ID to avoid conflicts
             imported.id = generateUUID();
             AppState.data.accomplishments.push(imported);
             importedCount++;
-            
-            // Update categories and people
-            if (!AppState.data.categories.includes(imported.category)) {
-              AppState.data.categories.push(imported.category);
-            }
-            if (!AppState.data.people.includes(imported.person)) {
-              AppState.data.people.push(imported.person);
-            }
+            if (!AppState.data.categories.includes(imported.category)) AppState.data.categories.push(imported.category);
+            if (!AppState.data.people.includes(imported.person)) AppState.data.people.push(imported.person);
           }
         });
-        
-        saveData(AppState.data);
-        
-        // Refresh UI
-        checkMonthlySnapshot();
-        updateFlowerDisplay();
-        renderMonthlyShelf();
-        applyFilters();
-        renderFilters();
-        
+        await saveData(AppState.data);
+        if (!AppState.useFirebase) { checkMonthlySnapshot(); updateFlowerDisplay(); renderMonthlyShelf(); applyFilters(); renderFilters(); }
         showToast(`Imported ${importedCount} accomplishments (${importedData.accomplishments.length - importedCount} duplicates skipped)`, 'success', 6000);
-        
       } catch (error) {
         console.error('Error importing data:', error);
         showToast('Error importing data. Please check the file format.', 'error');
@@ -3336,190 +2572,130 @@
     }
 
     /* ============================================================
-       12. EVENT LISTENERS
+       12. FOOTER UPDATE
        ============================================================ */
 
-    /**
-     * Initialize event listeners
-     */
+    function updateFooter() {
+      document.getElementById('footer-total-accomplishments').textContent =
+        `${AppState.data.accomplishments.length} total accomplishment${AppState.data.accomplishments.length !== 1 ? 's' : ''}`;
+      const usage = getStorageUsage();
+      const storageLabel = AppState.useFirebase ? 'Firebase ☁️' : `Local ${Math.round(usage)}%`;
+      document.getElementById('footer-storage-usage').textContent = `Storage: ${storageLabel}`;
+      if (AppState.data.settings.lastBackup) {
+        const backupDate = new Date(AppState.data.settings.lastBackup);
+        document.getElementById('footer-last-backup').textContent = `Last sync: ${backupDate.toLocaleString()}`;
+      }
+    }
+
+    /* ============================================================
+       13. EVENT LISTENERS
+       ============================================================ */
+
     function initEventListeners() {
-      // Header buttons
       document.getElementById('btn-export').onclick = showExportMenu;
-      document.getElementById('btn-import').onclick = () => {
-        document.getElementById('import-file-input').click();
-      };
-      document.getElementById('import-file-input').onchange = (e) => {
-        const file = e.target.files[0];
-        if (file) importData(file);
-        e.target.value = ''; // Reset input
-      };
-      
-      // Form toggle
+      document.getElementById('btn-import').onclick = () => document.getElementById('import-file-input').click();
+      document.getElementById('import-file-input').onchange = (e) => { const file = e.target.files[0]; if (file) importData(file); e.target.value = ''; };
       document.getElementById('form-header').onclick = toggleForm;
-      document.getElementById('form-header').onkeydown = (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggleForm();
-        }
-      };
-      
-      // Form submission
+      document.getElementById('form-header').onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleForm(); } };
       document.getElementById('accomplishment-form').onsubmit = handleFormSubmit;
-      document.getElementById('btn-cancel-form').onclick = () => {
-        if (AppState.editingId) {
-          clearForm();
-        }
-        toggleForm();
-      };
-      
-      // Form field validation
+      document.getElementById('btn-cancel-form').onclick = () => { if (AppState.editingId) clearForm(); toggleForm(); };
       ['title', 'summary', 'date', 'person', 'category'].forEach(field => {
         const input = document.getElementById(`form-${field}-input`);
-        input.onblur = () => {
-          const errors = validateField(field, input.value);
-          showFieldError(field, errors);
-        };
+        input.onblur = () => { const errors = validateField(field, input.value); showFieldError(field, errors); };
       });
-      
-      // Character count updates
       document.getElementById('form-title-input').oninput = () => updateCharCount('title');
       document.getElementById('form-summary-input').oninput = () => updateCharCount('summary');
-      
-      // Add link button
       document.getElementById('btn-add-link').onclick = addLinkField;
-      
-      // Image upload
       document.getElementById('form-image-input').onchange = handleImageUpload;
-      
-      // Search input
       let searchTimeout;
       document.getElementById('search-input').oninput = (e) => {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-          AppState.filters.search = e.target.value;
-          applyFilters();
-          renderFilters();
-        }, 300); // Debounce 300ms
+        searchTimeout = setTimeout(() => { AppState.filters.search = e.target.value; applyFilters(); renderFilters(); }, 300);
       };
-      
-      // Filter dropdowns
-      document.getElementById('filter-person').onchange = (e) => {
-        AppState.filters.person = e.target.value;
-        applyFilters();
-        renderFilters();
-      };
-      
-      document.getElementById('filter-category').onchange = (e) => {
-        AppState.filters.category = e.target.value;
-        applyFilters();
-        renderFilters();
-      };
-      
-      document.getElementById('filter-date-from').onchange = (e) => {
-        AppState.filters.dateFrom = e.target.value;
-        applyFilters();
-        renderFilters();
-      };
-      
-      document.getElementById('filter-date-to').onchange = (e) => {
-        AppState.filters.dateTo = e.target.value;
-        applyFilters();
-        renderFilters();
-      };
-      
-      document.getElementById('filter-sort').onchange = (e) => {
-        AppState.filters.sort = e.target.value;
-        applyFilters();
-      };
-      
-      // Clear filters button
+      document.getElementById('filter-person').onchange = (e) => { AppState.filters.person = e.target.value; applyFilters(); renderFilters(); };
+      document.getElementById('filter-category').onchange = (e) => { AppState.filters.category = e.target.value; applyFilters(); renderFilters(); };
+      document.getElementById('filter-date-from').onchange = (e) => { AppState.filters.dateFrom = e.target.value; applyFilters(); renderFilters(); };
+      document.getElementById('filter-date-to').onchange = (e) => { AppState.filters.dateTo = e.target.value; applyFilters(); renderFilters(); };
+      document.getElementById('filter-sort').onchange = (e) => { AppState.filters.sort = e.target.value; applyFilters(); };
       document.getElementById('btn-clear-filters').onclick = clearFilters;
-      
-      // Auto-save form draft every 30 seconds
       AppState.autoSaveTimer = setInterval(autoSaveFormDraft, CONFIG.AUTO_SAVE_INTERVAL);
-      
-      // Update datalists when typing
       document.getElementById('form-person-input').oninput = updateDatalist;
       document.getElementById('form-category-input').oninput = updateDatalist;
     }
 
-    /**
-     * Update datalist options
-     */
     function updateDatalist() {
-      // Update person datalist
       const personDatalist = document.getElementById('person-datalist');
       personDatalist.innerHTML = '';
-      AppState.data.people.forEach(person => {
-        const option = document.createElement('option');
-        option.value = person;
-        personDatalist.appendChild(option);
-      });
-      
-      // Update category datalist
+      AppState.data.people.forEach(person => { const option = document.createElement('option'); option.value = person; personDatalist.appendChild(option); });
       const categoryDatalist = document.getElementById('category-datalist');
       categoryDatalist.innerHTML = '';
-      AppState.data.categories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category;
-        categoryDatalist.appendChild(option);
-      });
+      AppState.data.categories.forEach(category => { const option = document.createElement('option'); option.value = category; categoryDatalist.appendChild(option); });
     }
 
     /* ============================================================
-       13. INITIALIZATION
+       14. INITIALIZATION
        ============================================================ */
 
-    /**
-     * Initialize application
-     */
-    function initApp() {
-      console.log('🚀 Initializing ClinDoc Innovation Tracker...');
-      
-      // Load data
-      AppState.data = loadData();
-      AppState.myReactions = loadMyReactions();
-      
-      // Check for monthly snapshots
-      checkMonthlySnapshot();
-      
-      // Initialize UI
-      updateFlowerDisplay();
-      renderMonthlyShelf();
-      applyFilters();
-      renderFilters();
-      updateDatalist();
-      
-      // Update footer
-      document.getElementById('footer-total-accomplishments').textContent = 
-        `${AppState.data.accomplishments.length} total accomplishment${AppState.data.accomplishments.length !== 1 ? 's' : ''}`;
-      
-      const usage = getStorageUsage();
-      document.getElementById('footer-storage-usage').textContent = `Storage: ${Math.round(usage)}%`;
-      
-      if (AppState.data.settings.lastBackup) {
-        const backupDate = new Date(AppState.data.settings.lastBackup);
-        document.getElementById('footer-last-backup').textContent = 
-          `Last backup: ${backupDate.toLocaleString()}`;
+    function showConnectionStatus(mode) {
+      const banner = document.getElementById('storage-warning');
+      const text = document.getElementById('storage-warning-text');
+      if (mode === 'firebase') {
+        // Firebase OK – hide warning
+        banner.style.display = 'none';
+      } else {
+        // localStorage fallback
+        banner.style.background = '#e3f2fd';
+        banner.style.borderLeftColor = '#2196F3';
+        text.style.color = '#0d47a1';
+        text.textContent = '⚠️ Mode local uniquement – configurez Firebase pour partager les données entre utilisateurs.';
+        banner.style.display = 'flex';
       }
-      
-      // Initialize event listeners
-      initEventListeners();
-      
-      // Load form draft if exists
-      setTimeout(loadFormDraft, 1000);
-      
-      console.log('✅ App initialized successfully');
     }
 
-    // Start the app when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
+    function initApp() {
+      console.log('🚀 Initializing ClinDoc Innovation Tracker...');
+
+      // Check if Firebase is available (set by module script above)
+      const fb = window.__fb;
+      if (fb && fb.firebaseAvailable) {
+        AppState.useFirebase = true;
+        showConnectionStatus('firebase');
+        subscribeFirebase(); // Real-time listener sets AppState.data and refreshes UI
+      } else {
+        AppState.useFirebase = false;
+        showConnectionStatus('local');
+        fallbackToLocalStorage();
+      }
+
+      AppState.myReactions = loadMyReactions();
+      initEventListeners();
+      setTimeout(loadFormDraft, 1500);
+      console.log('✅ App initialized, mode:', AppState.useFirebase ? 'Firebase' : 'localStorage');
+    }
+
+    // Wait for firebase-ready event OR start immediately if already ready
+    if (window.__fb && window.__fb.firebaseAvailable !== undefined) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
     } else {
-      initApp();
+      document.addEventListener('firebase-ready', () => {
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+          initApp();
+        }
+      });
+      // Fallback if firebase-ready never fires
+      setTimeout(() => {
+        if (!AppState.data) initApp();
+      }, 3000);
     }
 
     })(); // end IIFE
   </script>
+
 </body>
 </html>
