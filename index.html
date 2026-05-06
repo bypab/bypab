@@ -1400,15 +1400,13 @@
   <!-- ============================================================
        JAVASCRIPT APPLICATION
        ============================================================ -->
-  <!-- Single module script: Firebase + App logic together, no timing issues -->
+  <!-- App: Firebase + Logic in one deferred module, no race conditions -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
-    /* ============================================================
-       FIREBASE CONFIG
-       ============================================================ */
-    const firebaseConfig = {
+    /* ── Firebase ─────────────────────────────────────────────── */
+    const FB_CONFIG = {
       apiKey: "AIzaSyD2gdbnfALS_SnV0ebVOPZS_8vnnALx02k",
       authDomain: "clindoc-tracker.firebaseapp.com",
       databaseURL: "https://clindoc-tracker-default-rtdb.europe-west1.firebasedatabase.app",
@@ -1418,239 +1416,139 @@
       appId: "1:288975950208:web:9bbb2e80ef72937e64b165"
     };
 
-    let db = null;
-    let useFirebase = false;
+    let db = null, useFirebase = false;
     try {
-      const app = initializeApp(firebaseConfig);
-      db = getDatabase(app);
+      db = getDatabase(initializeApp(FB_CONFIG));
       useFirebase = true;
-      console.log('✅ Firebase connected');
-    } catch (e) {
-      console.warn('Firebase init failed:', e);
-    }
+    } catch (e) { console.warn('Firebase unavailable:', e); }
 
-    /* ============================================================
-       1. CONFIG & STATE
-       ============================================================ */
-    const CONFIG = {
-      APP_VERSION: '1.0.0',
-      STORAGE_KEY: 'clindoc_accomplishments',
-      DRAFT_KEY: 'clindoc_draft',
-      REACTIONS_KEY: 'clindoc_my_reactions',
-      MAX_IMAGE_SIZE: 204800,
-      AUTO_SAVE_INTERVAL: 30000,
-      FLOWER_STAGES: [0, 1, 2, 3, 4, 5],
-      BADGE_THRESHOLDS: { bronze: 1, silver: 3, gold: 5 },
-      MOTIVATIONAL_MESSAGES: {
+    /* ── Config ───────────────────────────────────────────────── */
+    const CFG = {
+      VERSION: '1.0.0',
+      LS_DATA: 'clindoc_data',
+      LS_REACTIONS: 'clindoc_reactions',
+      LS_DRAFT: 'clindoc_draft',
+      LS_CAT_COLORS: 'clindoc_cat_colors',
+      LS_DEVICE: 'clindoc_device_id',
+      MAX_IMG: 204800,
+      MESSAGES: {
         0: "Plant your first seed of success! 🌱",
         1: "Great start! Your garden is growing! 🌿",
         2: "Momentum building! Keep it up! 💪",
         3: "Halfway to full bloom! 🌼",
         4: "Almost there! One more for celebration! 🎊",
-        5: "Full bloom achieved! Amazing work! 🌸✨",
-        idle: "It's been quiet... Time to celebrate a new win! 💜"
+        5: "Full bloom achieved! Amazing work! 🌸✨"
       }
     };
 
-
-    /* ============================================================
-       CATEGORY COLOR PALETTE
-       ============================================================ */
-    const CATEGORY_COLORS = [
-      { bg: '#fce4ec', color: '#c2185b', border: '#f48fb1', label: 'Rose' },
-      { bg: '#e8eaf6', color: '#3949ab', border: '#9fa8da', label: 'Indigo' },
-      { bg: '#e0f7fa', color: '#00838f', border: '#80deea', label: 'Cyan' },
-      { bg: '#e8f5e9', color: '#2e7d32', border: '#a5d6a7', label: 'Green' },
-      { bg: '#fff3e0', color: '#e65100', border: '#ffcc80', label: 'Orange' },
-      { bg: '#f3e5f5', color: '#6a1b9a', border: '#ce93d8', label: 'Purple' },
-      { bg: '#e3f2fd', color: '#1565c0', border: '#90caf9', label: 'Blue' },
-      { bg: '#fafafa', color: '#424242', border: '#bdbdbd', label: 'Grey' },
-      { bg: '#fff8e1', color: '#f57f17', border: '#ffe082', label: 'Amber' },
-      { bg: '#fbe9e7', color: '#bf360c', border: '#ffab91', label: 'Deep Orange' },
-      { bg: '#e0f2f1', color: '#00695c', border: '#80cbc4', label: 'Teal' },
-      { bg: '#f9fbe7', color: '#558b2f', border: '#dce775', label: 'Lime' },
+    /* ── Category colours ─────────────────────────────────────── */
+    const CAT_PALETTE = [
+      { bg:'#fce4ec', fg:'#c2185b', bd:'#f48fb1' },
+      { bg:'#e8eaf6', fg:'#3949ab', bd:'#9fa8da' },
+      { bg:'#e0f7fa', fg:'#00838f', bd:'#80deea' },
+      { bg:'#e8f5e9', fg:'#2e7d32', bd:'#a5d6a7' },
+      { bg:'#fff3e0', fg:'#e65100', bd:'#ffcc80' },
+      { bg:'#f3e5f5', fg:'#6a1b9a', bd:'#ce93d8' },
+      { bg:'#e3f2fd', fg:'#1565c0', bd:'#90caf9' },
+      { bg:'#fafafa', fg:'#424242', bd:'#bdbdbd' },
+      { bg:'#fff8e1', fg:'#f57f17', bd:'#ffe082' },
+      { bg:'#fbe9e7', fg:'#bf360c', bd:'#ffab91' },
+      { bg:'#e0f2f1', fg:'#00695c', bd:'#80cbc4' },
+      { bg:'#f9fbe7', fg:'#558b2f', bd:'#dce775' },
     ];
 
-    // Map category name -> color index (persisted in localStorage)
-    function loadCategoryColors() {
-      try { return JSON.parse(localStorage.getItem('clindoc_cat_colors') || '{}'); } catch (_) { return {}; }
+    let catColorMap = {};
+    function loadCatColors() {
+      try { catColorMap = JSON.parse(localStorage.getItem(CFG.LS_CAT_COLORS) || '{}'); } catch (_) { catColorMap = {}; }
     }
-    function saveCategoryColors(map) {
-      try { localStorage.setItem('clindoc_cat_colors', JSON.stringify(map)); } catch (_) {}
+    function saveCatColors() {
+      try { localStorage.setItem(CFG.LS_CAT_COLORS, JSON.stringify(catColorMap)); } catch (_) {}
     }
-    function getCategoryColorIndex(name) {
-      const map = loadCategoryColors();
-      if (map[name] !== undefined) return map[name];
-      // Auto-assign next available index
-      const used = Object.values(map);
-      let idx = 0;
-      while (used.includes(idx)) idx++;
-      if (idx >= CATEGORY_COLORS.length) idx = idx % CATEGORY_COLORS.length;
-      map[name] = idx;
-      saveCategoryColors(map);
-      return idx;
-    }
-    function getCategoryStyle(name) {
-      const idx = getCategoryColorIndex(name);
-      return CATEGORY_COLORS[idx];
-    }
-
-        const AppState = {
-      data: null,
-      filteredData: [],
-      filters: { search: '', person: '', category: '', dateFrom: '', dateTo: '', sort: 'date-desc' },
-      currentMonth: getCurrentMonth(),
-      editingId: null,
-      undoStack: [],
-      autoSaveTimer: null,
-      myReactions: {}
-    };
-
-    /* ============================================================
-       2. UTILITIES
-       ============================================================ */
-    function getCurrentMonth() {
-      const now = new Date();
-      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-    }
-
-    function generateUUID() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-        const r = Math.random() * 16 | 0;
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-      });
-    }
-
-    function sanitizeHTML(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    function formatDate(dateString) {
-      const date = new Date(dateString + 'T00:00:00');
-      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    }
-
-    function formatMonth(monthString) {
-      const [year, month] = monthString.split('-');
-      return new Date(year, parseInt(month) - 1, 1).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-    }
-
-    function daysSinceLastAccomplishment(accomplishments) {
-      if (!accomplishments || accomplishments.length === 0) return Infinity;
-      const latest = accomplishments.map(a => new Date(a.date)).sort((a, b) => b - a)[0];
-      return Math.ceil(Math.abs(new Date() - latest) / (1000 * 60 * 60 * 24));
-    }
-
-    function isValidURL(str) {
-      try { const u = new URL(str); return u.protocol === 'http:' || u.protocol === 'https:'; }
-      catch (_) { return false; }
-    }
-
-    function compressImage(file, maxBytes) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let { width, height } = img;
-            const max = 800;
-            if (width > height && width > max) { height = height / width * max; width = max; }
-            else if (height > max) { width = width / height * max; height = max; }
-            canvas.width = width; canvas.height = height;
-            canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-            let q = 0.9, data = canvas.toDataURL('image/jpeg', q);
-            while (data.length > maxBytes && q > 0.1) { q -= 0.1; data = canvas.toDataURL('image/jpeg', q); }
-            data.length > maxBytes ? reject(new Error('Too large')) : resolve(data);
-          };
-          img.onerror = () => reject(new Error('Load failed'));
-          img.src = e.target.result;
-        };
-        reader.onerror = () => reject(new Error('Read failed'));
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function isLSAvailable() {
-      try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); return true; }
-      catch (_) { return false; }
-    }
-
-    function getStorageUsage() {
-      try {
-        let total = 0;
-        for (const k in localStorage) { if (localStorage.hasOwnProperty(k)) total += localStorage[k].length + k.length; }
-        return (total / (5 * 1024 * 1024)) * 100;
-      } catch (_) { return 0; }
-    }
-
-    /* ============================================================
-       3. TOAST & MODAL
-       ============================================================ */
-    function showToast(message, type = 'info', duration = 4000, onUndo = null) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
-      toast.innerHTML = `<span aria-hidden="true">${icons[type] || 'ℹ'}</span><span>${sanitizeHTML(message)}</span>`;
-      if (onUndo) {
-        const btn = document.createElement('button');
-        btn.className = 'toast-undo'; btn.textContent = 'Undo';
-        btn.onclick = () => { onUndo(); toast.remove(); };
-        toast.appendChild(btn);
+    function getCatColor(name) {
+      if (catColorMap[name] === undefined) {
+        const used = new Set(Object.values(catColorMap));
+        let i = 0;
+        while (used.has(i)) i++;
+        catColorMap[name] = i % CAT_PALETTE.length;
+        saveCatColors();
       }
-      container.appendChild(toast);
-      setTimeout(() => { toast.style.animation = 'toastOut 0.3s ease forwards'; setTimeout(() => toast.remove(), 300); }, duration);
+      return CAT_PALETTE[catColorMap[name] % CAT_PALETTE.length];
     }
 
-    function showModal(title, body, actions = []) {
+    /* ── State ────────────────────────────────────────────────── */
+    let DATA = null; // { accomplishments:[], categories:[], people:[], monthlySnapshots:{}, settings:{} }
+    let FILTERED = [];
+    let FILTERS = { search:'', person:'', category:'', dateFrom:'', dateTo:'', sort:'date-desc' };
+    let EDITING_ID = null;
+    let MY_REACTIONS = {};
+    let UNDO_STACK = [];
+    const CURRENT_MONTH = (() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`; })();
+
+    /* ── Helpers ──────────────────────────────────────────────── */
+    function uuid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = Math.random()*16|0; return (c==='x'?r:(r&3|8)).toString(16);
+      });
+    }
+    function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+    function fmtDate(s) { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
+    function fmtMonth(s) { const [y,m]=s.split('-'); return new Date(y,+m-1,1).toLocaleDateString('en-US',{year:'numeric',month:'long'}); }
+    function totalRx(a) { return Object.values(a.reactions||{}).reduce((s,arr)=>s+(arr||[]).length,0); }
+    function lsOk() { try{localStorage.setItem('_t','1');localStorage.removeItem('_t');return true;}catch(_){return false;} }
+    function getDeviceId() {
+      let id = lsOk() ? localStorage.getItem(CFG.LS_DEVICE) : null;
+      if (!id) { id=uuid(); if(lsOk()) localStorage.setItem(CFG.LS_DEVICE,id); }
+      return id;
+    }
+    function defaultData() {
+      return { version:CFG.VERSION, accomplishments:[], categories:[], people:[], monthlySnapshots:{}, settings:{lastBackup:null} };
+    }
+    function validData(d) {
+      return d && typeof d==='object' && Array.isArray(d.accomplishments) && Array.isArray(d.categories) && Array.isArray(d.people);
+    }
+
+    /* ── Toast ────────────────────────────────────────────────── */
+    function toast(msg, type='info', duration=4000, onUndo=null) {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.innerHTML = `<span>${{success:'✓',error:'✕',warning:'⚠',info:'ℹ'}[type]||'ℹ'}</span><span>${esc(msg)}</span>`;
+      if (onUndo) {
+        const b=document.createElement('button'); b.className='toast-undo'; b.textContent='Undo';
+        b.onclick=()=>{onUndo();t.remove();}; t.appendChild(b);
+      }
+      c.appendChild(t);
+      setTimeout(()=>{ t.style.animation='toastOut 0.3s ease forwards'; setTimeout(()=>t.remove(),300); }, duration);
+    }
+
+    /* ── Modal ────────────────────────────────────────────────── */
+    function modal(title, body, actions=[]) {
       return new Promise(resolve => {
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay';
-        overlay.innerHTML = `<div class="modal-box" role="dialog" aria-modal="true">
-          <h3 class="modal-title">${sanitizeHTML(title)}</h3>
-          <div class="modal-body">${sanitizeHTML(body)}</div>
-          <div class="modal-actions" id="modal-actions-inner"></div></div>`;
-        document.body.appendChild(overlay);
-        overlay.querySelector('#modal-actions-inner') && actions.forEach(a => {
-          const btn = document.createElement('button');
-          btn.className = `btn ${a.class || 'btn-secondary'}`; btn.textContent = a.label;
-          btn.onclick = () => { overlay.remove(); resolve(a.value); };
-          overlay.querySelector('#modal-actions-inner').appendChild(btn);
-        });
-        overlay.onclick = e => { if (e.target === overlay) { overlay.remove(); resolve(null); } };
+        const o=document.createElement('div'); o.className='modal-overlay';
+        o.innerHTML=`<div class="modal-box" role="dialog" aria-modal="true">
+          <h3 class="modal-title">${esc(title)}</h3>
+          <div class="modal-body">${esc(body)}</div>
+          <div id="_ma" class="modal-actions"></div></div>`;
+        document.body.appendChild(o);
+        actions.forEach(a=>{ const b=document.createElement('button'); b.className=`btn ${a.class||'btn-secondary'}`; b.textContent=a.label; b.onclick=()=>{o.remove();resolve(a.value);}; o.querySelector('#_ma').appendChild(b); });
+        o.onclick=e=>{ if(e.target===o){o.remove();resolve(null);} };
       });
     }
 
-    /* ============================================================
-       4. DATA LAYER – Firebase + localStorage fallback
-       ============================================================ */
-    function getDefaultData() {
-      return { version: CONFIG.APP_VERSION, accomplishments: [], categories: [], people: [], settings: { lastBackup: null }, monthlySnapshots: {} };
-    }
-
-    function validateData(data) {
-      return data && typeof data === 'object' && data.version && Array.isArray(data.accomplishments) && Array.isArray(data.categories) && Array.isArray(data.people) && data.settings && data.monthlySnapshots;
-    }
-
-    /* -- Firebase ------------------------------------------------ */
-    function dataRef() { return ref(db, 'clindoc/data'); }
-
-    function firebaseDataToApp(raw) {
-      if (!raw) return getDefaultData();
+    /* ── Firebase data conversion ─────────────────────────────── */
+    function fromFirebase(raw) {
+      if (!raw) return defaultData();
       return {
-        version: raw.version || CONFIG.APP_VERSION,
+        version: raw.version || CFG.VERSION,
         accomplishments: raw.accomplishments ? Object.values(raw.accomplishments) : [],
-        categories: raw.categories ? Object.values(raw.categories) : [],
-        people: raw.people ? Object.values(raw.people) : [],
+        categories: raw.categories ? (Array.isArray(raw.categories) ? raw.categories : Object.values(raw.categories)) : [],
+        people: raw.people ? (Array.isArray(raw.people) ? raw.people : Object.values(raw.people)) : [],
         settings: raw.settings || { lastBackup: null },
         monthlySnapshots: raw.monthlySnapshots || {}
       };
     }
 
-    function appDataToFirebase(data) {
+    function toFirebase(data) {
       const accObj = {};
       data.accomplishments.forEach(a => { accObj[a.id] = a; });
       return {
@@ -1663,820 +1561,714 @@
       };
     }
 
-    async function saveData(data) {
+    /* ── Save ─────────────────────────────────────────────────── */
+    async function saveData() {
+      if (!DATA) return;
       if (useFirebase) {
-        try { await set(dataRef(), appDataToFirebase(data)); return true; }
-        catch (e) { console.error('Firebase write error:', e); showToast('Erreur de sauvegarde', 'error'); return false; }
+        try { await set(ref(db,'clindoc/data'), toFirebase(DATA)); }
+        catch(e) { console.error('Firebase save error:',e); toast('Save error','error'); }
       } else {
-        if (!isLSAvailable()) return false;
-        try { localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(data)); return true; }
-        catch (e) { return false; }
+        if (lsOk()) try { localStorage.setItem(CFG.LS_DATA, JSON.stringify(DATA)); } catch(_) {}
       }
     }
 
-    function subscribeToData() {
-      if (!useFirebase) {
-        // localStorage mode: load once
-        let data = getDefaultData();
-        if (isLSAvailable()) {
-          try {
-            const raw = localStorage.getItem(CONFIG.STORAGE_KEY);
-            if (raw) { const parsed = JSON.parse(raw); if (validateData(parsed)) data = parsed; }
-          } catch (_) {}
-        }
-        AppState.data = data;
-        onDataReady();
-        return;
-      }
-      // Firebase realtime listener
-      onValue(dataRef(), snapshot => {
-        AppState.data = firebaseDataToApp(snapshot.val());
-        onDataReady();
-      }, err => {
-        console.error('Firebase read error:', err);
-        showToast('Connexion Firebase perdue – mode local activé', 'warning', 6000);
-        useFirebase = false;
-        subscribeToData();
-      });
-    }
-
-    /* -- Reactions (always local per-device) -------------------- */
-    function loadMyReactions() {
-      if (!isLSAvailable()) return {};
-      try { return JSON.parse(localStorage.getItem(CONFIG.REACTIONS_KEY) || '{}'); } catch (_) { return {}; }
-    }
-    function saveMyReactions() {
-      if (!isLSAvailable()) return;
-      try { localStorage.setItem(CONFIG.REACTIONS_KEY, JSON.stringify(AppState.myReactions)); } catch (_) {}
-    }
-
-    function getDeviceId() {
-      let id = isLSAvailable() ? localStorage.getItem('clindoc_device_id') : null;
-      if (!id) { id = generateUUID(); if (isLSAvailable()) localStorage.setItem('clindoc_device_id', id); }
-      return id;
-    }
-
-    /* ============================================================
-       5. CRUD OPERATIONS
-       ============================================================ */
+    /* ── CRUD ─────────────────────────────────────────────────── */
     async function addAccomplishment(fd) {
       const acc = {
-        id: generateUUID(),
-        title: fd.title.trim(), summary: fd.summary.trim(), date: fd.date,
-        person: fd.person.trim(), category: fd.category.trim(),
-        links: fd.links || [], image: fd.image || null, private: fd.private || false,
-        reactions: { applause: [], confetti: [], happy: [], surprised: [] },
+        id: uuid(), title: fd.title.trim(), summary: fd.summary.trim(),
+        date: fd.date, person: fd.person.trim(), category: fd.category.trim(),
+        links: fd.links||[], image: fd.image||null, private: !!fd.private,
+        reactions: { applause:[], confetti:[], happy:[], surprised:[] },
         createdAt: new Date().toISOString(), modifiedAt: new Date().toISOString()
       };
-      AppState.data.accomplishments.push(acc);
-      if (!AppState.data.categories.includes(acc.category)) AppState.data.categories.push(acc.category);
-      if (!AppState.data.people.includes(acc.person)) AppState.data.people.push(acc.person);
-      await saveData(AppState.data);
+      DATA.accomplishments.push(acc);
+      if (!DATA.categories.includes(acc.category)) DATA.categories.push(acc.category);
+      if (!DATA.people.includes(acc.person)) DATA.people.push(acc.person);
+      await saveData();
     }
 
     async function updateAccomplishment(id, fd) {
-      const acc = AppState.data.accomplishments.find(a => a.id === id);
+      const acc = DATA.accomplishments.find(a=>a.id===id);
       if (!acc) return;
       Object.assign(acc, {
-        title: fd.title.trim(), summary: fd.summary.trim(), date: fd.date,
-        person: fd.person.trim(), category: fd.category.trim(),
-        links: fd.links, image: fd.image, private: fd.private,
+        title:fd.title.trim(), summary:fd.summary.trim(), date:fd.date,
+        person:fd.person.trim(), category:fd.category.trim(),
+        links:fd.links, image:fd.image, private:!!fd.private,
         modifiedAt: new Date().toISOString()
       });
-      if (!AppState.data.categories.includes(acc.category)) AppState.data.categories.push(acc.category);
-      if (!AppState.data.people.includes(acc.person)) AppState.data.people.push(acc.person);
-      await saveData(AppState.data);
+      if (!DATA.categories.includes(acc.category)) DATA.categories.push(acc.category);
+      if (!DATA.people.includes(acc.person)) DATA.people.push(acc.person);
+      await saveData();
     }
 
     async function deleteAccomplishment(id) {
-      const idx = AppState.data.accomplishments.findIndex(a => a.id === id);
-      if (idx === -1) return;
-      const [deleted] = AppState.data.accomplishments.splice(idx, 1);
-      AppState.undoStack.push({ type: 'delete', data: deleted, ts: Date.now() });
-      if (AppState.undoStack.length > 10) AppState.undoStack.shift();
-      await saveData(AppState.data);
+      const i = DATA.accomplishments.findIndex(a=>a.id===id);
+      if (i===-1) return;
+      const [del] = DATA.accomplishments.splice(i,1);
+      UNDO_STACK.push(del);
+      if (UNDO_STACK.length > 10) UNDO_STACK.shift();
+      await saveData();
     }
 
     async function undoDelete() {
-      const last = AppState.undoStack.pop();
-      if (!last || last.type !== 'delete') return null;
-      AppState.data.accomplishments.push(last.data);
-      await saveData(AppState.data);
-      return last.data;
+      const item = UNDO_STACK.pop();
+      if (!item) return false;
+      DATA.accomplishments.push(item);
+      await saveData();
+      return true;
     }
 
     async function toggleReaction(accId, type) {
-      const acc = AppState.data.accomplishments.find(a => a.id === accId);
+      const acc = DATA.accomplishments.find(a=>a.id===accId);
       if (!acc) return;
-      const devId = getDeviceId();
-      const prev = AppState.myReactions[accId];
-      if (prev) {
-        const arr = acc.reactions[prev];
-        const i = arr.indexOf(devId);
-        if (i > -1) arr.splice(i, 1);
+      const dev = getDeviceId();
+      const prev = MY_REACTIONS[accId];
+      if (prev && acc.reactions[prev]) {
+        const pi = acc.reactions[prev].indexOf(dev);
+        if (pi>-1) acc.reactions[prev].splice(pi,1);
       }
-      if (prev === type) { delete AppState.myReactions[accId]; }
-      else {
-        if (!acc.reactions[type].includes(devId)) acc.reactions[type].push(devId);
-        AppState.myReactions[accId] = type;
+      if (prev === type) {
+        delete MY_REACTIONS[accId];
+      } else {
+        if (!acc.reactions[type]) acc.reactions[type] = [];
+        if (!acc.reactions[type].includes(dev)) acc.reactions[type].push(dev);
+        MY_REACTIONS[accId] = type;
       }
-      saveMyReactions();
-      await saveData(AppState.data);
-      // If localStorage mode, re-render immediately
-      if (!useFirebase) renderCards();
+      if (lsOk()) try { localStorage.setItem(CFG.LS_REACTIONS, JSON.stringify(MY_REACTIONS)); } catch(_) {}
+      await saveData();
+      // For localStorage mode, re-render since no realtime listener
+      if (!useFirebase) refreshUI();
     }
 
-    /* ============================================================
-       6. FLOWER SYSTEM
-       ============================================================ */
-    function getFlowerStage(count) {
-      if (count >= 5) return 5;
-      return count; // 0-4 = stage 0-4
-    }
-
-    function getBadgeType(count) {
-      if (count >= CONFIG.BADGE_THRESHOLDS.gold) return 'gold';
-      if (count >= CONFIG.BADGE_THRESHOLDS.silver) return 'silver';
-      if (count >= CONFIG.BADGE_THRESHOLDS.bronze) return 'bronze';
-      return null;
-    }
+    /* ── Flower ───────────────────────────────────────────────── */
+    function flowerStage(count) { return Math.min(count, 5); }
 
     function renderFlower(stage) {
-      const el = id => document.getElementById(id);
-      const stem = el('stem'), leafL = el('leaf-left'), leafR = el('leaf-right');
-      const bud = el('bud'), bloom = el('bloom');
-      const flowerDisplay = el('flower-display');
-      const particles = el('celebration-particles');
-
-      // Reset
-      [stem, leafL, leafR, bud, bloom].forEach(e => { e.style.animation = 'none'; });
-      particles.innerHTML = '';
-      flowerDisplay.classList.remove('blooming');
-
-      if (stage === 0) {
-        stem.style.transform = 'scaleY(0)';
-        [leafL, leafR, bud, bloom].forEach(e => { e.style.transform = 'scale(0)'; e.style.opacity = '0'; });
+      const get = id => document.getElementById(id);
+      const stem=get('stem'), lL=get('leaf-left'), lR=get('leaf-right'), bud=get('bud'), bloom=get('bloom');
+      const disp=get('flower-display'), parts=get('celebration-particles');
+      [stem,lL,lR,bud,bloom].forEach(e=>{e.style.animation='none';});
+      parts.innerHTML=''; disp.classList.remove('blooming');
+      if (stage===0) {
+        stem.style.transform='scaleY(0)';
+        [lL,lR,bud,bloom].forEach(e=>{e.style.transform='scale(0)';e.style.opacity='0';});
         return;
       }
-      setTimeout(() => { stem.style.animation = 'growStem 0.8s ease-out forwards'; }, 100);
-      if (stage >= 2) setTimeout(() => { leafL.style.animation = 'growLeaf 0.6s ease-out forwards'; }, 900);
-      else { leafL.style.transform = 'scale(0)'; leafL.style.opacity = '0'; }
-      if (stage >= 3) setTimeout(() => { leafR.style.animation = 'growLeaf 0.6s ease-out forwards'; }, 1200);
-      else { leafR.style.transform = 'scale(0)'; leafR.style.opacity = '0'; }
-      if (stage === 4) {
-        setTimeout(() => { bud.style.animation = 'growBud 0.5s ease-out forwards'; }, 1500);
-        bloom.style.transform = 'scale(0)'; bloom.style.opacity = '0';
-      } else { bud.style.transform = 'scale(0)'; bud.style.opacity = '0'; }
-      if (stage >= 5) {
-        bud.style.transform = 'scale(0)'; bud.style.opacity = '0';
-        setTimeout(() => {
-          bloom.style.animation = 'bloomPetal 0.8s ease-out forwards';
-          document.querySelectorAll('#sparkles circle').forEach((s, i) => {
-            setTimeout(() => { s.style.animation = 'sparkle 1.5s ease-in-out infinite'; s.style.animationDelay = `${i * 0.3}s`; }, 800 + i * 100);
+      setTimeout(()=>{ stem.style.animation='growStem 0.8s ease-out forwards'; },100);
+      if (stage>=2) setTimeout(()=>{ lL.style.animation='growLeaf 0.6s ease-out forwards'; },900);
+      else { lL.style.transform='scale(0)'; lL.style.opacity='0'; }
+      if (stage>=3) setTimeout(()=>{ lR.style.animation='growLeaf 0.6s ease-out forwards'; },1200);
+      else { lR.style.transform='scale(0)'; lR.style.opacity='0'; }
+      if (stage===4) { setTimeout(()=>{ bud.style.animation='growBud 0.5s ease-out forwards'; },1500); bloom.style.transform='scale(0)'; bloom.style.opacity='0'; }
+      else { bud.style.transform='scale(0)'; bud.style.opacity='0'; }
+      if (stage>=5) {
+        bud.style.transform='scale(0)'; bud.style.opacity='0';
+        setTimeout(()=>{
+          bloom.style.animation='bloomPetal 0.8s ease-out forwards';
+          document.querySelectorAll('#sparkles circle').forEach((s,i)=>{
+            setTimeout(()=>{ s.style.animation=`sparkle 1.5s ease-in-out infinite`; s.style.animationDelay=`${i*0.3}s`; },800+i*100);
           });
-          flowerDisplay.classList.add('blooming');
-          createParticles();
-        }, 1500);
-      } else { bloom.style.transform = 'scale(0)'; bloom.style.opacity = '0'; }
+          disp.classList.add('blooming');
+          const colors=['#E91E63','#9C27B0','#FDD835','#4CAF50','#2196F3'];
+          for(let i=0;i<20;i++){
+            const p=document.createElement('div'); p.className='particle';
+            p.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*5)]};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s`;
+            parts.appendChild(p);
+          }
+        },1500);
+      } else { bloom.style.transform='scale(0)'; bloom.style.opacity='0'; }
     }
 
-    function createParticles() {
-      const container = document.getElementById('celebration-particles');
-      const colors = ['#E91E63', '#9C27B0', '#FDD835', '#4CAF50', '#2196F3'];
-      for (let i = 0; i < 20; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = `${Math.random() * 100}%`;
-        p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        p.style.animationDelay = `${Math.random() * 2}s`;
-        p.style.animationDuration = `${2 + Math.random() * 2}s`;
-        container.appendChild(p);
-      }
-    }
-
-    function updateFlowerDisplay() {
-      const monthAccs = AppState.data.accomplishments.filter(a => a.date.startsWith(AppState.currentMonth));
+    function updateFlower() {
+      const monthAccs = DATA.accomplishments.filter(a=>a.date.startsWith(CURRENT_MONTH));
       const count = monthAccs.length;
-      const stage = getFlowerStage(count);
+      const stage = flowerStage(count);
       document.getElementById('flower-stage-label').textContent = `Stage ${stage} / 5`;
-      document.getElementById('flower-progress-fill').style.width = `${(stage / 5) * 100}%`;
-      document.querySelector('.flower-progress-bar').setAttribute('aria-valuenow', stage);
-      let msg = CONFIG.MOTIVATIONAL_MESSAGES[stage];
-      if (daysSinceLastAccomplishment(AppState.data.accomplishments) >= 10 && count > 0) msg = CONFIG.MOTIVATIONAL_MESSAGES.idle;
-      document.getElementById('flower-message').textContent = msg;
+      document.getElementById('flower-progress-fill').style.width = `${(stage/5)*100}%`;
+      document.getElementById('flower-message').textContent = CFG.MESSAGES[stage] || CFG.MESSAGES[5];
       document.getElementById('stat-month-count').textContent = count;
-      document.getElementById('stat-total-count').textContent = AppState.data.accomplishments.length;
+      document.getElementById('stat-total-count').textContent = DATA.accomplishments.length;
       renderFlower(stage);
     }
 
-    /* ============================================================
-       7. MONTHLY SHELF
-       ============================================================ */
-    function checkMonthlySnapshot() {
-      const current = getCurrentMonth();
+    /* ── Monthly shelf ────────────────────────────────────────── */
+    function updateSnapshots() {
       const byMonth = {};
-      AppState.data.accomplishments.forEach(a => {
-        const m = a.date.substring(0, 7);
-        if (!byMonth[m]) byMonth[m] = [];
+      DATA.accomplishments.forEach(a => {
+        const m = a.date.substring(0,7);
+        if (!byMonth[m]) byMonth[m]=[];
         byMonth[m].push(a);
       });
       Object.keys(byMonth).forEach(m => {
-        if (!AppState.data.monthlySnapshots[m] && m !== current) {
-          const count = byMonth[m].length;
-          AppState.data.monthlySnapshots[m] = { accomplishmentCount: count, flowerStage: getFlowerStage(count), badge: getBadgeType(count), snapshotDate: new Date().toISOString() };
+        if (!DATA.monthlySnapshots[m] && m !== CURRENT_MONTH) {
+          const c = byMonth[m].length;
+          DATA.monthlySnapshots[m] = { accomplishmentCount:c, flowerStage:flowerStage(c), snapshotDate:new Date().toISOString() };
         }
       });
     }
 
-    function renderMonthlyShelf() {
+    function badge(count) { return count>=5?'gold':count>=3?'silver':count>=1?'bronze':null; }
+
+    function renderShelf() {
       const container = document.getElementById('shelf-container');
-      container.innerHTML = '';
       const months = new Set();
-      AppState.data.accomplishments.forEach(a => months.add(a.date.substring(0, 7)));
-      Object.keys(AppState.data.monthlySnapshots).forEach(m => months.add(m));
-      const sorted = Array.from(months).sort().reverse();
-      if (sorted.length === 0) {
-        container.innerHTML = '<p style="color:var(--gray);text-align:center;padding:20px">No archived months yet</p>';
+      DATA.accomplishments.forEach(a=>months.add(a.date.substring(0,7)));
+      Object.keys(DATA.monthlySnapshots).forEach(m=>months.add(m));
+      const sorted = [...months].sort().reverse();
+      if (!sorted.length) {
+        container.innerHTML='<p style="color:var(--gray);text-align:center;padding:20px">No archived months yet</p>';
         return;
       }
-      sorted.forEach(month => {
-        const isCurrent = month === AppState.currentMonth;
-        const count = AppState.data.accomplishments.filter(a => a.date.startsWith(month)).length;
-        const badge = getBadgeType(count);
-        const div = document.createElement('div');
-        div.className = `shelf-month${isCurrent ? ' current' : ''}`;
-        div.setAttribute('role', 'listitem'); div.setAttribute('tabindex', '0');
-        const badgeEmoji = badge === 'gold' ? '🥇' : badge === 'silver' ? '🥈' : badge === 'bronze' ? '🥉' : '';
-        const badgeHTML = badge ? `<div class="shelf-badge ${badge}" aria-label="${badge} badge">${badgeEmoji}</div>` : '';
-        const flower = count === 0 ? '🪴' : count >= 5 ? '🌸' : count >= 4 ? '🌺' : count >= 3 ? '🌼' : count >= 2 ? '🌿' : '🌱';
-        div.innerHTML = `${badgeHTML}<div class="shelf-month-name">${formatMonth(month)}</div><div class="shelf-flower-mini" aria-hidden="true">${flower}</div><div class="shelf-count">${count} accomplishment${count !== 1 ? 's' : ''}</div>`;
-        div.onclick = () => {
-          AppState.filters.dateFrom = `${month}-01`;
-          AppState.filters.dateTo = `${month}-${new Date(month.split('-')[0], month.split('-')[1], 0).getDate()}`;
-          applyFilters(); renderFilters();
-          document.getElementById('cards-section').scrollIntoView({ behavior: 'smooth' });
-        };
-        container.appendChild(div);
+      container.innerHTML = sorted.map(month => {
+        const isCur = month===CURRENT_MONTH;
+        const count = DATA.accomplishments.filter(a=>a.date.startsWith(month)).length;
+        const b = badge(count);
+        const bHTML = b ? `<div class="shelf-badge ${b}">${b==='gold'?'🥇':b==='silver'?'🥈':'🥉'}</div>` : '';
+        const flower = count===0?'🪴':count>=5?'🌸':count>=4?'🌺':count>=3?'🌼':count>=2?'🌿':'🌱';
+        return `<div class="shelf-month${isCur?' current':''}" role="listitem" tabindex="0" data-month="${month}">
+          ${bHTML}
+          <div class="shelf-month-name">${fmtMonth(month)}</div>
+          <div class="shelf-flower-mini">${flower}</div>
+          <div class="shelf-count">${count} accomplishment${count!==1?'s':''}</div>
+        </div>`;
+      }).join('');
+      container.querySelectorAll('.shelf-month').forEach(el => {
+        el.addEventListener('click', ()=>{
+          const m = el.dataset.month;
+          FILTERS.dateFrom = `${m}-01`;
+          FILTERS.dateTo = `${m}-${new Date(m.split('-')[0],+m.split('-')[1],0).getDate()}`;
+          applyFilters(); renderFilterControls();
+          document.getElementById('cards-section').scrollIntoView({behavior:'smooth'});
+        });
       });
     }
 
-    /* ============================================================
-       8. FILTERS & SEARCH
-       ============================================================ */
+    /* ── Filters ──────────────────────────────────────────────── */
     function applyFilters() {
-      let filtered = [...AppState.data.accomplishments];
-      if (AppState.filters.search) {
-        const q = AppState.filters.search.toLowerCase();
-        filtered = filtered.filter(a => a.title.toLowerCase().includes(q) || a.summary.toLowerCase().includes(q));
+      let list = [...DATA.accomplishments];
+      if (FILTERS.search) {
+        const q = FILTERS.search.toLowerCase();
+        list = list.filter(a => a.title.toLowerCase().includes(q) || a.summary.toLowerCase().includes(q));
       }
-      if (AppState.filters.person) filtered = filtered.filter(a => a.person === AppState.filters.person);
-      if (AppState.filters.category) filtered = filtered.filter(a => a.category === AppState.filters.category);
-      if (AppState.filters.dateFrom) filtered = filtered.filter(a => a.date >= AppState.filters.dateFrom);
-      if (AppState.filters.dateTo) filtered = filtered.filter(a => a.date <= AppState.filters.dateTo);
-      switch (AppState.filters.sort) {
-        case 'date-desc': filtered.sort((a, b) => b.date.localeCompare(a.date)); break;
-        case 'date-asc':  filtered.sort((a, b) => a.date.localeCompare(b.date)); break;
-        case 'reactions-desc': filtered.sort((a, b) => totalReactions(b) - totalReactions(a)); break;
-        case 'title-asc': filtered.sort((a, b) => a.title.localeCompare(b.title)); break;
+      if (FILTERS.person)   list = list.filter(a=>a.person===FILTERS.person);
+      if (FILTERS.category) list = list.filter(a=>a.category===FILTERS.category);
+      if (FILTERS.dateFrom) list = list.filter(a=>a.date>=FILTERS.dateFrom);
+      if (FILTERS.dateTo)   list = list.filter(a=>a.date<=FILTERS.dateTo);
+      switch(FILTERS.sort) {
+        case 'date-asc':       list.sort((a,b)=>a.date.localeCompare(b.date)); break;
+        case 'reactions-desc': list.sort((a,b)=>totalRx(b)-totalRx(a)); break;
+        case 'title-asc':      list.sort((a,b)=>a.title.localeCompare(b.title)); break;
+        default:               list.sort((a,b)=>b.date.localeCompare(a.date));
       }
-      AppState.filteredData = filtered;
+      FILTERED = list;
       renderCards();
-      updateResultsCount();
+      document.getElementById('results-count').textContent =
+        list.length===DATA.accomplishments.length
+          ? `Showing all ${list.length} accomplishment${list.length!==1?'s':''}`
+          : `Showing ${list.length} of ${DATA.accomplishments.length} accomplishment${DATA.accomplishments.length!==1?'s':''}`;
     }
 
-    function totalReactions(a) { return Object.values(a.reactions).reduce((s, arr) => s + arr.length, 0); }
-
-    function clearFilters() {
-      AppState.filters = { search: '', person: '', category: '', dateFrom: '', dateTo: '', sort: 'date-desc' };
-      ['search-input', 'filter-person', 'filter-category', 'filter-date-from', 'filter-date-to'].forEach(id => { document.getElementById(id).value = ''; });
-      document.getElementById('filter-sort').value = 'date-desc';
-      applyFilters(); renderFilters();
-    }
-
-    function renderFilters() {
-      // Person dropdown
-      const pSel = document.getElementById('filter-person');
-      const pCur = pSel.value;
-      pSel.innerHTML = '<option value="">All People</option>';
-      [...AppState.data.people].sort().forEach(p => {
-        const o = document.createElement('option'); o.value = p; o.textContent = p;
-        if (p === pCur) o.selected = true;
-        pSel.appendChild(o);
-      });
-      // Category dropdown
-      const cSel = document.getElementById('filter-category');
-      const cCur = cSel.value;
-      cSel.innerHTML = '<option value="">All Categories</option>';
-      [...AppState.data.categories].sort().forEach(c => {
-        const o = document.createElement('option'); o.value = c; o.textContent = c;
-        if (c === cCur) o.selected = true;
-        cSel.appendChild(o);
-      });
-      // Active filter tags
+    function renderFilterControls() {
+      // Person select
+      const ps = document.getElementById('filter-person');
+      const pv = ps.value;
+      ps.innerHTML = '<option value="">All People</option>';
+      [...DATA.people].sort().forEach(p=>{ const o=document.createElement('option'); o.value=o.textContent=p; if(p===pv) o.selected=true; ps.appendChild(o); });
+      // Category select
+      const cs = document.getElementById('filter-category');
+      const cv = cs.value;
+      cs.innerHTML = '<option value="">All Categories</option>';
+      [...DATA.categories].sort().forEach(c=>{ const o=document.createElement('option'); o.value=o.textContent=c; if(c===cv) o.selected=true; cs.appendChild(o); });
+      // Tags
       const tags = document.getElementById('filter-tags');
       tags.innerHTML = '';
       const active = [];
-      if (AppState.filters.search) active.push({ label: `Search: "${AppState.filters.search}"`, key: 'search' });
-      if (AppState.filters.person) active.push({ label: `Person: ${AppState.filters.person}`, key: 'person' });
-      if (AppState.filters.category) active.push({ label: `Category: ${AppState.filters.category}`, key: 'category' });
-      if (AppState.filters.dateFrom || AppState.filters.dateTo) active.push({ label: `Date: ${AppState.filters.dateFrom || '...'} → ${AppState.filters.dateTo || '...'}`, key: 'date' });
-      active.forEach(f => {
-        const tag = document.createElement('div'); tag.className = 'filter-tag';
-        tag.innerHTML = `<span>${sanitizeHTML(f.label)}</span><button class="filter-tag-remove" aria-label="Remove filter">×</button>`;
-        tag.querySelector('button').onclick = () => {
-          if (f.key === 'search') { AppState.filters.search = ''; document.getElementById('search-input').value = ''; }
-          else if (f.key === 'person') { AppState.filters.person = ''; document.getElementById('filter-person').value = ''; }
-          else if (f.key === 'category') { AppState.filters.category = ''; document.getElementById('filter-category').value = ''; }
-          else if (f.key === 'date') { AppState.filters.dateFrom = ''; AppState.filters.dateTo = ''; document.getElementById('filter-date-from').value = ''; document.getElementById('filter-date-to').value = ''; }
-          applyFilters(); renderFilters();
-        };
+      if (FILTERS.search)   active.push({label:`Search: "${FILTERS.search}"`,clear:()=>{FILTERS.search='';document.getElementById('search-input').value='';}});
+      if (FILTERS.person)   active.push({label:`Person: ${FILTERS.person}`,clear:()=>{FILTERS.person='';document.getElementById('filter-person').value='';}});
+      if (FILTERS.category) active.push({label:`Category: ${FILTERS.category}`,clear:()=>{FILTERS.category='';document.getElementById('filter-category').value='';}});
+      if (FILTERS.dateFrom||FILTERS.dateTo) active.push({label:`Date: ${FILTERS.dateFrom||'…'} → ${FILTERS.dateTo||'…'}`,clear:()=>{ FILTERS.dateFrom=FILTERS.dateTo=''; document.getElementById('filter-date-from').value=''; document.getElementById('filter-date-to').value=''; }});
+      active.forEach(f=>{
+        const tag=document.createElement('div'); tag.className='filter-tag';
+        tag.innerHTML=`<span>${esc(f.label)}</span><button class="filter-tag-remove">×</button>`;
+        tag.querySelector('button').onclick=()=>{ f.clear(); applyFilters(); renderFilterControls(); };
         tags.appendChild(tag);
       });
     }
 
-    function updateResultsCount() {
-      const count = AppState.filteredData.length, total = AppState.data.accomplishments.length;
-      document.getElementById('results-count').textContent = count === total
-        ? `Showing all ${total} accomplishment${total !== 1 ? 's' : ''}`
-        : `Showing ${count} of ${total} accomplishment${total !== 1 ? 's' : ''}`;
+    function clearFilters() {
+      FILTERS = {search:'',person:'',category:'',dateFrom:'',dateTo:'',sort:'date-desc'};
+      ['search-input','filter-person','filter-category','filter-date-from','filter-date-to'].forEach(id=>{ document.getElementById(id).value=''; });
+      document.getElementById('filter-sort').value='date-desc';
+      applyFilters(); renderFilterControls();
     }
 
+    /* ── Cards ────────────────────────────────────────────────── */
     function highlight(text) {
-      if (!AppState.filters.search) return sanitizeHTML(text);
-      const q = AppState.filters.search.toLowerCase();
-      const lo = text.toLowerCase();
-      const i = lo.indexOf(q);
-      if (i === -1) return sanitizeHTML(text);
-      return `${sanitizeHTML(text.slice(0, i))}<mark>${sanitizeHTML(text.slice(i, i + q.length))}</mark>${highlight(text.slice(i + q.length))}`;
+      if (!FILTERS.search) return esc(text);
+      const q=FILTERS.search.toLowerCase(), lo=text.toLowerCase(), i=lo.indexOf(q);
+      if (i===-1) return esc(text);
+      return esc(text.slice(0,i))+`<mark>${esc(text.slice(i,i+FILTERS.search.length))}</mark>`+highlight(text.slice(i+FILTERS.search.length));
     }
 
-    /* ============================================================
-       9. CARD RENDERING
-       ============================================================ */
     function renderCards() {
       const grid = document.getElementById('cards-grid');
+      if (!grid) return;
       grid.innerHTML = '';
-      if (AppState.filteredData.length === 0) {
-        const isEmpty = AppState.data.accomplishments.length === 0;
+      if (!FILTERED.length) {
+        const empty = DATA.accomplishments.length === 0;
         grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-          <div class="empty-state-icon" aria-hidden="true">🌱</div>
-          <h3 class="empty-state-title">${isEmpty ? 'No accomplishments yet' : 'No results found'}</h3>
-          <p class="empty-state-text">${isEmpty ? 'Add your first accomplishment below!' : 'Try adjusting your filters or search terms.'}</p>
+          <div class="empty-state-icon">🌱</div>
+          <h3 class="empty-state-title">${empty?'No accomplishments yet':'No results found'}</h3>
+          <p class="empty-state-text">${empty?'Click "Add New Accomplishment" above to get started!':'Try adjusting your search or filters.'}</p>
         </div>`;
         return;
       }
-      AppState.filteredData.forEach(acc => grid.appendChild(createCard(acc)));
-    }
-
-    function createCard(acc) {
-      const card = document.createElement('div');
-      card.className = 'card'; card.setAttribute('role', 'listitem');
-
-      const privateBadge = acc.private ? '<div class="card-private-badge">Private</div>' : '';
-
-      let imgHTML;
-      if (acc.image) {
-        imgHTML = `<img src="${acc.image}" alt="" class="card-image" loading="lazy"/>`;
-      } else {
-        const emojis = ['🎯','🚀','💡','⭐','🏆','✨'];
-        imgHTML = `<div class="card-image-placeholder" aria-hidden="true">${emojis[Math.floor(Math.random() * emojis.length)]}</div>`;
-      }
-
-      let linksHTML = '';
-      if (acc.links && acc.links.length > 0) {
-        linksHTML = '<div class="card-links">' + acc.links.map((l, i) =>
-          `<a href="${sanitizeHTML(l)}" target="_blank" rel="noopener noreferrer" class="card-link"><span aria-hidden="true">🔗</span> Link ${i + 1}</a>`
-        ).join('') + '</div>';
-      }
-
-      const myReaction = AppState.myReactions[acc.id];
-      const reactionBtns = [
-        { type: 'applause', emoji: '👏', label: 'Applause' },
-        { type: 'confetti', emoji: '🎉', label: 'Confetti' },
-        { type: 'happy',    emoji: '😊', label: 'Happy' },
-        { type: 'surprised',emoji: '😲', label: 'Surprised' }
-      ].map(r => {
-        const count = (acc.reactions[r.type] || []).length;
-        const active = myReaction === r.type;
-        return `<button class="reaction-btn${active ? ' active' : ''}" data-id="${acc.id}" data-reaction="${r.type}" aria-label="${r.label}${count ? `, ${count}` : ''}" aria-pressed="${active}">
-          <span aria-hidden="true">${r.emoji}</span>${count ? `<span class="reaction-count">${count}</span>` : ''}
-        </button>`;
-      }).join('');
-
-      card.innerHTML = `
-        ${privateBadge}
-        ${imgHTML}
-        <div class="card-body">
-          <span class="card-category" style="--cat-bg:${getCategoryStyle(acc.category).bg};--cat-color:${getCategoryStyle(acc.category).color};--cat-border:${getCategoryStyle(acc.category).border}">${sanitizeHTML(acc.category)}</span>
-          <h3 class="card-title">${highlight(acc.title)}</h3>
-          <p class="card-summary">${highlight(acc.summary)}</p>
-          <div class="card-meta">
-            <span class="card-meta-item"><span aria-hidden="true">👤</span> ${sanitizeHTML(acc.person)}</span>
-            <span class="card-meta-item"><span aria-hidden="true">📅</span> ${formatDate(acc.date)}</span>
+      FILTERED.forEach(acc => {
+        const c = document.createElement('div');
+        c.className='card'; c.setAttribute('role','listitem');
+        const cat = getCatColor(acc.category);
+        const imgHTML = acc.image
+          ? `<img src="${acc.image}" alt="" class="card-image" loading="lazy"/>`
+          : `<div class="card-image-placeholder">${['🎯','🚀','💡','⭐','🏆','✨'][Math.floor(Math.random()*6)]}</div>`;
+        const linksHTML = acc.links?.length
+          ? `<div class="card-links">${acc.links.map((l,i)=>`<a href="${esc(l)}" target="_blank" rel="noopener noreferrer" class="card-link">🔗 Link ${i+1}</a>`).join('')}</div>`
+          : '';
+        const myRx = MY_REACTIONS[acc.id];
+        const rxHTML = ['applause','confetti','happy','surprised'].map((type,i) => {
+          const emoji=['👏','🎉','😊','😲'][i];
+          const cnt=(acc.reactions?.[type]||[]).length;
+          return `<button class="reaction-btn${myRx===type?' active':''}" data-id="${acc.id}" data-rx="${type}" aria-pressed="${myRx===type}">
+            ${emoji}${cnt?`<span class="reaction-count">${cnt}</span>`:''}
+          </button>`;
+        }).join('');
+        c.innerHTML = `
+          ${acc.private?'<div class="card-private-badge">Private</div>':''}
+          ${imgHTML}
+          <div class="card-body">
+            <span class="card-category" style="--cat-bg:${cat.bg};--cat-color:${cat.fg};--cat-border:${cat.bd}">${esc(acc.category)}</span>
+            <h3 class="card-title">${highlight(acc.title)}</h3>
+            <p class="card-summary">${highlight(acc.summary)}</p>
+            <div class="card-meta">
+              <span class="card-meta-item">👤 ${esc(acc.person)}</span>
+              <span class="card-meta-item">📅 ${fmtDate(acc.date)}</span>
+            </div>
+            ${linksHTML}
+            <div class="card-reactions">${rxHTML}</div>
           </div>
-          ${linksHTML}
-          <div class="card-reactions">${reactionBtns}</div>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn-ghost btn-sm" data-action="edit" data-id="${acc.id}">✏️ Edit</button>
-          <button class="btn btn-danger btn-sm" data-action="delete" data-id="${acc.id}">🗑️ Delete</button>
-        </div>`;
-
-      card.querySelectorAll('.reaction-btn').forEach(btn => {
-        btn.onclick = () => toggleReaction(btn.dataset.id, btn.dataset.reaction);
+          <div class="card-footer">
+            <button class="btn btn-ghost btn-sm" data-action="edit" data-id="${acc.id}">✏️ Edit</button>
+            <button class="btn btn-danger btn-sm" data-action="delete" data-id="${acc.id}">🗑️ Delete</button>
+          </div>`;
+        c.querySelectorAll('.reaction-btn').forEach(b=>b.onclick=()=>toggleReaction(b.dataset.id,b.dataset.rx));
+        c.querySelector('[data-action="edit"]').onclick=()=>startEdit(acc.id);
+        c.querySelector('[data-action="delete"]').onclick=()=>confirmDelete(acc.id);
+        grid.appendChild(c);
       });
-      card.querySelector('[data-action="edit"]').onclick = () => editAccomplishment(acc.id);
-      card.querySelector('[data-action="delete"]').onclick = () => confirmDelete(acc.id);
-      return card;
     }
 
-    /* ============================================================
-       10. FORM
-       ============================================================ */
-    function toggleForm() {
+    /* ── Full UI refresh ──────────────────────────────────────── */
+    function refreshUI() {
+      if (!DATA) return;
+      updateSnapshots();
+      updateFlower();
+      renderShelf();
+      applyFilters();
+      renderFilterControls();
+      updateDatalist();
+      updateFooter();
+      renderCategorySwatches(document.getElementById('form-category-input')?.value||'');
+    }
+
+    /* ── Form ─────────────────────────────────────────────────── */
+    function openForm() {
       const body = document.getElementById('form-body');
-      const header = document.getElementById('form-header');
-      const icon = header.querySelector('.form-toggle-icon');
-      const open = body.classList.toggle('open');
-      icon.classList.toggle('open', open);
-      header.setAttribute('aria-expanded', open);
-      if (open) {
+      if (!body.classList.contains('open')) {
+        body.classList.add('open');
+        document.getElementById('form-header').setAttribute('aria-expanded','true');
+        document.querySelector('#form-header .form-toggle-icon').classList.add('open');
         document.getElementById('form-date-input').value = new Date().toISOString().split('T')[0];
         document.getElementById('form-title-input').focus();
-      } else if (!AppState.editingId) clearForm();
+      }
     }
 
-    function clearForm() {
+    function closeForm() {
+      const body = document.getElementById('form-body');
+      body.classList.remove('open');
+      document.getElementById('form-header').setAttribute('aria-expanded','false');
+      document.querySelector('#form-header .form-toggle-icon').classList.remove('open');
+    }
+
+    function toggleForm() {
+      const body = document.getElementById('form-body');
+      if (body.classList.contains('open')) {
+        closeForm();
+        if (!EDITING_ID) resetForm();
+      } else {
+        openForm();
+      }
+    }
+
+    function resetForm() {
       document.getElementById('accomplishment-form').reset();
-      const preview = document.getElementById('form-image-preview');
-      preview.style.display = 'none'; preview.src = '';
+      const prev = document.getElementById('form-image-preview');
+      prev.style.display='none'; prev.src='';
       document.getElementById('form-links-list').innerHTML =
-        `<div class="form-link-item"><input type="url" class="form-input" id="form-link-input-0" name="link-0" placeholder="https://example.com" aria-label="Link 1"/></div>`;
-      document.querySelectorAll('.form-error').forEach(e => e.textContent = '');
-      document.querySelectorAll('.form-input, .form-textarea').forEach(e => e.classList.remove('error', 'valid'));
-      document.getElementById('form-title-count').textContent = '0 / 100';
-      document.getElementById('form-summary-count').textContent = '0 / 500';
-      AppState.editingId = null;
-      document.getElementById('btn-submit-form').innerHTML = '<span aria-hidden="true">✨</span> Add Accomplishment';
+        `<div class="form-link-item"><input type="url" class="form-input" name="link-0" placeholder="https://example.com" aria-label="Link 1"/></div>`;
+      document.querySelectorAll('.form-error').forEach(e=>e.textContent='');
+      document.querySelectorAll('.form-input,.form-textarea').forEach(e=>e.classList.remove('error','valid'));
+      document.getElementById('form-title-count').textContent='0 / 100';
+      document.getElementById('form-summary-count').textContent='0 / 500';
+      document.getElementById('btn-submit-form').innerHTML='<span>✨</span> Add Accomplishment';
+      EDITING_ID = null;
       renderCategorySwatches('');
     }
 
-    function validateField(name, value) {
-      const errors = [];
-      if (name === 'title') { if (!value?.trim()) errors.push('Title is required'); else if (value.trim().length > 100) errors.push('Max 100 characters'); }
-      if (name === 'summary') { if (!value?.trim()) errors.push('Summary is required'); else if (value.trim().length > 500) errors.push('Max 500 characters'); }
-      if (name === 'date') { if (!value) errors.push('Date is required'); }
-      if (name === 'person') { if (!value?.trim()) errors.push('Person name is required'); }
-      if (name === 'category') { if (!value?.trim()) errors.push('Category is required'); }
-      return errors;
-    }
-
-    function showFieldError(name, errors) {
-      const input = document.getElementById(`form-${name}-input`);
-      const errDiv = document.getElementById(`form-${name}-error`);
-      if (errors.length > 0) { input.classList.add('error'); input.classList.remove('valid'); errDiv.textContent = errors[0]; }
-      else { input.classList.remove('error'); input.classList.add('valid'); errDiv.textContent = ''; }
-    }
-
     function getFormData() {
-      const form = document.getElementById('accomplishment-form');
-      const fd = new FormData(form);
+      const fd = new FormData(document.getElementById('accomplishment-form'));
       const links = [];
-      for (let i = 0; ; i++) { const l = fd.get(`link-${i}`); if (l === null) break; if (l.trim()) links.push(l.trim()); }
-      const preview = document.getElementById('form-image-preview');
+      for(let i=0;;i++){ const l=fd.get(`link-${i}`); if(l===null) break; if(l.trim()) links.push(l.trim()); }
+      const prev = document.getElementById('form-image-preview');
       return {
-        title: fd.get('title') || '', summary: fd.get('summary') || '',
-        date: fd.get('date') || '', person: fd.get('person') || '',
-        category: fd.get('category') || '', private: fd.get('private') === 'on',
-        links, image: preview.style.display !== 'none' ? preview.src : null
+        title: fd.get('title')||'', summary: fd.get('summary')||'',
+        date: fd.get('date')||'', person: fd.get('person')||'',
+        category: fd.get('category')||'', private: fd.get('private')==='on',
+        links, image: prev.style.display!=='none' ? prev.src : null
       };
     }
 
+    function validateField(name, val) {
+      if (name==='title')    return !val?.trim() ? ['Title is required'] : val.length>100 ? ['Max 100 chars'] : [];
+      if (name==='summary')  return !val?.trim() ? ['Summary is required'] : val.length>500 ? ['Max 500 chars'] : [];
+      if (name==='date')     return !val ? ['Date is required'] : [];
+      if (name==='person')   return !val?.trim() ? ['Person is required'] : [];
+      if (name==='category') return !val?.trim() ? ['Category is required'] : [];
+      return [];
+    }
+
+    function showFieldErr(name, errs) {
+      const inp=document.getElementById(`form-${name}-input`);
+      const div=document.getElementById(`form-${name}-error`);
+      if (errs.length) { inp.classList.add('error'); inp.classList.remove('valid'); div.textContent=errs[0]; }
+      else { inp.classList.remove('error'); inp.classList.add('valid'); div.textContent=''; }
+    }
+
     function validateForm() {
-      const fd = getFormData();
-      let ok = true;
-      ['title', 'summary', 'date', 'person', 'category'].forEach(f => {
-        const errs = validateField(f, fd[f]); showFieldError(f, errs);
-        if (errs.length) ok = false;
-      });
-      const linkErrs = fd.links.filter(l => !isValidURL(l));
-      const linksErrDiv = document.getElementById('form-links-error');
-      if (linkErrs.length) { linksErrDiv.textContent = `Invalid URL: ${linkErrs[0]}`; ok = false; }
-      else linksErrDiv.textContent = '';
+      const fd=getFormData(); let ok=true;
+      ['title','summary','date','person','category'].forEach(f=>{ const e=validateField(f,fd[f]); showFieldErr(f,e); if(e.length) ok=false; });
       return ok;
     }
 
-    async function handleFormSubmit(e) {
+    async function handleSubmit(e) {
       e.preventDefault();
-      if (!validateForm()) { showToast('Please fix the errors in the form', 'error'); return; }
+      if (!validateForm()) { toast('Please fix the errors','error'); return; }
       const fd = getFormData();
-      const submitBtn = document.getElementById('btn-submit-form');
-      submitBtn.disabled = true; submitBtn.textContent = 'Saving…';
+      const btn = document.getElementById('btn-submit-form');
+      btn.disabled=true; btn.textContent='Saving…';
       try {
-        if (AppState.editingId) { await updateAccomplishment(AppState.editingId, fd); showToast('Accomplishment updated! ✅', 'success'); }
-        else { await addAccomplishment(fd); showToast('Accomplishment added! 🎉', 'success'); }
-        if (isLSAvailable()) localStorage.removeItem(CONFIG.DRAFT_KEY);
-        // Firebase listener will refresh UI; localStorage mode needs manual refresh
-        if (!useFirebase) { checkMonthlySnapshot(); updateFlowerDisplay(); renderMonthlyShelf(); applyFilters(); renderFilters(); updateDatalist(); updateFooter(); }
-        if (document.getElementById('form-body').classList.contains('open')) toggleForm();
-        clearForm();
-        document.getElementById('cards-section').scrollIntoView({ behavior: 'smooth' });
-      } catch (err) {
-        console.error(err); showToast('Error saving accomplishment', 'error');
+        if (EDITING_ID) {
+          await updateAccomplishment(EDITING_ID, fd);
+          toast('Accomplishment updated! ✅','success');
+        } else {
+          await addAccomplishment(fd);
+          toast('Accomplishment added! 🎉','success');
+        }
+        closeForm();
+        resetForm();
+        // For localStorage, refresh manually; Firebase listener handles it automatically
+        if (!useFirebase) refreshUI();
+        document.getElementById('cards-section').scrollIntoView({behavior:'smooth'});
+      } catch(err) {
+        console.error(err); toast('Error saving','error');
       } finally {
-        submitBtn.disabled = false; submitBtn.innerHTML = '<span aria-hidden="true">✨</span> Add Accomplishment';
+        btn.disabled=false; btn.innerHTML='<span>✨</span> Add Accomplishment';
       }
     }
 
-    function editAccomplishment(id) {
-      const acc = AppState.data.accomplishments.find(a => a.id === id);
+    function startEdit(id) {
+      const acc = DATA.accomplishments.find(a=>a.id===id);
       if (!acc) return;
-      AppState.editingId = id;
+      EDITING_ID = id;
       document.getElementById('form-title-input').value = acc.title;
       document.getElementById('form-summary-input').value = acc.summary;
       document.getElementById('form-date-input').value = acc.date;
       document.getElementById('form-person-input').value = acc.person;
       document.getElementById('form-category-input').value = acc.category;
       document.getElementById('form-private-input').checked = acc.private;
-      const ll = document.getElementById('form-links-list');
-      ll.innerHTML = acc.links.length === 0
-        ? `<div class="form-link-item"><input type="url" class="form-input" id="form-link-input-0" name="link-0" placeholder="https://example.com" aria-label="Link 1"/></div>`
-        : acc.links.map((l, i) => `<div class="form-link-item"><input type="url" class="form-input" id="form-link-input-${i}" name="link-${i}" value="${sanitizeHTML(l)}" placeholder="https://example.com" aria-label="Link ${i+1}"/>${i > 0 ? '<button type="button" class="form-link-remove">Remove</button>' : ''}</div>`).join('');
-      ll.querySelectorAll('.form-link-remove').forEach(btn => btn.onclick = () => btn.parentElement.remove());
-      if (acc.image) { const p = document.getElementById('form-image-preview'); p.src = acc.image; p.style.display = 'block'; }
+      const ll=document.getElementById('form-links-list');
+      ll.innerHTML = acc.links.length
+        ? acc.links.map((l,i)=>`<div class="form-link-item"><input type="url" class="form-input" name="link-${i}" value="${esc(l)}" placeholder="https://example.com" aria-label="Link ${i+1}"/>${i>0?'<button type="button" class="form-link-remove">Remove</button>':''}</div>`).join('')
+        : `<div class="form-link-item"><input type="url" class="form-input" name="link-0" placeholder="https://example.com" aria-label="Link 1"/></div>`;
+      ll.querySelectorAll('.form-link-remove').forEach(b=>b.onclick=()=>b.parentElement.remove());
+      if (acc.image) { const p=document.getElementById('form-image-preview'); p.src=acc.image; p.style.display='block'; }
       updateCharCount('title'); updateCharCount('summary');
-      document.getElementById('btn-submit-form').innerHTML = '<span aria-hidden="true">💾</span> Update Accomplishment';
+      document.getElementById('btn-submit-form').innerHTML='<span>💾</span> Update Accomplishment';
       renderCategorySwatches(acc.category);
-      if (!document.getElementById('form-body').classList.contains('open')) toggleForm();
-      document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
+      openForm();
+      document.getElementById('form-section').scrollIntoView({behavior:'smooth'});
     }
 
     async function confirmDelete(id) {
-      const acc = AppState.data.accomplishments.find(a => a.id === id);
+      const acc = DATA.accomplishments.find(a=>a.id===id);
       if (!acc) return;
-      const ok = await showModal('Delete Accomplishment?', `Delete "${acc.title}"? This can be undone.`,
-        [{ label: 'Cancel', value: false, class: 'btn-secondary' }, { label: 'Delete', value: true, class: 'btn-danger' }]);
+      const ok = await modal('Delete?', `Delete "${acc.title}"?`,
+        [{label:'Cancel',value:false,class:'btn-secondary'},{label:'Delete',value:true,class:'btn-danger'}]);
       if (!ok) return;
       await deleteAccomplishment(id);
-      showToast('Accomplishment deleted', 'success', 5000, async () => {
-        const restored = await undoDelete();
-        if (restored) {
-          if (!useFirebase) { updateFlowerDisplay(); renderMonthlyShelf(); applyFilters(); }
-          showToast('Restored ✅', 'success');
-        }
+      if (!useFirebase) refreshUI();
+      toast('Deleted','success',5000, async ()=>{
+        if (await undoDelete()) { if(!useFirebase) refreshUI(); toast('Restored ✅','success'); }
       });
-      if (!useFirebase) { updateFlowerDisplay(); renderMonthlyShelf(); applyFilters(); }
     }
 
     function addLinkField() {
-      const ll = document.getElementById('form-links-list');
-      const count = ll.querySelectorAll('.form-link-item').length;
-      if (count >= 5) { showToast('Maximum 5 links allowed', 'warning'); return; }
-      const div = document.createElement('div'); div.className = 'form-link-item';
-      div.innerHTML = `<input type="url" class="form-input" id="form-link-input-${count}" name="link-${count}" placeholder="https://example.com" aria-label="Link ${count+1}"/><button type="button" class="form-link-remove">Remove</button>`;
-      div.querySelector('.form-link-remove').onclick = () => div.remove();
+      const ll=document.getElementById('form-links-list');
+      const n=ll.querySelectorAll('.form-link-item').length;
+      if (n>=5) { toast('Maximum 5 links','warning'); return; }
+      const div=document.createElement('div'); div.className='form-link-item';
+      div.innerHTML=`<input type="url" class="form-input" name="link-${n}" placeholder="https://example.com" aria-label="Link ${n+1}"/><button type="button" class="form-link-remove">Remove</button>`;
+      div.querySelector('.form-link-remove').onclick=()=>div.remove();
       ll.appendChild(div);
     }
 
-    async function handleImageUpload(e) {
-      const file = e.target.files[0]; if (!file) return;
-      const errDiv = document.getElementById('form-image-error');
-      const preview = document.getElementById('form-image-preview');
-      if (!file.type.startsWith('image/')) { errDiv.textContent = 'Please select an image file'; preview.style.display = 'none'; return; }
-      if (file.size > 10 * 1024 * 1024) { errDiv.textContent = 'Image too large (max 10MB)'; preview.style.display = 'none'; return; }
+    async function handleImage(e) {
+      const file=e.target.files[0]; if(!file) return;
+      const err=document.getElementById('form-image-error'), prev=document.getElementById('form-image-preview');
+      if (!file.type.startsWith('image/')) { err.textContent='Please select an image'; prev.style.display='none'; return; }
+      if (file.size>10*1024*1024) { err.textContent='Max 10MB'; prev.style.display='none'; return; }
+      err.textContent='Compressing…';
       try {
-        errDiv.textContent = 'Compressing…';
-        const compressed = await compressImage(file, CONFIG.MAX_IMAGE_SIZE);
-        preview.src = compressed; preview.style.display = 'block'; errDiv.textContent = '';
-        showToast('Image compressed ✅', 'success');
-      } catch (err) { errDiv.textContent = 'Error processing image. Try a smaller file.'; preview.style.display = 'none'; }
+        const data = await new Promise((res,rej)=>{
+          const r=new FileReader(); r.onload=e2=>{
+            const img=new Image(); img.onload=()=>{
+              const canvas=document.createElement('canvas');
+              let {width,height}=img; const max=800;
+              if(width>height&&width>max){height=height/width*max;width=max;}
+              else if(height>max){width=width/height*max;height=max;}
+              canvas.width=width; canvas.height=height;
+              canvas.getContext('2d').drawImage(img,0,0,width,height);
+              let q=0.9, d=canvas.toDataURL('image/jpeg',q);
+              while(d.length>CFG.MAX_IMG&&q>0.1){q-=0.1;d=canvas.toDataURL('image/jpeg',q);}
+              d.length>CFG.MAX_IMG?rej(new Error('Too large')):res(d);
+            }; img.src=e2.target.result;
+          }; r.readAsDataURL(file);
+        });
+        prev.src=data; prev.style.display='block'; err.textContent='';
+        toast('Image ready ✅','success');
+      } catch(_) { err.textContent='Image too large, try a smaller file'; prev.style.display='none'; }
     }
 
     function updateCharCount(name) {
-      const input = document.getElementById(`form-${name}-input`);
-      const div = document.getElementById(`form-${name}-count`);
-      const len = input.value.length, max = input.maxLength;
-      div.textContent = `${len} / ${max}`;
-      div.classList.toggle('warning', len > max * 0.9);
-      div.classList.toggle('error', len >= max);
+      const inp=document.getElementById(`form-${name}-input`);
+      const div=document.getElementById(`form-${name}-count`);
+      const l=inp.value.length, max=inp.maxLength;
+      div.textContent=`${l} / ${max}`;
+      div.classList.toggle('warning',l>max*0.9);
+      div.classList.toggle('error',l>=max);
     }
 
-    function autoSaveFormDraft() {
-      if (!isLSAvailable()) return;
-      const fd = getFormData();
-      if (fd.title || fd.summary) try { localStorage.setItem(CONFIG.DRAFT_KEY, JSON.stringify(fd)); } catch (_) {}
-    }
-
-    function loadFormDraft() {
-      if (!isLSAvailable()) return;
-      try {
-        const raw = localStorage.getItem(CONFIG.DRAFT_KEY);
-        if (!raw) return;
-        const draft = JSON.parse(raw);
-        showModal('Restore Draft?', 'You have an unsaved draft. Would you like to restore it?',
-          [{ label: 'Discard', value: false, class: 'btn-ghost' }, { label: 'Restore', value: true, class: 'btn-primary' }]
-        ).then(ok => {
-          if (ok) {
-            ['title','summary','date','person','category'].forEach(f => { document.getElementById(`form-${f}-input`).value = draft[f] || ''; });
-            document.getElementById('form-private-input').checked = draft.private || false;
-            updateCharCount('title'); updateCharCount('summary');
-            if (!document.getElementById('form-body').classList.contains('open')) toggleForm();
-          } else localStorage.removeItem(CONFIG.DRAFT_KEY);
-        });
-      } catch (_) {}
-    }
-
-    /* ============================================================
-       11. EXPORT / IMPORT
-       ============================================================ */
-    function exportJSON() {
-      const data = { ...AppState.data, accomplishments: AppState.data.accomplishments.filter(a => !a.private) };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `clindoc-${new Date().toISOString().split('T')[0]}.json`;
-      a.click(); URL.revokeObjectURL(a.href);
-      showToast('Exported as JSON ✅', 'success');
-    }
-
-    function exportCSV() {
-      const accs = AppState.data.accomplishments.filter(a => !a.private);
-      if (!accs.length) { showToast('No data to export', 'warning'); return; }
-      const headers = ['Title','Summary','Date','Person','Category','Links','Total Reactions'];
-      const rows = accs.map(a => [
-        `"${a.title.replace(/"/g,'""')}"`, `"${a.summary.replace(/"/g,'""')}"`,
-        a.date, `"${a.person.replace(/"/g,'""')}"`, `"${a.category.replace(/"/g,'""')}"`,
-        `"${a.links.join('; ').replace(/"/g,'""')}"`, totalReactions(a)
-      ].join(','));
-      const blob = new Blob([[headers.join(','), ...rows].join('\n')], { type: 'text/csv' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `clindoc-${new Date().toISOString().split('T')[0]}.csv`;
-      a.click(); URL.revokeObjectURL(a.href);
-      showToast('Exported as CSV ✅', 'success');
-    }
-
-    async function showExportMenu() {
-      const fmt = await showModal('Export Data', 'Choose format:',
-        [{ label: 'Cancel', value: null, class: 'btn-ghost' }, { label: 'CSV', value: 'csv', class: 'btn-secondary' }, { label: 'JSON', value: 'json', class: 'btn-primary' }]);
-      if (fmt === 'json') exportJSON();
-      else if (fmt === 'csv') exportCSV();
-    }
-
-    async function importData(file) {
-      try {
-        const raw = await file.text();
-        const imported = JSON.parse(raw);
-        if (!validateData(imported)) { showToast('Invalid file format', 'error'); return; }
-        const ok = await showModal('Import Data?',
-          `Import ${imported.accomplishments.length} accomplishments? Duplicates will be skipped.`,
-          [{ label: 'Cancel', value: false, class: 'btn-ghost' }, { label: 'Import', value: true, class: 'btn-primary' }]);
-        if (!ok) return;
-        let count = 0;
-        imported.accomplishments.forEach(imp => {
-          const dup = AppState.data.accomplishments.some(e => e.title === imp.title && e.date === imp.date && e.person === imp.person);
-          if (!dup) {
-            imp.id = generateUUID();
-            AppState.data.accomplishments.push(imp);
-            count++;
-            if (!AppState.data.categories.includes(imp.category)) AppState.data.categories.push(imp.category);
-            if (!AppState.data.people.includes(imp.person)) AppState.data.people.push(imp.person);
-          }
-        });
-        await saveData(AppState.data);
-        if (!useFirebase) { checkMonthlySnapshot(); updateFlowerDisplay(); renderMonthlyShelf(); applyFilters(); renderFilters(); updateDatalist(); updateFooter(); }
-        showToast(`Imported ${count} accomplishments (${imported.accomplishments.length - count} skipped)`, 'success', 6000);
-      } catch (err) { console.error(err); showToast('Error importing file', 'error'); }
-    }
-
-    /* ============================================================
-       12. FOOTER & DATALIST
-       ============================================================ */
-    function updateFooter() {
-      const total = AppState.data.accomplishments.length;
-      document.getElementById('footer-total-accomplishments').textContent =
-        `${total} total accomplishment${total !== 1 ? 's' : ''}`;
-      const lb = document.getElementById('footer-last-backup');
-      if (AppState.data.settings?.lastBackup) {
-        const d = new Date(AppState.data.settings.lastBackup);
-        lb.textContent = `Last sync: ${d.toLocaleDateString('fr-FR', { month:'2-digit', year:'numeric' })}`;
-      }
-      // else keep the default "Last sync: 05/2026" from HTML
-    }
-
-    function renderCategorySwatches(currentValue) {
-      const container = document.getElementById('category-swatches');
-      if (!container) return;
-      container.innerHTML = '';
-      const cats = [...AppState.data.categories].sort();
-      if (cats.length === 0) return;
-      cats.forEach(cat => {
-        const style = getCategoryStyle(cat);
-        const swatch = document.createElement('div');
-        swatch.className = 'category-swatch' + (cat === currentValue ? ' selected' : '');
-        swatch.style.background = style.bg;
-        swatch.style.color = style.color;
-        swatch.style.borderColor = cat === currentValue ? style.color : 'transparent';
-        swatch.innerHTML = `<span class="category-color-dot" style="background:${style.color}"></span>${sanitizeHTML(cat)}`;
-        swatch.onclick = () => {
-          document.getElementById('form-category-input').value = cat;
+    /* ── Category swatches ────────────────────────────────────── */
+    function renderCategorySwatches(current) {
+      const container=document.getElementById('category-swatches');
+      if (!container || !DATA) return;
+      container.innerHTML='';
+      const cats=[...DATA.categories].sort();
+      if (!cats.length) return;
+      cats.forEach(cat=>{
+        const c=getCatColor(cat);
+        const div=document.createElement('div');
+        div.className='category-swatch'+(cat===current?' selected':'');
+        div.style.cssText=`background:${c.bg};color:${c.fg};border-color:${cat===current?c.fg:'transparent'}`;
+        div.innerHTML=`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${c.fg};margin-right:5px"></span>${esc(cat)}`;
+        div.onclick=()=>{
+          document.getElementById('form-category-input').value=cat;
           renderCategorySwatches(cat);
-          showFieldError('category', validateField('category', cat));
+          showFieldErr('category',validateField('category',cat));
         };
-        container.appendChild(swatch);
+        container.appendChild(div);
       });
     }
 
-        function updateDatalist() {
-      const pDL = document.getElementById('person-datalist');
-      pDL.innerHTML = AppState.data.people.map(p => `<option value="${sanitizeHTML(p)}">`).join('');
-      const cDL = document.getElementById('category-datalist');
-      cDL.innerHTML = AppState.data.categories.map(c => `<option value="${sanitizeHTML(c)}">`).join('');
+    /* ── Datalist ─────────────────────────────────────────────── */
+    function updateDatalist() {
+      const pd=document.getElementById('person-datalist');
+      pd.innerHTML=DATA.people.map(p=>`<option value="${esc(p)}">`).join('');
     }
 
-    /* ============================================================
-       13. STORAGE WARNING
-       ============================================================ */
-    function showConnectionBanner() {
-      const banner = document.getElementById('storage-warning');
-      const text = document.getElementById('storage-warning-text');
-      if (!useFirebase) {
-        banner.style.cssText = 'display:flex;background:#e3f2fd;border-left-color:#2196F3';
-        text.style.color = '#0d47a1';
-        text.textContent = '⚠️ Mode local uniquement. Configurez Firebase pour partager les données en temps réel.';
-      } else {
-        banner.style.display = 'none';
+    /* ── Footer ───────────────────────────────────────────────── */
+    function updateFooter() {
+      const total=DATA.accomplishments.length;
+      document.getElementById('footer-total-accomplishments').textContent=
+        `${total} total accomplishment${total!==1?'s':''}`;
+      if (DATA.settings?.lastBackup) {
+        const d=new Date(DATA.settings.lastBackup);
+        document.getElementById('footer-last-backup').textContent=
+          `Last sync: ${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
       }
     }
 
-    /* ============================================================
-       14. EVENT LISTENERS
-       ============================================================ */
-    function initEventListeners() {
-      // Export/Import kept as hidden functionality (no UI buttons)
-      const btnExp = document.getElementById('btn-export');
-      if (btnExp) btnExp.onclick = showExportMenu;
-      const btnImp = document.getElementById('btn-import');
-      if (btnImp) btnImp.onclick = () => document.getElementById('import-file-input').click();
-      document.getElementById('import-file-input').onchange = e => { if (e.target.files[0]) importData(e.target.files[0]); e.target.value = ''; };
+    /* ── Draft autosave ───────────────────────────────────────── */
+    function saveDraft() {
+      if (!lsOk()) return;
+      const fd=getFormData();
+      if (fd.title||fd.summary) try{localStorage.setItem(CFG.LS_DRAFT,JSON.stringify(fd));}catch(_){}
+    }
+
+    function loadDraft() {
+      if (!lsOk()) return;
+      try {
+        const raw=localStorage.getItem(CFG.LS_DRAFT); if(!raw) return;
+        const d=JSON.parse(raw);
+        modal('Restore draft?','You have an unsaved draft. Restore it?',
+          [{label:'Discard',value:false,class:'btn-ghost'},{label:'Restore',value:true,class:'btn-primary'}]
+        ).then(ok=>{
+          if(ok){
+            ['title','summary','date','person','category'].forEach(f=>{document.getElementById(`form-${f}-input`).value=d[f]||'';});
+            document.getElementById('form-private-input').checked=!!d.private;
+            updateCharCount('title'); updateCharCount('summary');
+            renderCategorySwatches(d.category||'');
+            openForm();
+          } else localStorage.removeItem(CFG.LS_DRAFT);
+        });
+      } catch(_){}
+    }
+
+    /* ── Export / Import ──────────────────────────────────────── */
+    async function showExportMenu() {
+      const fmt=await modal('Export data','Choose format:',
+        [{label:'Cancel',value:null,class:'btn-ghost'},{label:'CSV',value:'csv',class:'btn-secondary'},{label:'JSON',value:'json',class:'btn-primary'}]);
+      if (fmt==='json') {
+        const blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});
+        const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`clindoc-${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(a.href);
+        toast('Exported ✅','success');
+      } else if (fmt==='csv') {
+        const h=['Title','Summary','Date','Person','Category','Links','Reactions'];
+        const rows=DATA.accomplishments.map(a=>[
+          `"${a.title.replace(/"/g,'""')}"`,`"${a.summary.replace(/"/g,'""')}"`,
+          a.date,`"${a.person.replace(/"/g,'""')}"`,`"${a.category.replace(/"/g,'""')}"`,
+          `"${(a.links||[]).join('; ')}"`,totalRx(a)
+        ].join(','));
+        const blob=new Blob([[h.join(','),...rows].join('\n')],{type:'text/csv'});
+        const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`clindoc-${new Date().toISOString().split('T')[0]}.csv`; a.click(); URL.revokeObjectURL(a.href);
+        toast('Exported ✅','success');
+      }
+    }
+
+    async function importFile(file) {
+      try {
+        const imported=JSON.parse(await file.text());
+        if (!validData(imported)) { toast('Invalid file format','error'); return; }
+        const ok=await modal('Import?',`Import ${imported.accomplishments.length} accomplishments?`,
+          [{label:'Cancel',value:false,class:'btn-ghost'},{label:'Import',value:true,class:'btn-primary'}]);
+        if (!ok) return;
+        let n=0;
+        imported.accomplishments.forEach(imp=>{
+          const dup=DATA.accomplishments.some(e=>e.title===imp.title&&e.date===imp.date&&e.person===imp.person);
+          if(!dup){imp.id=uuid();DATA.accomplishments.push(imp);n++;
+            if(!DATA.categories.includes(imp.category)) DATA.categories.push(imp.category);
+            if(!DATA.people.includes(imp.person)) DATA.people.push(imp.person);}
+        });
+        await saveData();
+        if (!useFirebase) refreshUI();
+        toast(`Imported ${n} (${imported.accomplishments.length-n} skipped)`,'success',6000);
+      } catch(e){ console.error(e); toast('Import failed','error'); }
+    }
+
+    /* ── Event listeners ──────────────────────────────────────── */
+    function bindEvents() {
+      // Form toggle
       document.getElementById('form-header').onclick = toggleForm;
-      document.getElementById('form-header').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleForm(); } };
-      document.getElementById('accomplishment-form').onsubmit = handleFormSubmit;
-      document.getElementById('btn-cancel-form').onclick = () => { if (AppState.editingId) clearForm(); toggleForm(); };
-      ['title','summary','date','person','category'].forEach(f => {
-        const inp = document.getElementById(`form-${f}-input`);
-        inp.onblur = () => showFieldError(f, validateField(f, inp.value));
+      document.getElementById('form-header').onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleForm();} };
+      document.getElementById('accomplishment-form').onsubmit = handleSubmit;
+      document.getElementById('btn-cancel-form').onclick = ()=>{ closeForm(); resetForm(); };
+
+      // Field validation on blur
+      ['title','summary','date','person','category'].forEach(f=>{
+        document.getElementById(`form-${f}-input`).onblur=()=>{
+          showFieldErr(f,validateField(f,document.getElementById(`form-${f}-input`).value));
+        };
       });
-      document.getElementById('form-title-input').oninput = () => updateCharCount('title');
-      document.getElementById('form-summary-input').oninput = () => updateCharCount('summary');
-      document.getElementById('btn-add-link').onclick = addLinkField;
-      document.getElementById('form-image-input').onchange = handleImageUpload;
-      let searchTimer;
-      document.getElementById('search-input').oninput = e => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => { AppState.filters.search = e.target.value; applyFilters(); renderFilters(); }, 300);
-      };
-      document.getElementById('filter-person').onchange = e => { AppState.filters.person = e.target.value; applyFilters(); renderFilters(); };
-      document.getElementById('filter-category').onchange = e => { AppState.filters.category = e.target.value; applyFilters(); renderFilters(); };
-      document.getElementById('filter-date-from').onchange = e => { AppState.filters.dateFrom = e.target.value; applyFilters(); renderFilters(); };
-      document.getElementById('filter-date-to').onchange = e => { AppState.filters.dateTo = e.target.value; applyFilters(); renderFilters(); };
-      document.getElementById('filter-sort').onchange = e => { AppState.filters.sort = e.target.value; applyFilters(); };
-      document.getElementById('btn-clear-filters').onclick = clearFilters;
-      document.getElementById('form-person-input').oninput = updateDatalist;
-      document.getElementById('form-category-input').oninput = e => {
-        updateDatalist();
+      // Char counters
+      document.getElementById('form-title-input').oninput=()=>updateCharCount('title');
+      document.getElementById('form-summary-input').oninput=()=>updateCharCount('summary');
+      // Category swatches on type
+      document.getElementById('form-category-input').oninput=e=>{
         renderCategorySwatches(e.target.value);
+        updateDatalist();
       };
-      AppState.autoSaveTimer = setInterval(autoSaveFormDraft, CONFIG.AUTO_SAVE_INTERVAL);
+      // Links
+      document.getElementById('btn-add-link').onclick=addLinkField;
+      // Image
+      document.getElementById('form-image-input').onchange=handleImage;
+
+      // Search & filters
+      let searchTimer;
+      document.getElementById('search-input').oninput=e=>{
+        clearTimeout(searchTimer);
+        searchTimer=setTimeout(()=>{ FILTERS.search=e.target.value; applyFilters(); renderFilterControls(); },300);
+      };
+      document.getElementById('filter-person').onchange=e=>{ FILTERS.person=e.target.value; applyFilters(); renderFilterControls(); };
+      document.getElementById('filter-category').onchange=e=>{ FILTERS.category=e.target.value; applyFilters(); renderFilterControls(); };
+      document.getElementById('filter-date-from').onchange=e=>{ FILTERS.dateFrom=e.target.value; applyFilters(); renderFilterControls(); };
+      document.getElementById('filter-date-to').onchange=e=>{ FILTERS.dateTo=e.target.value; applyFilters(); renderFilterControls(); };
+      document.getElementById('filter-sort').onchange=e=>{ FILTERS.sort=e.target.value; applyFilters(); };
+      document.getElementById('btn-clear-filters').onclick=clearFilters;
+
+      // Export/Import (hidden but functional)
+      const btnExp=document.getElementById('btn-export');
+      const btnImp=document.getElementById('btn-import');
+      const fileInp=document.getElementById('import-file-input');
+      if(btnExp) btnExp.onclick=showExportMenu;
+      if(btnImp) btnImp.onclick=()=>fileInp.click();
+      fileInp.onchange=e=>{ if(e.target.files[0]) importFile(e.target.files[0]); e.target.value=''; };
+
+      // Autosave draft
+      setInterval(saveDraft, 30000);
     }
 
-    /* ============================================================
-       15. MAIN ENTRY – called when Firebase data first arrives
-       ============================================================ */
-    function onDataReady() {
-      checkMonthlySnapshot();
-      updateFlowerDisplay();
-      renderMonthlyShelf();
-      applyFilters();
-      renderFilters();
-      updateDatalist();
-      renderCategorySwatches(document.getElementById('form-category-input')?.value || '');
-      updateFooter();
-    }
-
-    /* ============================================================
-       16. INIT
-       ============================================================ */
+    /* ── Init ─────────────────────────────────────────────────── */
     function init() {
-      AppState.myReactions = loadMyReactions();
-      showConnectionBanner();
-      subscribeToData();   // sets AppState.data then calls onDataReady
-      initEventListeners();
-      setTimeout(loadFormDraft, 1500);
-      console.log('🚀 ClinDoc ready – mode:', useFirebase ? 'Firebase ☁️' : 'localStorage');
+      loadCatColors();
+      try { MY_REACTIONS = JSON.parse(localStorage.getItem(CFG.LS_REACTIONS)||'{}'); } catch(_) { MY_REACTIONS={}; }
+
+      if (useFirebase) {
+        // Firebase: realtime listener refreshes UI on every change
+        onValue(ref(db,'clindoc/data'), snapshot => {
+          DATA = fromFirebase(snapshot.val());
+          refreshUI();
+        }, err => {
+          console.error('Firebase error:',err);
+          toast('Firebase error – switching to local mode','warning',6000);
+          useFirebase=false;
+          loadLocal();
+        });
+      } else {
+        loadLocal();
+      }
+
+      bindEvents();
+      setTimeout(loadDraft, 1200);
     }
 
-    // Run after DOM is parsed (module scripts are deferred by default, so DOM is ready)
+    function loadLocal() {
+      DATA = defaultData();
+      if (lsOk()) {
+        try {
+          const raw=localStorage.getItem(CFG.LS_DATA);
+          if(raw){ const p=JSON.parse(raw); if(validData(p)) DATA=p; }
+        } catch(_) {}
+      }
+      refreshUI();
+      // Show info banner
+      const banner=document.getElementById('storage-warning');
+      const txt=document.getElementById('storage-warning-text');
+      if(banner&&txt){
+        banner.style.cssText='display:flex;background:#e3f2fd;border-left:4px solid #2196F3';
+        txt.style.color='#0d47a1';
+        txt.textContent='⚠️ Mode local uniquement – configurez Firebase pour partager les données en temps réel.';
+      }
+    }
+
+    // Module scripts are deferred — DOM is guaranteed ready
     init();
 
   </script>
