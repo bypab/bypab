@@ -559,18 +559,6 @@
       transform: translateY(-2px);
     }
 
-    .card-private-badge {
-      position: absolute; top: 10px; right: 10px;
-      background: var(--gray);
-      color: var(--white);
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 99px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      z-index: 10;
-    }
 
     .card-image {
       width: 100%; height: 160px;
@@ -1254,12 +1242,10 @@
                 id="form-person-input" 
                 name="person"
                 maxlength="50"
-                list="person-datalist"
                 required
                 aria-required="true"
                 aria-describedby="form-person-error"
               />
-              <datalist id="person-datalist"></datalist>
               <div class="form-error" id="form-person-error" role="alert"></div>
             </div>
 
@@ -1280,48 +1266,7 @@
                 aria-describedby="form-category-error"
                 autocomplete="off"
               />
-              <div class="category-swatch-row" id="category-swatches"></div>
               <div class="form-error" id="form-category-error" role="alert"></div>
-            </div>
-
-            <!-- Private checkbox -->
-            <div class="form-group">
-              <div class="form-checkbox-group">
-                <input 
-                  type="checkbox" 
-                  class="form-checkbox" 
-                  id="form-private-input" 
-                  name="private"
-                  aria-describedby="form-private-hint"
-                />
-                <label class="form-label" for="form-private-input" style="margin: 0;">
-                  Private <span class="optional">(excluded from exports)</span>
-                </label>
-              </div>
-              <p class="form-hint" id="form-private-hint">Visible in app, but not exported</p>
-            </div>
-
-            <!-- Links -->
-            <div class="form-group form-full">
-              <label class="form-label" for="form-link-input-0">
-                External Links <span class="optional">(optional)</span>
-              </label>
-              <div class="form-links-list" id="form-links-list">
-                <div class="form-link-item">
-                  <input 
-                    type="url" 
-                    class="form-input" 
-                    id="form-link-input-0" 
-                    name="link-0"
-                    placeholder="https://example.com"
-                    aria-label="Link 1"
-                  />
-                </div>
-              </div>
-              <button type="button" class="btn btn-ghost btn-sm" id="btn-add-link" style="margin-top: 6px;">
-                + Add Another Link
-              </button>
-              <div class="form-error" id="form-links-error" role="alert"></div>
             </div>
 
             <!-- Image upload -->
@@ -1577,7 +1522,7 @@
       const acc = {
         id: uuid(), title: fd.title.trim(), summary: fd.summary.trim(),
         date: fd.date, person: fd.person.trim(), category: fd.category.trim(),
-        links: fd.links||[], image: fd.image||null, private: !!fd.private,
+        links: fd.links||[], image: fd.image||null,
         reactions: { applause:[], confetti:[], happy:[], surprised:[] },
         createdAt: new Date().toISOString(), modifiedAt: new Date().toISOString()
       };
@@ -1593,7 +1538,7 @@
       Object.assign(acc, {
         title:fd.title.trim(), summary:fd.summary.trim(), date:fd.date,
         person:fd.person.trim(), category:fd.category.trim(),
-        links:fd.links, image:fd.image, private:!!fd.private,
+        links:fd.links, image:fd.image,
         modifiedAt: new Date().toISOString()
       });
       if (!DATA.categories.includes(acc.category)) DATA.categories.push(acc.category);
@@ -1714,7 +1659,11 @@
       const months = new Set();
       DATA.accomplishments.forEach(a=>months.add(a.date.substring(0,7)));
       Object.keys(DATA.monthlySnapshots).forEach(m=>months.add(m));
-      const sorted = [...months].sort().reverse();
+      // Only show current month and months that have accomplishments
+      const sorted = [...months].filter(m => {
+        const hasAccs = DATA.accomplishments.some(a => a.date.startsWith(m));
+        return hasAccs;
+      }).sort().reverse();
       if (!sorted.length) {
         container.innerHTML='<p style="color:var(--gray);text-align:center;padding:20px">No archived months yet</p>';
         return;
@@ -1842,8 +1791,7 @@
           </button>`;
         }).join('');
         c.innerHTML = `
-          ${acc.private?'<div class="card-private-badge">Private</div>':''}
-          ${imgHTML}
+${imgHTML}
           <div class="card-body">
             <span class="card-category" style="--cat-bg:${cat.bg};--cat-color:${cat.fg};--cat-border:${cat.bd}">${esc(acc.category)}</span>
             <h3 class="card-title">${highlight(acc.title)}</h3>
@@ -1874,9 +1822,7 @@
       renderShelf();
       applyFilters();
       renderFilterControls();
-      updateDatalist();
       updateFooter();
-      renderCategorySwatches(document.getElementById('form-category-input')?.value||'');
     }
 
     /* ── Form ─────────────────────────────────────────────────── */
@@ -1920,7 +1866,6 @@
       document.getElementById('form-summary-count').textContent='0 / 500';
       document.getElementById('btn-submit-form').innerHTML='<span>✨</span> Add Accomplishment';
       EDITING_ID = null;
-      renderCategorySwatches('');
     }
 
     function getFormData() {
@@ -1931,7 +1876,7 @@
       return {
         title: fd.get('title')||'', summary: fd.get('summary')||'',
         date: fd.get('date')||'', person: fd.get('person')||'',
-        category: fd.get('category')||'', private: fd.get('private')==='on',
+        category: fd.get('category')||'',
         links, image: prev.style.display!=='none' ? prev.src : null
       };
     }
@@ -1993,7 +1938,6 @@
       document.getElementById('form-date-input').value = acc.date;
       document.getElementById('form-person-input').value = acc.person;
       document.getElementById('form-category-input').value = acc.category;
-      document.getElementById('form-private-input').checked = acc.private;
       const ll=document.getElementById('form-links-list');
       ll.innerHTML = acc.links.length
         ? acc.links.map((l,i)=>`<div class="form-link-item"><input type="url" class="form-input" name="link-${i}" value="${esc(l)}" placeholder="https://example.com" aria-label="Link ${i+1}"/>${i>0?'<button type="button" class="form-link-remove">Remove</button>':''}</div>`).join('')
@@ -2002,7 +1946,6 @@
       if (acc.image) { const p=document.getElementById('form-image-preview'); p.src=acc.image; p.style.display='block'; }
       updateCharCount('title'); updateCharCount('summary');
       document.getElementById('btn-submit-form').innerHTML='<span>💾</span> Update Accomplishment';
-      renderCategorySwatches(acc.category);
       openForm();
       document.getElementById('form-section').scrollIntoView({behavior:'smooth'});
     }
@@ -2066,35 +2009,8 @@
       div.classList.toggle('error',l>=max);
     }
 
-    /* ── Category swatches ────────────────────────────────────── */
-    function renderCategorySwatches(current) {
-      const container=document.getElementById('category-swatches');
-      if (!container || !DATA) return;
-      container.innerHTML='';
-      const cats=[...DATA.categories].sort();
-      if (!cats.length) return;
-      cats.forEach(cat=>{
-        const c=getCatColor(cat);
-        const div=document.createElement('div');
-        div.className='category-swatch'+(cat===current?' selected':'');
-        div.style.cssText=`background:${c.bg};color:${c.fg};border-color:${cat===current?c.fg:'transparent'}`;
-        div.innerHTML=`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${c.fg};margin-right:5px"></span>${esc(cat)}`;
-        div.onclick=()=>{
-          document.getElementById('form-category-input').value=cat;
-          renderCategorySwatches(cat);
-          showFieldErr('category',validateField('category',cat));
-        };
-        container.appendChild(div);
-      });
-    }
-
     /* ── Datalist ─────────────────────────────────────────────── */
-    function updateDatalist() {
-      const pd=document.getElementById('person-datalist');
-      pd.innerHTML=DATA.people.map(p=>`<option value="${esc(p)}">`).join('');
-    }
-
-    /* ── Footer ───────────────────────────────────────────────── */
+/* ── Footer ───────────────────────────────────────────────── */
     function updateFooter() {
       const total=DATA.accomplishments.length;
       document.getElementById('footer-total-accomplishments').textContent=
@@ -2123,9 +2039,7 @@
         ).then(ok=>{
           if(ok){
             ['title','summary','date','person','category'].forEach(f=>{document.getElementById(`form-${f}-input`).value=d[f]||'';});
-            document.getElementById('form-private-input').checked=!!d.private;
             updateCharCount('title'); updateCharCount('summary');
-            renderCategorySwatches(d.category||'');
             openForm();
           } else localStorage.removeItem(CFG.LS_DRAFT);
         });
@@ -2192,9 +2106,7 @@
       document.getElementById('form-summary-input').oninput=()=>updateCharCount('summary');
       // Category swatches on type
       document.getElementById('form-category-input').oninput=e=>{
-        renderCategorySwatches(e.target.value);
-        updateDatalist();
-      };
+        };
       // Links
       document.getElementById('btn-add-link').onclick=addLinkField;
       // Image
