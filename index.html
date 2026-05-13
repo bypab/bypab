@@ -1,2188 +1,1619 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ClinDoc Innovation – Team Accomplishments</title>
-  <meta name="description" content="ClinDoc Innovation team accomplishment tracker and celebration board" />
-  <meta name="robots" content="noindex, nofollow" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%86%3C/text%3E%3C/svg%3E" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>" />
+  <title>Complice — Votre compagnon au quotidien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
     /* ============================================================
-       CSS CUSTOM PROPERTIES – Edit these to retheme the entire app
-       ============================================================ */
+       VARIABLES & RESET
+    ============================================================ */
     :root {
-      /* Sanofi Brand */
-      --purple:        #663399;
-      --purple-light:  #9966CC;
-      --purple-dark:   #4a2070;
-      --purple-faint:  rgba(102, 51, 153, 0.08);
-      --purple-hover:  rgba(102, 51, 153, 0.15);
-
-      /* Neutrals */
-      --gray:          #666666;
-      --gray-light:    #f5f5f7;
-      --gray-mid:      #e0e0e0;
-      --gray-dark:     #333333;
-      --white:         #ffffff;
-
-      /* Semantic */
-      --success:       #4CAF50;
-      --warning:       #FF9800;
-      --error:         #F44336;
-      --info:          #2196F3;
-
-      /* Flower accent colours */
-      --flower-green:  #4CAF50;
-      --flower-yellow: #FFEB3B;
-      --flower-orange: #FF9800;
-      --flower-pink:   #E91E63;
-      --flower-red:    #F44336;
-
-      /* Badge colours */
-      --bronze:        #CD7F32;
-      --silver:        #C0C0C0;
-      --gold:          #FFD700;
-
-      /* Layout */
-      --radius:        12px;
-      --radius-sm:     6px;
-      --shadow:        0 2px 12px rgba(0,0,0,0.10);
-      --shadow-lg:     0 6px 28px rgba(0,0,0,0.15);
-      --transition:    0.22s ease;
-
-      /* Typography */
-      --font:          'Segoe UI', system-ui, -apple-system, sans-serif;
+      --blue-dark:   #1B3456;
+      --blue-light:  #3BBEE9;
+      --blue-mid:    #2a6fa8;
+      --white:       #FFFFFF;
+      --off-white:   #F7FAFC;
+      --sand:        #F3EDE4;
+      --green:       #7BC6A4;
+      --text-main:   #1B3456;
+      --text-muted:  #607B96;
+      --border:      #DDE8F0;
+      --shadow-sm:   0 2px 12px rgba(27,52,86,.08);
+      --shadow-md:   0 8px 32px rgba(27,52,86,.12);
+      --shadow-lg:   0 20px 60px rgba(27,52,86,.16);
+      --radius:      16px;
+      --radius-sm:   10px;
+      --radius-lg:   24px;
+      --transition:  .25s cubic-bezier(.4,0,.2,1);
     }
 
-    /* ============================================================
-       RESET & BASE
-       ============================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; font-size: 16px; }
-
     body {
-      font-family: var(--font);
-      background: var(--gray-light);
-      color: var(--gray-dark);
-      min-height: 100vh;
-      line-height: 1.6;
+      font-family: 'Lato', sans-serif;
+      color: var(--text-main);
+      background: var(--white);
+      overflow-x: hidden;
+      line-height: 1.7;
     }
 
+    h1,h2,h3,h4,h5 { font-family: 'Manrope', sans-serif; line-height: 1.25; font-weight: 700; }
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.5rem); }
+    h3 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
+    h4 { font-size: 1.1rem; }
+    p  { font-size: 1.05rem; color: var(--text-muted); }
+
+    a { text-decoration: none; color: inherit; }
     img { max-width: 100%; display: block; }
-    button { cursor: pointer; font-family: var(--font); }
-    a { color: var(--purple); }
-    input, textarea, select { font-family: var(--font); }
-
-    /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
+    ul { list-style: none; }
 
     /* ============================================================
-       ACCESSIBILITY – Focus styles
-       ============================================================ */
-    :focus-visible {
-      outline: 3px solid var(--purple-light);
-      outline-offset: 2px;
-      border-radius: var(--radius-sm);
-    }
+       UTILITIES
+    ============================================================ */
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
 
-    .sr-only {
-      position: absolute; width: 1px; height: 1px;
-      padding: 0; margin: -1px; overflow: hidden;
-      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-    }
-
-    /* ============================================================
-       LAYOUT CONTAINERS
-       ============================================================ */
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-
-    /* ============================================================
-       HEADER
-       ============================================================ */
-    #app-header {
-      background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 60%, var(--purple-light) 100%);
-      color: var(--white);
-      padding: 18px 0 14px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .header-brand { display: flex; align-items: center; gap: 12px; }
-
-    .header-logo {
-      width: 42px; height: 42px;
-      background: rgba(255,255,255,0.18);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-
-    .header-title { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.3px; }
-    .header-subtitle { font-size: 0.78rem; opacity: 0.82; margin-top: 1px; }
-
-    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    .btn-header {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: var(--white);
-      padding: 7px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 0.82rem;
-      font-weight: 600;
-      transition: background var(--transition);
-      display: flex; align-items: center; gap: 5px;
-      min-height: 36px;
-    }
-    .btn-header:hover { background: rgba(255,255,255,0.28); }
-
-    /* ============================================================
-       TOAST NOTIFICATIONS
-       ============================================================ */
-    #toast-container {
-      position: fixed;
-      bottom: 24px; right: 24px;
-      z-index: 9999;
-      display: flex; flex-direction: column; gap: 8px;
-      pointer-events: none;
-    }
-
-    .toast {
-      background: var(--gray-dark);
-      color: var(--white);
-      padding: 12px 18px;
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
-      box-shadow: var(--shadow-lg);
-      pointer-events: all;
-      display: flex; align-items: center; gap: 10px;
-      max-width: 340px;
-      animation: toastIn 0.3s ease forwards;
-    }
-    .toast.success { background: var(--success); }
-    .toast.error   { background: var(--error); }
-    .toast.warning { background: var(--warning); color: var(--gray-dark); }
-    .toast.info    { background: var(--info); }
-
-    .toast-undo {
-      margin-left: auto;
-      background: rgba(255,255,255,0.25);
-      border: none;
-      color: inherit;
-      padding: 3px 9px;
-      border-radius: 4px;
-      font-size: 0.8rem;
+    .badge {
+      display: inline-block;
+      background: rgba(59,190,233,.12);
+      color: var(--blue-light);
+      font-family: 'Manrope', sans-serif;
+      font-size: .78rem;
       font-weight: 700;
-      cursor: pointer;
-    }
-
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes toastOut {
-      from { opacity: 1; transform: translateY(0); }
-      to   { opacity: 0; transform: translateY(16px); }
-    }
-
-    /* ============================================================
-       MODAL / DIALOG
-       ============================================================ */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 500;
-      display: flex; align-items: center; justify-content: center;
-      padding: 16px;
-      animation: fadeIn 0.2s ease;
-    }
-    .modal-box {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 28px;
-      max-width: 480px; width: 100%;
-      box-shadow: var(--shadow-lg);
-      animation: slideUp 0.25s ease;
-    }
-    .modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: var(--purple); }
-    .modal-body  { font-size: 0.92rem; color: var(--gray); margin-bottom: 20px; line-height: 1.6; }
-    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-
-    @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    /* ============================================================
-       BUTTONS (general)
-       ============================================================ */
-    .btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 9px 18px;
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
-      font-weight: 600;
-      border: none;
-      transition: all var(--transition);
-      min-height: 40px;
-      white-space: nowrap;
-    }
-    .btn-primary   { background: var(--purple); color: var(--white); }
-    .btn-primary:hover { background: var(--purple-dark); }
-    .btn-secondary { background: var(--white); color: var(--purple); border: 1.5px solid var(--purple); }
-    .btn-secondary:hover { background: var(--purple-faint); }
-    .btn-danger    { background: var(--error); color: var(--white); }
-    .btn-danger:hover { background: #c62828; }
-    .btn-ghost     { background: transparent; color: var(--gray); border: 1.5px solid var(--gray-mid); }
-    .btn-ghost:hover { background: var(--gray-light); }
-    .btn-sm        { padding: 5px 12px; font-size: 0.8rem; min-height: 32px; }
-    .btn:disabled  { opacity: 0.45; cursor: not-allowed; }
-
-    /* ============================================================
-       SECTION WRAPPERS
-       ============================================================ */
-    .section {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin: 20px 0;
-      overflow: hidden;
-    }
-
-    .section-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--gray-mid);
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .section-title {
-      font-size: 1rem; font-weight: 700;
-      color: var(--purple);
-      display: flex; align-items: center; gap: 8px;
-    }
-
-    .section-body { padding: 20px; }
-
-    /* ============================================================
-       STORAGE WARNING BANNER
-       ============================================================ */
-    #storage-warning {
-      background: #fff3e0;
-      border-left: 4px solid var(--warning);
-      padding: 10px 16px;
-      font-size: 0.85rem;
-      color: #7a4f00;
-      display: none;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* ============================================================
-       FLOWER GARDEN SECTION - SVG ANIMATED FLOWER
-       ============================================================ */
-    #flower-section .section-body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 28px 20px;
-      background: linear-gradient(to bottom, #f0f9ff 0%, var(--white) 100%);
-    }
-
-    .flower-stage-label {
-      font-size: 0.78rem;
-      font-weight: 700;
+      letter-spacing: .08em;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--purple-light);
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: 16px;
     }
 
-    .flower-display {
-      position: relative;
-      width: 280px;
-      height: 320px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .section-tag { text-align: center; margin-bottom: 48px; }
+    .section-tag h2 { margin-bottom: 12px; }
+    .section-tag p  { max-width: 580px; margin: 0 auto; font-size: 1.1rem; }
 
-    /* SVG Flower Container */
-    #flower-svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 50px; font-family: 'Manrope', sans-serif;
+      font-weight: 700; font-size: .95rem; cursor: pointer;
+      transition: var(--transition); border: none; white-space: nowrap;
     }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue-light), var(--blue-mid));
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(59,190,233,.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(59,190,233,.45); }
 
-    /* Flower animations */
-    @keyframes growStem {
-      from { transform: scaleY(0); transform-origin: bottom; }
-      to   { transform: scaleY(1); transform-origin: bottom; }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--blue-dark);
+      color: var(--blue-dark);
     }
+    .btn-outline:hover { background: var(--blue-dark); color: #fff; transform: translateY(-2px); }
 
-    @keyframes growLeaf {
-      from { transform: scale(0); opacity: 0; }
-      to   { transform: scale(1); opacity: 1; }
+    .btn-ghost {
+      background: rgba(255,255,255,.15);
+      border: 2px solid rgba(255,255,255,.4);
+      color: var(--white);
+      backdrop-filter: blur(8px);
     }
+    .btn-ghost:hover { background: rgba(255,255,255,.25); transform: translateY(-2px); }
 
-    @keyframes growBud {
-      from { transform: scale(0); opacity: 0; }
-      to   { transform: scale(1); opacity: 1; }
-    }
+    .btn-sm { padding: 10px 20px; font-size: .85rem; }
 
-    @keyframes bloomPetal {
-      from { transform: scale(0) rotate(-20deg); opacity: 0; }
-      to   { transform: scale(1) rotate(0deg); opacity: 1; }
-    }
-
-    @keyframes sway {
-      0%, 100% { transform: rotate(-2deg); }
-      50%      { transform: rotate(2deg); }
-    }
-
-    @keyframes petalFloat {
-      0%, 100% { transform: translateY(0px); }
-      50%      { transform: translateY(-3px); }
-    }
-
-    @keyframes sparkle {
-      0%, 100% { opacity: 0; transform: scale(0); }
-      50%      { opacity: 1; transform: scale(1); }
-    }
-
-    /* Celebration particles for full bloom */
-    .celebration-particles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: visible;
-    }
-
-    .particle {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      animation: particleFall 3s ease-in infinite;
-      opacity: 0;
-    }
-
-    @keyframes particleFall {
-      0%   { opacity: 1; transform: translateY(-20px) rotate(0deg) scale(1); }
-      100% { opacity: 0; transform: translateY(200px) rotate(360deg) scale(0.3); }
-    }
-
-    /* Glow effect for full bloom */
-    .flower-display.blooming #flower-svg {
-      filter: drop-shadow(0 0 20px rgba(233, 30, 99, 0.4)) drop-shadow(0 4px 12px rgba(0,0,0,0.1));
-      animation: glowPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes glowPulse {
-      0%, 100% { filter: drop-shadow(0 0 20px rgba(233, 30, 99, 0.4)) drop-shadow(0 4px 12px rgba(0,0,0,0.1)); }
-      50%      { filter: drop-shadow(0 0 30px rgba(233, 30, 99, 0.6)) drop-shadow(0 4px 16px rgba(0,0,0,0.15)); }
-    }
-
-    .flower-progress-bar {
-      width: 100%; max-width: 320px;
-      height: 8px;
-      background: var(--gray-mid);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .flower-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--purple), var(--purple-light));
-      border-radius: 99px;
-      transition: width 0.6s ease;
-    }
-
-    .flower-message {
-      font-size: 0.92rem;
-      color: var(--gray);
-      text-align: center;
-      font-style: italic;
-      max-width: 360px;
-    }
-
-    .flower-stats {
-      display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
-    }
-    .flower-stat {
-      text-align: center;
-    }
-    .flower-stat-value {
-      font-size: 1.5rem; font-weight: 800; color: var(--purple);
-      line-height: 1;
-    }
-    .flower-stat-label {
-      font-size: 0.72rem; text-transform: uppercase;
-      letter-spacing: 0.8px; color: var(--gray); margin-top: 2px;
-    }
-
-    /* ============================================================
-       FILTERS & SEARCH
-       ============================================================ */
-    #filters-section .section-body {
-      display: flex; flex-direction: column; gap: 14px;
-    }
-
-    .search-row {
-      display: flex; gap: 10px; align-items: center;
-    }
-
-    .search-input-wrap {
-      position: relative; flex: 1;
-    }
-    .search-input-wrap .search-icon {
-      position: absolute; left: 12px; top: 50%;
-      transform: translateY(-50%);
-      color: var(--gray); font-size: 1rem; pointer-events: none;
-    }
-    .search-input {
-      width: 100%;
-      padding: 9px 12px 9px 36px;
-      border: 1.5px solid var(--gray-mid);
-      border-radius: var(--radius-sm);
-      font-size: 0.9rem;
-      transition: border-color var(--transition);
-      background: var(--white);
-    }
-    .search-input:focus { border-color: var(--purple); outline: none; }
-
-    .filters-row {
-      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-    }
-
-    .filter-select {
-      padding: 8px 12px;
-      border: 1.5px solid var(--gray-mid);
-      border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      background: var(--white);
-      color: var(--gray-dark);
-      cursor: pointer;
-      transition: border-color var(--transition);
-      min-height: 38px;
-    }
-    .filter-select:focus { border-color: var(--purple); outline: none; }
-
-    .filter-date-group {
-      display: flex; gap: 6px; align-items: center;
-      font-size: 0.82rem; color: var(--gray);
-    }
-    .filter-date-input {
-      padding: 7px 10px;
-      border: 1.5px solid var(--gray-mid);
-      border-radius: var(--radius-sm);
-      font-size: 0.82rem;
-      background: var(--white);
-      min-height: 38px;
-    }
-    .filter-date-input:focus { border-color: var(--purple); outline: none; }
-
-    .filter-tags {
-      display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-    }
-    .filter-tag {
-      background: var(--purple-faint);
-      color: var(--purple);
-      border: 1px solid var(--purple-light);
-      padding: 3px 10px;
-      border-radius: 99px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .filter-tag-remove {
-      background: none; border: none;
-      color: var(--purple); font-size: 0.9rem;
-      cursor: pointer; padding: 0; line-height: 1;
-    }
-
-    .results-count {
-      font-size: 0.82rem; color: var(--gray);
-      margin-left: auto;
-    }
-
-    /* Sort controls */
-    .sort-row {
-      display: flex; gap: 8px; align-items: center;
-      font-size: 0.82rem; color: var(--gray);
-    }
-
-    /* ============================================================
-       ACCOMPLISHMENT CARDS
-       ============================================================ */
-    #cards-section .section-body { padding: 16px; }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 16px;
-    }
-
+    /* Cards */
     .card {
       background: var(--white);
-      border: 1.5px solid var(--gray-mid);
       border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
       overflow: hidden;
-      transition: box-shadow var(--transition), transform var(--transition);
-      display: flex; flex-direction: column;
-      position: relative;
+      transition: var(--transition);
     }
-    .card:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
-    }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
 
-
-    .card-image {
-      width: 100%; height: 160px;
-      object-fit: cover;
-      background: var(--gray-light);
-    }
-    .card-image-placeholder {
-      width: 100%; height: 120px;
-      background: linear-gradient(135deg, var(--purple-faint), var(--gray-light));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2.5rem;
-      color: var(--purple-light);
-    }
-
-    .card-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
-
-    .card-category {
-      display: inline-block;
-      background: var(--cat-bg, var(--purple-faint));
-      color: var(--cat-color, var(--purple));
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 2px 9px;
-      border-radius: 99px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      align-self: flex-start;
-      border: 1px solid var(--cat-border, transparent);
-    }
-    /* Category color dot in form */
-    .category-color-dot {
-      display: inline-block;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      margin-right: 6px;
-      vertical-align: middle;
-      flex-shrink: 0;
-    }
-    .category-swatch-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .category-swatch {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: transform 0.1s, border-color 0.15s;
-    }
-    .category-swatch:hover { transform: scale(1.07); }
-    .category-swatch.selected { border-color: #333; }
-
-    .card-title {
-      font-size: 1rem; font-weight: 700;
-      color: var(--gray-dark);
-      line-height: 1.35;
-    }
-    .card-title mark {
-      background: #fff176;
-      border-radius: 2px;
-      padding: 0 1px;
-    }
-
-    .card-summary {
-      font-size: 0.85rem;
-      color: var(--gray);
-      line-height: 1.55;
-      flex: 1;
-    }
-    .card-summary mark {
-      background: #fff176;
-      border-radius: 2px;
-      padding: 0 1px;
-    }
-
-    .card-meta {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      font-size: 0.78rem; color: var(--gray);
-      align-items: center;
-    }
-    .card-meta-item { display: flex; align-items: center; gap: 4px; }
-
-    .card-links { display: flex; flex-wrap: wrap; gap: 6px; }
-    .card-link {
-      font-size: 0.78rem;
-      color: var(--purple);
-      text-decoration: none;
-      background: var(--purple-faint);
-      padding: 2px 8px;
-      border-radius: 4px;
-      display: flex; align-items: center; gap: 4px;
-      transition: background var(--transition);
-    }
-    .card-link:hover { background: var(--purple-hover); }
-
-    .card-reactions {
-      display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-      padding-top: 8px;
-      border-top: 1px solid var(--gray-mid);
-    }
-
-    .reaction-btn {
-      background: var(--gray-light);
-      border: 1.5px solid var(--gray-mid);
-      border-radius: 99px;
-      padding: 4px 10px;
-      font-size: 0.82rem;
-      display: flex; align-items: center; gap: 4px;
-      transition: all var(--transition);
-      min-height: 32px;
-      color: var(--gray-dark);
-    }
-    .reaction-btn:hover { border-color: var(--purple-light); background: var(--purple-faint); }
-    .reaction-btn.active {
-      background: var(--purple-faint);
-      border-color: var(--purple);
-      color: var(--purple);
-      font-weight: 700;
-    }
-    .reaction-count { font-size: 0.78rem; font-weight: 600; }
-
-    .card-footer {
-      padding: 10px 16px;
-      border-top: 1px solid var(--gray-mid);
-      display: flex; gap: 6px; justify-content: flex-end;
-      background: var(--gray-light);
-    }
-
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      padding: 48px 20px;
-      color: var(--gray);
-    }
-    .empty-state-icon { font-size: 3rem; margin-bottom: 12px; }
-    .empty-state-title { font-size: 1.1rem; font-weight: 700; color: var(--gray-dark); margin-bottom: 6px; }
-    .empty-state-text  { font-size: 0.88rem; }
+    /* Fade-in on scroll */
+    .fade-in { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
 
     /* ============================================================
-       SUBMISSION FORM
-       ============================================================ */
-    #form-section .section-header { cursor: pointer; user-select: none; }
-    #form-section .section-header:hover { background: var(--purple-faint); }
-
-    .form-toggle-icon {
-      transition: transform var(--transition);
-      font-size: 1.1rem;
+       HEADER / NAV
+    ============================================================ */
+    #header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 0 24px;
+      transition: var(--transition);
     }
-    .form-toggle-icon.open { transform: rotate(45deg); }
-
-    #form-body { display: none; }
-    #form-body.open { display: block; }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+    #header .nav-inner {
+      max-width: 1180px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0;
     }
-    .form-full { grid-column: 1 / -1; }
+    #header.scrolled {
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 2px 24px rgba(27,52,86,.1);
+      padding: 0 24px;
+    }
+    #header.scrolled .nav-inner { padding: 12px 0; }
 
-    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 1.35rem; color: var(--white);
+    }
+    #header.scrolled .logo { color: var(--blue-dark); }
 
-    .form-label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--gray-dark);
-      display: flex; align-items: center; gap: 5px;
-    }
-    .form-label .required { color: var(--error); }
-    .form-label .optional { color: var(--gray); font-weight: 400; font-size: 0.75rem; }
-
-    .form-input, .form-textarea, .form-select {
-      padding: 9px 12px;
-      border: 1.5px solid var(--gray-mid);
-      border-radius: var(--radius-sm);
-      font-size: 0.9rem;
-      transition: border-color var(--transition), box-shadow var(--transition);
-      background: var(--white);
-      width: 100%;
-    }
-    .form-input:focus, .form-textarea:focus, .form-select:focus {
-      border-color: var(--purple);
-      box-shadow: 0 0 0 3px rgba(102,51,153,0.1);
-      outline: none;
-    }
-    .form-input.error, .form-textarea.error, .form-select.error {
-      border-color: var(--error);
-      box-shadow: 0 0 0 3px rgba(244,67,54,0.1);
-    }
-    .form-input.valid, .form-textarea.valid, .form-select.valid {
-      border-color: var(--success);
+    .logo-icon {
+      width: 38px; height: 38px;
     }
 
-    .form-textarea { resize: vertical; min-height: 90px; }
+    .nav-links {
+      display: flex; align-items: center; gap: 32px;
+    }
+    .nav-links a {
+      font-family: 'Manrope', sans-serif; font-weight: 600; font-size: .9rem;
+      color: rgba(255,255,255,.85);
+      transition: var(--transition);
+    }
+    .nav-links a:hover { color: var(--white); }
+    #header.scrolled .nav-links a { color: var(--text-muted); }
+    #header.scrolled .nav-links a:hover { color: var(--blue-dark); }
 
-    .form-error {
-      font-size: 0.78rem;
-      color: var(--error);
-      display: flex; align-items: center; gap: 4px;
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+    .nav-cta .btn-nav-outline {
+      display: inline-flex; align-items: center;
+      padding: 9px 22px; border-radius: 50px;
+      border: 2px solid rgba(255,255,255,.6);
+      color: var(--white); font-family: 'Manrope', sans-serif;
+      font-weight: 700; font-size: .88rem;
+      transition: var(--transition);
     }
-    .form-hint {
-      font-size: 0.75rem;
-      color: var(--gray);
-      font-style: italic;
+    .nav-cta .btn-nav-outline:hover { background: rgba(255,255,255,.15); }
+    #header.scrolled .btn-nav-outline { border-color: var(--blue-dark); color: var(--blue-dark); }
+    #header.scrolled .btn-nav-outline:hover { background: var(--blue-dark); color: #fff; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      padding: 6px;
+    }
+    .hamburger span {
+      width: 24px; height: 2px; background: var(--white);
+      border-radius: 2px; transition: var(--transition);
+    }
+    #header.scrolled .hamburger span { background: var(--blue-dark); }
+
+    /* Mobile menu */
+    #mobile-menu {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--blue-dark); z-index: 999;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 32px;
+    }
+    #mobile-menu.open { display: flex; }
+    #mobile-menu a {
+      font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: 1.4rem; color: var(--white); transition: var(--transition);
+    }
+    #mobile-menu a:hover { color: var(--blue-light); }
+    #mobile-menu .close-btn {
+      position: absolute; top: 24px; right: 24px; font-size: 2rem;
+      color: var(--white); cursor: pointer; background: none; border: none;
     }
 
-    .form-char-count {
-      font-size: 0.75rem;
-      color: var(--gray);
-      text-align: right;
-    }
-    .form-char-count.warning { color: var(--warning); }
-    .form-char-count.error { color: var(--error); }
-
-    .form-checkbox-group {
-      display: flex; align-items: center; gap: 8px;
-    }
-    .form-checkbox {
-      width: 18px; height: 18px;
-      cursor: pointer;
-      accent-color: var(--purple);
+    /* ============================================================
+       HERO
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--blue-dark) 0%, #1a4a7a 60%, #1a6a96 100%);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding-top: 80px;
     }
 
-    .form-file-input {
-      padding: 8px;
-      font-size: 0.85rem;
+    /* Decorative shapes */
+    #hero::before {
+      content: '';
+      position: absolute; top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(59,190,233,.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    #hero::after {
+      content: '';
+      position: absolute; bottom: -150px; left: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(123,198,164,.15) 0%, transparent 70%);
+      border-radius: 50%;
     }
 
-    .form-image-preview {
-      margin-top: 8px;
-      max-width: 200px;
-      border-radius: var(--radius-sm);
-      border: 1.5px solid var(--gray-mid);
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: center;
+      position: relative; z-index: 1;
+      padding: 40px 0 80px;
     }
 
-    .form-links-list {
-      display: flex; flex-direction: column; gap: 6px;
-    }
-    .form-link-item {
-      display: flex; gap: 6px; align-items: center;
-    }
-    .form-link-item input { flex: 1; }
-    .form-link-remove {
-      background: var(--error);
+    .hero-content .badge { background: rgba(59,190,233,.2); }
+
+    .hero-title {
       color: var(--white);
-      border: none;
-      padding: 6px 10px;
-      border-radius: var(--radius-sm);
-      font-size: 0.8rem;
-      min-height: 32px;
+      margin-bottom: 20px;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+    }
+    .hero-title span { color: var(--blue-light); }
+
+    .hero-sub {
+      color: rgba(255,255,255,.75);
+      font-size: 1.15rem;
+      margin-bottom: 36px;
+      max-width: 480px;
     }
 
-    .form-actions {
-      display: flex; gap: 10px; justify-content: flex-end;
-      padding-top: 12px;
-      border-top: 1px solid var(--gray-mid);
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
+
+    .hero-stats {
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .stat {
+      display: flex; flex-direction: column;
+    }
+    .stat-number {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 1.8rem; color: var(--white);
+    }
+    .stat-label { font-size: .85rem; color: rgba(255,255,255,.6); }
+
+    /* App mockup */
+    .hero-visual { display: flex; justify-content: center; align-items: center; }
+
+    .app-mockup {
+      width: 320px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 28px;
+      padding: 24px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .mockup-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    }
+    .mockup-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-light), var(--green));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .mockup-greet { font-family: 'Manrope', sans-serif; font-weight: 700; color: #fff; font-size: 1rem; }
+    .mockup-date  { font-size: .78rem; color: rgba(255,255,255,.5); }
+
+    .mockup-card {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px; padding: 14px 16px;
+      margin-bottom: 10px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .mockup-card:last-child { margin-bottom: 0; }
+    .mockup-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .mc-blue  { background: rgba(59,190,233,.25); }
+    .mc-green { background: rgba(123,198,164,.25); }
+    .mc-sand  { background: rgba(243,237,228,.2); }
+    .mc-dark  { background: rgba(255,255,255,.1); }
+
+    .mockup-card-text p:first-child {
+      font-family: 'Manrope', sans-serif; font-weight: 600;
+      font-size: .82rem; color: #fff; margin-bottom: 2px;
+    }
+    .mockup-card-text span { font-size: .73rem; color: rgba(255,255,255,.5); }
+
+    /* ============================================================
+       POURQUOI COMPLICE
+    ============================================================ */
+    #pourquoi { background: var(--off-white); }
+
+    .benefits-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;
+      margin-top: 56px;
+    }
+
+    .benefit-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .benefit-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--blue-light), var(--blue-dark));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s ease;
+    }
+    .benefit-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+    .benefit-card:hover::before { transform: scaleX(1); }
+
+    .benefit-icon {
+      width: 56px; height: 56px; border-radius: 16px;
+      background: linear-gradient(135deg, rgba(59,190,233,.1), rgba(27,52,86,.1));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin-bottom: 20px;
+    }
+    .benefit-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
+    .benefit-card p  { font-size: .95rem; }
+
+    /* ============================================================
+       SOLUTIONS
+    ============================================================ */
+    #solutions { background: var(--white); }
+
+    .solutions-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px;
+      margin-top: 56px;
+    }
+
+    .solution-card {
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .solution-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+
+    .solution-card.social  { background: linear-gradient(160deg, #EBF8FF, #F7FAFC); }
+    .solution-card.admin   { background: linear-gradient(160deg, #FFF8F0, #F7FAFC); }
+    .solution-card.health  { background: linear-gradient(160deg, #F0FBF6, #F7FAFC); }
+
+    .solution-icon {
+      width: 64px; height: 64px; border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; margin-bottom: 24px;
+    }
+    .social .solution-icon  { background: rgba(59,190,233,.15); }
+    .admin  .solution-icon  { background: rgba(243,237,228,.8); }
+    .health .solution-icon  { background: rgba(123,198,164,.2); }
+
+    .solution-card h3 { margin-bottom: 10px; font-size: 1.3rem; }
+    .solution-card > p { margin-bottom: 24px; font-size: .95rem; }
+
+    .solution-features { margin-bottom: 28px; }
+    .solution-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: .92rem; color: var(--text-muted); margin-bottom: 8px;
+    }
+    .solution-features li::before {
+      content: '✓';
+      color: var(--blue-light); font-weight: 700; flex-shrink: 0; margin-top: 1px;
     }
 
     /* ============================================================
-       MONTHLY SHELF
-       ============================================================ */
-    #shelf-section .section-body {
-      padding: 16px;
-      overflow-x: auto;
+       ESPACE AIDANTS
+    ============================================================ */
+    #aidants { background: var(--sand); }
+
+    .aidants-grid {
+      display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px;
+      align-items: center; margin-top: 56px;
     }
 
-    .shelf-container {
-      display: flex;
-      gap: 12px;
-      min-width: min-content;
-      padding-bottom: 8px;
+    .aidants-content h2 { margin-bottom: 20px; }
+    .aidants-content p  { margin-bottom: 28px; }
+
+    .aidants-features li {
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-bottom: 18px;
+    }
+    .aidants-features .feat-icon {
+      width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--blue-light), var(--blue-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: #fff;
+    }
+    .aidants-features .feat-text strong { display: block; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: .95rem; color: var(--blue-dark); }
+    .aidants-features .feat-text span   { font-size: .87rem; color: var(--text-muted); }
+
+    /* Dashboard mockup */
+    .dashboard-mockup {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .dash-header {
+      background: linear-gradient(135deg, var(--blue-dark), #1a5a96);
+      padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .dash-title { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; }
+    .dash-date   { font-size: .78rem; color: rgba(255,255,255,.6); }
+    .dash-badge-live {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(123,198,164,.2); border-radius: 50px;
+      padding: 4px 12px; font-size: .75rem; color: var(--green);
+      font-family: 'Manrope', sans-serif; font-weight: 700;
+    }
+    .dash-badge-live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+    .dash-body { padding: 20px; }
+
+    .dash-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; border-radius: 12px;
+      border: 1px solid var(--border); margin-bottom: 10px;
+      background: var(--off-white);
+    }
+    .dash-card:last-child { margin-bottom: 0; }
+    .dash-card-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .dc-green  { background: rgba(123,198,164,.18); }
+    .dc-blue   { background: rgba(59,190,233,.15); }
+    .dc-sand   { background: rgba(243,237,228,.8); }
+    .dc-yellow { background: rgba(255,213,79,.2); }
+
+    .dash-card-text p:first-child {
+      font-family: 'Manrope', sans-serif; font-weight: 600; font-size: .85rem;
+      color: var(--blue-dark); margin-bottom: 1px;
+    }
+    .dash-card-text span { font-size: .75rem; color: var(--text-muted); }
+
+    .dash-card-status {
+      margin-left: auto; font-size: .72rem; font-family: 'Manrope', sans-serif;
+      font-weight: 700; padding: 3px 10px; border-radius: 50px;
+    }
+    .status-ok     { background: rgba(123,198,164,.2); color: #4caf85; }
+    .status-info   { background: rgba(59,190,233,.15); color: var(--blue-mid); }
+    .status-alert  { background: rgba(255,213,79,.25); color: #c49a00; }
+
+    /* ============================================================
+       TARIFS
+    ============================================================ */
+    #tarifs { background: var(--off-white); }
+
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
+      margin-top: 56px; align-items: start;
     }
 
-    .shelf-month {
-      background: var(--gray-light);
-      border: 2px solid var(--gray-mid);
-      border-radius: var(--radius);
-      padding: 14px;
-      min-width: 160px;
-      text-align: center;
-      cursor: pointer;
-      transition: all var(--transition);
+    .pricing-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
       position: relative;
     }
-    .shelf-month:hover {
-      border-color: var(--purple-light);
-      box-shadow: var(--shadow);
-      transform: translateY(-2px);
+    .pricing-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .pricing-card.featured {
+      background: linear-gradient(160deg, var(--blue-dark), #1a5a96);
+      border-color: transparent;
+      color: var(--white);
+      transform: scale(1.04);
     }
-    .shelf-month.current {
-      border-color: var(--purple);
-      background: var(--purple-faint);
+    .pricing-card.featured:hover { transform: scale(1.04) translateY(-4px); }
+
+    .pricing-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(90deg, var(--blue-light), var(--green));
+      color: var(--white); font-family: 'Manrope', sans-serif;
+      font-weight: 700; font-size: .75rem; letter-spacing: .06em;
+      text-transform: uppercase; padding: 5px 18px; border-radius: 50px;
+      white-space: nowrap;
     }
 
-    .shelf-badge {
-      position: absolute;
-      top: -8px; right: -8px;
-      width: 32px; height: 32px;
-      border-radius: 50%;
+    .pricing-title {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 1.3rem; margin-bottom: 4px;
+    }
+    .pricing-card.featured .pricing-title { color: var(--white); }
+
+    .pricing-focus {
+      font-size: .85rem; color: var(--text-muted); margin-bottom: 24px;
+    }
+    .pricing-card.featured .pricing-focus { color: rgba(255,255,255,.6); }
+
+    .pricing-price {
+      display: flex; align-items: baseline; gap: 4px; margin-bottom: 28px;
+    }
+    .price-amount {
+      font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 3rem;
+      color: var(--blue-dark);
+    }
+    .pricing-card.featured .price-amount { color: var(--white); }
+    .price-unit { font-size: .95rem; color: var(--text-muted); }
+    .pricing-card.featured .price-unit { color: rgba(255,255,255,.6); }
+
+    .pricing-features { margin-bottom: 32px; }
+    .pricing-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: .9rem; color: var(--text-muted); margin-bottom: 10px;
+    }
+    .pricing-card.featured .pricing-features li { color: rgba(255,255,255,.75); }
+    .pricing-features li::before {
+      content: '✓'; font-weight: 700; flex-shrink: 0;
+      color: var(--blue-light); margin-top: 1px;
+    }
+    .pricing-card.featured .pricing-features li::before { color: var(--green); }
+
+    .pricing-note {
+      text-align: center; margin-top: 40px;
+      font-size: .9rem; color: var(--text-muted);
+    }
+
+    /* ============================================================
+       TÉMOIGNAGES
+    ============================================================ */
+    #temoignages { background: var(--white); }
+
+    .temoignages-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
+      margin-top: 56px;
+    }
+
+    .temoignage-card {
+      background: var(--off-white);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .temoignage-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+
+    .stars { color: #F59E0B; font-size: 1rem; margin-bottom: 16px; }
+    .temoignage-text {
+      font-size: .95rem; color: var(--text-muted); font-style: italic;
+      margin-bottom: 20px; line-height: 1.7;
+    }
+    .temoignage-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-light), var(--blue-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: #fff; font-family: 'Manrope', sans-serif; font-weight: 700;
+    }
+    .author-name { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: .9rem; color: var(--blue-dark); }
+    .author-role { font-size: .78rem; color: var(--text-muted); }
+
+    /* ============================================================
+       PROXIMITÉ / ÉQUIPE
+    ============================================================ */
+    #proximite { background: var(--sand); }
+
+    .proximity-hero {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: center; margin-bottom: 80px;
+    }
+    .proximity-content .badge { background: rgba(123,198,164,.2); color: #4caf85; }
+    .proximity-content h2 { margin-bottom: 16px; }
+    .proximity-content p  { margin-bottom: 24px; }
+
+    .partner-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .partner-tag {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 50px; padding: 7px 16px; font-size: .83rem;
+      font-family: 'Manrope', sans-serif; font-weight: 600; color: var(--blue-dark);
+    }
+
+    .proximity-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .prox-stat {
+      background: var(--white); border-radius: var(--radius);
+      padding: 24px; text-align: center;
+      border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+    }
+    .prox-stat-num {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 2rem; color: var(--blue-light); display: block;
+    }
+    .prox-stat-label { font-size: .82rem; color: var(--text-muted); }
+
+    .team-section h3 { text-align: center; margin-bottom: 40px; font-size: 1.6rem; }
+
+    .team-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
+    }
+
+    .team-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 28px 20px; text-align: center;
+      border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+
+    .team-avatar {
+      width: 68px; height: 68px; border-radius: 50%; margin: 0 auto 14px;
+      background: linear-gradient(135deg, var(--blue-light), var(--blue-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--white); font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+    }
+    .team-name { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: .95rem; color: var(--blue-dark); margin-bottom: 4px; }
+    .team-role { font-size: .8rem; color: var(--text-muted); }
+
+    .expert-note {
+      margin-top: 32px; padding: 20px 24px;
+      background: rgba(59,190,233,.08); border-radius: var(--radius);
+      border-left: 4px solid var(--blue-light);
+      font-size: .92rem; color: var(--text-muted); text-align: center;
+    }
+    .expert-note strong { color: var(--blue-dark); }
+
+    /* ============================================================
+       BLOG
+    ============================================================ */
+    #blog { background: var(--white); }
+
+    .blog-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px;
+      margin-top: 56px;
+    }
+
+    .blog-card {
+      border-radius: var(--radius); border: 1px solid var(--border);
+      overflow: hidden; box-shadow: var(--shadow-sm); transition: var(--transition);
+      background: var(--white);
+    }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+
+    .blog-thumb {
+      height: 180px; display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+    }
+    .blog-thumb.t1 { background: linear-gradient(135deg, #EBF8FF, #CCE8F5); }
+    .blog-thumb.t2 { background: linear-gradient(135deg, #FFF5E8, #FFE5C8); }
+    .blog-thumb.t3 { background: linear-gradient(135deg, #F0FBF6, #C8EDD9); }
+    .blog-thumb.t4 { background: linear-gradient(135deg, #F3EDE4, #E5D8CA); }
+
+    .blog-body { padding: 24px; }
+    .blog-cat {
+      display: inline-block; font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--blue-light); margin-bottom: 10px;
+    }
+    .blog-card h3 { font-size: 1rem; margin-bottom: 8px; line-height: 1.4; }
+    .blog-excerpt { font-size: .87rem; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
+
+    /* ============================================================
+       PARTENAIRES BANNER
+    ============================================================ */
+    #partenaires {
+      background: linear-gradient(135deg, var(--blue-dark), #1a5a96);
+      padding: 56px 0; text-align: center;
+    }
+    #partenaires h3 {
+      color: var(--white); font-size: 1.1rem; margin-bottom: 8px;
+    }
+    #partenaires p {
+      color: rgba(255,255,255,.6); font-size: .95rem; margin-bottom: 32px;
+    }
+    .partners-logos {
+      display: flex; justify-content: center; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .partner-pill {
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50px; padding: 10px 20px;
+      font-family: 'Manrope', sans-serif; font-weight: 600; font-size: .85rem;
+      color: rgba(255,255,255,.8);
+    }
+
+    /* ============================================================
+       CONTACT
+    ============================================================ */
+    #contact { background: var(--off-white); }
+
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; margin-top: 56px;
+    }
+
+    .contact-info h3 { margin-bottom: 16px; }
+    .contact-info p  { margin-bottom: 32px; }
+
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px;
+    }
+    .contact-detail-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--blue-light), var(--blue-dark));
       display: flex; align-items: center; justify-content: center;
       font-size: 1.1rem;
-      box-shadow: var(--shadow);
-      border: 2px solid var(--white);
     }
-    .shelf-badge.bronze { background: var(--bronze); }
-    .shelf-badge.silver { background: var(--silver); }
-    .shelf-badge.gold   { background: var(--gold); }
+    .contact-detail-text strong { display: block; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: .9rem; color: var(--blue-dark); }
+    .contact-detail-text span   { font-size: .87rem; color: var(--text-muted); }
 
-    .shelf-month-name {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--gray-dark);
-      margin-bottom: 6px;
+    .contact-form {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 40px; box-shadow: var(--shadow-md); border: 1px solid var(--border);
     }
-
-    .shelf-flower-mini {
-      font-size: 2rem;
-      margin: 8px 0;
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; font-family: 'Manrope', sans-serif; font-weight: 600;
+      font-size: .85rem; color: var(--blue-dark); margin-bottom: 6px;
     }
-
-    .shelf-count {
-      font-size: 0.75rem;
-      color: var(--gray);
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 12px 16px; border-radius: 10px;
+      border: 1.5px solid var(--border); background: var(--off-white);
+      font-family: 'Lato', sans-serif; font-size: .95rem; color: var(--text-main);
+      transition: var(--transition); outline: none;
+      -webkit-appearance: none;
     }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--blue-light);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(59,190,233,.12);
+    }
+    .form-group textarea { height: 110px; resize: vertical; }
 
     /* ============================================================
        FOOTER
-       ============================================================ */
-    #app-footer {
-      background: var(--white);
-      border-top: 1px solid var(--gray-mid);
-      padding: 20px 0;
-      margin-top: 40px;
-      font-size: 0.82rem;
-      color: var(--gray);
+    ============================================================ */
+    footer {
+      background: var(--blue-dark); color: rgba(255,255,255,.75);
+      padding: 72px 0 0;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 48px;
+      padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .footer-brand .logo { color: var(--white); margin-bottom: 16px; }
+    .footer-brand p { font-size: .88rem; line-height: 1.7; max-width: 300px; margin-bottom: 20px; }
+    .footer-ethics {
+      background: rgba(255,255,255,.05); border-radius: var(--radius-sm);
+      padding: 14px 16px; font-size: .78rem; line-height: 1.6; color: rgba(255,255,255,.5);
     }
 
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+    .footer-col h4 {
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: .9rem;
+      color: var(--white); margin-bottom: 20px;
     }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a { font-size: .85rem; color: rgba(255,255,255,.55); transition: var(--transition); }
+    .footer-col a:hover { color: var(--blue-light); }
 
-    .footer-stats {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
+    .footer-bottom {
+      padding: 24px 0; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 12px;
     }
-
-    .footer-stat {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+    .footer-bottom p { font-size: .82rem; color: rgba(255,255,255,.4); }
 
     /* ============================================================
-       RESPONSIVE DESIGN
-       ============================================================ */
-    @media (max-width: 767px) {
-      .header-title { font-size: 1.05rem; }
-      .header-subtitle { font-size: 0.72rem; }
-      .btn-header { font-size: 0.75rem; padding: 6px 10px; }
-      
-      .form-grid { grid-template-columns: 1fr; }
-      
-      .cards-grid { grid-template-columns: 1fr; }
-      
-      .flower-display { width: 220px; height: 260px; }
-      
-      .filter-date-group { flex-direction: column; align-items: flex-start; }
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .hero-grid     { grid-template-columns: 1fr; gap: 40px; }
+      .hero-visual   { order: -1; }
+      .aidants-grid  { grid-template-columns: 1fr; }
+      .contact-grid  { grid-template-columns: 1fr; }
+      .footer-grid   { grid-template-columns: 1fr 1fr; }
+      .proximity-hero { grid-template-columns: 1fr; }
     }
 
-    @media (min-width: 768px) and (max-width: 1023px) {
-      .cards-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    @media (max-width: 768px) {
+      .section { padding: 64px 0; }
+      .nav-links, .nav-cta .btn-nav-outline { display: none; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .proximity-stats { grid-template-columns: 1fr 1fr; }
+      .pricing-card.featured { transform: none; }
     }
 
-    @media (min-width: 1024px) {
-      .container { padding: 0 24px; }
-      .section { margin: 24px 0; }
+    @media (max-width: 480px) {
+      .hero-btns { flex-direction: column; }
+      .hero-stats { gap: 20px; }
+      .proximity-stats { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ============================================================
-       HEADER
-       ============================================================ -->
-  <header id="app-header">
-    <div class="container">
-      <div class="header-inner">
-        <div class="header-brand">
-          <div class="header-logo" aria-hidden="true">🏆</div>
-          <div>
-            <h1 class="header-title">ClinDoc Innovation</h1>
-            <p class="header-subtitle">Team Accomplishments Tracker</p>
-          </div>
-        </div>
+<!-- ============================================================
+     HEADER
+============================================================ -->
+<header id="header">
+  <div class="nav-inner">
+    <!-- Logo SVG inline (formes du logo Complice) -->
+    <a href="#hero" class="logo">
+      <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- Arc supérieur cyan -->
+        <path d="M50 10 C75 10, 90 30, 90 50 C90 55, 88 60, 85 64 L70 56 C72 53, 74 51.5, 74 50 C74 38, 63 26, 50 26 C37 26, 26 38, 26 50 L10 50 C10 30, 28 10, 50 10Z" fill="#3BBEE9"/>
+        <!-- Arc inférieur bleu foncé -->
+        <path d="M85 64 C80 75, 66 90, 50 90 C28 90, 10 72, 10 50 L26 50 C26 63, 37 74, 50 74 C57 74, 63 71, 67 66Z" fill="#1B3456"/>
+        <!-- Point central -->
+        <circle cx="50" cy="50" r="8" fill="#1B3456"/>
+      </svg>
+      Complice
+    </a>
 
+    <nav class="nav-links">
+      <a href="#pourquoi">Pourquoi Complice</a>
+      <a href="#solutions">Solutions</a>
+      <a href="#aidants">Espace aidants</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#proximite">Proximité</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a href="#contact" class="btn-nav-outline">Nous contacter</a>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
       </div>
     </div>
-  </header>
-
-  <!-- Storage warning banner -->
-  <div id="storage-warning" role="alert">
-    <span aria-hidden="true">⚠️</span>
-    <span id="storage-warning-text"></span>
   </div>
+</header>
 
-  <main class="container">
+<!-- Mobile Menu -->
+<div id="mobile-menu">
+  <button class="close-btn" onclick="toggleMenu()">✕</button>
+  <a href="#pourquoi"  onclick="toggleMenu()">Pourquoi Complice</a>
+  <a href="#solutions" onclick="toggleMenu()">Solutions</a>
+  <a href="#aidants"   onclick="toggleMenu()">Espace aidants</a>
+  <a href="#tarifs"    onclick="toggleMenu()">Tarifs</a>
+  <a href="#proximite" onclick="toggleMenu()">Proximité</a>
+  <a href="#blog"      onclick="toggleMenu()">Blog</a>
+  <a href="#contact"   onclick="toggleMenu()">Contact</a>
+</div>
 
-    <!-- ============================================================
-         FLOWER GARDEN SECTION
-         ============================================================ -->
-    <section id="flower-section" class="section" aria-labelledby="flower-title">
-      <div class="section-header">
-        <h2 class="section-title" id="flower-title">
-          <span aria-hidden="true">🌸</span> Your Growth Garden
-        </h2>
-      </div>
-      <div class="section-body">
-        <div class="flower-stage-label" id="flower-stage-label" aria-live="polite">Stage 0 / 5</div>
-        
-        <div class="flower-display" id="flower-display" role="img" aria-label="Flower growth visualization">
-          <!-- SVG Flower will be injected here -->
-          <svg id="flower-svg" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
-            <!-- Pot -->
-            <g id="pot">
-              <path d="M 70 250 L 80 270 L 120 270 L 130 250 Z" fill="#8B4513" stroke="#654321" stroke-width="2"/>
-              <ellipse cx="100" cy="250" rx="30" ry="8" fill="#A0522D"/>
-              <path d="M 85 260 Q 100 255 115 260" fill="none" stroke="#654321" stroke-width="1.5" opacity="0.5"/>
-            </g>
-
-            <!-- Stem (grows from bottom) -->
-            <g id="stem" style="transform-origin: 100px 250px; transform: scaleY(0);">
-              <line x1="100" y1="250" x2="100" y2="120" stroke="#2E7D32" stroke-width="4" stroke-linecap="round"/>
-              <!-- Stem texture -->
-              <line x1="100" y1="250" x2="100" y2="120" stroke="#1B5E20" stroke-width="1" opacity="0.3" stroke-dasharray="2,3"/>
-            </g>
-
-            <!-- Left Leaf (appears at stage 2) -->
-            <g id="leaf-left" style="transform-origin: 100px 180px; transform: scale(0); opacity: 0;">
-              <ellipse cx="70" cy="180" rx="20" ry="12" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.5" transform="rotate(-30 70 180)"/>
-              <path d="M 90 180 Q 80 180 70 180" fill="none" stroke="#2E7D32" stroke-width="1" opacity="0.5"/>
-            </g>
-
-            <!-- Right Leaf (appears at stage 3) -->
-            <g id="leaf-right" style="transform-origin: 100px 200px; transform: scale(0); opacity: 0;">
-              <ellipse cx="130" cy="200" rx="20" ry="12" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.5" transform="rotate(30 130 200)"/>
-              <path d="M 110 200 Q 120 200 130 200" fill="none" stroke="#2E7D32" stroke-width="1" opacity="0.5"/>
-            </g>
-
-            <!-- Bud (appears at stage 4) -->
-            <g id="bud" style="transform-origin: 100px 120px; transform: scale(0); opacity: 0;">
-              <ellipse cx="100" cy="115" rx="12" ry="16" fill="#81C784" stroke="#4CAF50" stroke-width="2"/>
-              <path d="M 100 105 Q 95 110 100 115 Q 105 110 100 105" fill="#66BB6A" opacity="0.7"/>
-            </g>
-
-            <!-- Full Bloom Flower (appears at stage 5) -->
-            <g id="bloom" style="transform-origin: 100px 100px; transform: scale(0); opacity: 0;">
-              <!-- Center -->
-              <circle cx="100" cy="100" r="15" fill="#FDD835" stroke="#F9A825" stroke-width="2"/>
-              <circle cx="100" cy="100" r="8" fill="#F9A825"/>
-              
-              <!-- Petals (8 petals in a circle) -->
-              <g id="petals">
-                <!-- Top petal -->
-                <ellipse cx="100" cy="70" rx="12" ry="18" fill="#E91E63" stroke="#C2185B" stroke-width="1.5"/>
-                <!-- Top-right petal -->
-                <ellipse cx="121" cy="79" rx="12" ry="18" fill="#EC407A" stroke="#C2185B" stroke-width="1.5" transform="rotate(45 121 79)"/>
-                <!-- Right petal -->
-                <ellipse cx="130" cy="100" rx="12" ry="18" fill="#E91E63" stroke="#C2185B" stroke-width="1.5" transform="rotate(90 130 100)"/>
-                <!-- Bottom-right petal -->
-                <ellipse cx="121" cy="121" rx="12" ry="18" fill="#EC407A" stroke="#C2185B" stroke-width="1.5" transform="rotate(135 121 121)"/>
-                <!-- Bottom petal -->
-                <ellipse cx="100" cy="130" rx="12" ry="18" fill="#E91E63" stroke="#C2185B" stroke-width="1.5" transform="rotate(180 100 130)"/>
-                <!-- Bottom-left petal -->
-                <ellipse cx="79" cy="121" rx="12" ry="18" fill="#EC407A" stroke="#C2185B" stroke-width="1.5" transform="rotate(225 79 121)"/>
-                <!-- Left petal -->
-                <ellipse cx="70" cy="100" rx="12" ry="18" fill="#E91E63" stroke="#C2185B" stroke-width="1.5" transform="rotate(270 70 100)"/>
-                <!-- Top-left petal -->
-                <ellipse cx="79" cy="79" rx="12" ry="18" fill="#EC407A" stroke="#C2185B" stroke-width="1.5" transform="rotate(315 79 79)"/>
-              </g>
-
-              <!-- Sparkles -->
-              <g id="sparkles">
-                <circle cx="60" cy="60" r="3" fill="#FFF176" opacity="0"/>
-                <circle cx="140" cy="60" r="2" fill="#FFF176" opacity="0"/>
-                <circle cx="140" cy="140" r="3" fill="#FFF176" opacity="0"/>
-                <circle cx="60" cy="140" r="2" fill="#FFF176" opacity="0"/>
-              </g>
-            </g>
-          </svg>
-
-          <!-- Celebration particles container -->
-          <div class="celebration-particles" id="celebration-particles"></div>
-        </div>
-
-        <div class="flower-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="5" aria-label="Flower growth progress">
-          <div class="flower-progress-fill" id="flower-progress-fill" style="width: 0%;"></div>
-        </div>
-
-        <p class="flower-message" id="flower-message" aria-live="polite">
-          Plant your first seed of success! 🌱
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content fade-in">
+        <span class="badge">✦ Nouveau compagnon numérique</span>
+        <h1 class="hero-title">
+          Le compagnon qui <span>simplifie</span> le quotidien des seniors
+        </h1>
+        <p class="hero-sub">
+          Complice centralise le lien social, l'aide administrative et le suivi santé pour sécuriser les seniors à domicile — et soulager leurs proches.
         </p>
-
-        <div class="flower-stats">
-          <div class="flower-stat">
-            <div class="flower-stat-value" id="stat-month-count">0</div>
-            <div class="flower-stat-label">This Month</div>
-          </div>
-          <div class="flower-stat">
-            <div class="flower-stat-value" id="stat-total-count">0</div>
-            <div class="flower-stat-label">All Time</div>
-          </div>
+        <div class="hero-btns">
+          <a href="#solutions" class="btn btn-primary">Découvrir nos solutions →</a>
+          <a href="#tarifs"    class="btn btn-ghost">Voir les tarifs</a>
         </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         FILTERS & SEARCH SECTION
-         ============================================================ -->
-    <section id="filters-section" class="section" aria-labelledby="filters-title">
-      <div class="section-header">
-        <h2 class="section-title" id="filters-title">
-          <span aria-hidden="true">🔍</span> Search & Filter
-        </h2>
-        <button class="btn btn-ghost btn-sm" id="btn-clear-filters">Clear All</button>
-      </div>
-      <div class="section-body">
-        <!-- Search bar -->
-        <div class="search-row">
-          <div class="search-input-wrap">
-            <span class="search-icon" aria-hidden="true">🔎</span>
-            <input 
-              type="text" 
-              class="search-input" 
-              id="search-input" 
-              placeholder="Search accomplishments..."
-              aria-label="Search accomplishments"
-            />
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number">49</span>
+            <span class="stat-label">partenaires locaux</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">3</span>
+            <span class="stat-label">dimensions du quotidien</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">1</span>
+            <span class="stat-label">seule interface simple</span>
           </div>
         </div>
-
-        <!-- Filters -->
-        <div class="filters-row">
-          <select class="filter-select" id="filter-person" aria-label="Filter by person">
-            <option value="">All People</option>
-          </select>
-
-          <select class="filter-select" id="filter-category" aria-label="Filter by category">
-            <option value="">All Categories</option>
-          </select>
-
-          <div class="filter-date-group">
-            <label for="filter-date-from">From:</label>
-            <input type="date" class="filter-date-input" id="filter-date-from" aria-label="Filter from date"/>
-            <label for="filter-date-to">To:</label>
-            <input type="date" class="filter-date-input" id="filter-date-to" aria-label="Filter to date"/>
-          </div>
-
-          <select class="filter-select" id="filter-sort" aria-label="Sort accomplishments">
-            <option value="date-desc">Newest First</option>
-            <option value="date-asc">Oldest First</option>
-            <option value="reactions-desc">Most Reactions</option>
-            <option value="title-asc">Title A-Z</option>
-          </select>
-        </div>
-
-        <!-- Active filter tags -->
-        <div class="filter-tags" id="filter-tags" aria-live="polite"></div>
-
-        <!-- Results count -->
-        <div class="results-count" id="results-count" aria-live="polite">
-          Showing 0 accomplishments
-        </div>
       </div>
-    </section>
 
-    <!-- ============================================================
-         ACCOMPLISHMENT CARDS SECTION
-         ============================================================ -->
-    <section id="cards-section" class="section" aria-labelledby="cards-title">
-      <div class="section-header">
-        <h2 class="section-title" id="cards-title">
-          <span aria-hidden="true">🎯</span> Accomplishments
-        </h2>
-      </div>
-      <div class="section-body">
-        <div class="cards-grid" id="cards-grid" role="list">
-          <!-- Cards will be dynamically inserted here -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         SUBMISSION FORM SECTION
-         ============================================================ -->
-    <section id="form-section" class="section" aria-labelledby="form-title">
-      <div class="section-header" id="form-header" role="button" tabindex="0" aria-expanded="false" aria-controls="form-body">
-        <h2 class="section-title" id="form-title">
-          <span aria-hidden="true">➕</span> Add New Accomplishment
-        </h2>
-        <span class="form-toggle-icon" aria-hidden="true">+</span>
-      </div>
-      <div class="section-body" id="form-body">
-        <form id="accomplishment-form" novalidate>
-          <div class="form-grid">
-            <!-- Title -->
-            <div class="form-group form-full">
-              <label class="form-label" for="form-title-input">
-                Title <span class="required" aria-label="required">*</span>
-              </label>
-              <input 
-                type="text" 
-                class="form-input" 
-                id="form-title-input" 
-                name="title"
-                maxlength="100"
-                required
-                aria-required="true"
-                aria-describedby="form-title-hint form-title-error"
-              />
-              <div class="form-char-count" id="form-title-count">0 / 100</div>
-              <div class="form-error" id="form-title-error" role="alert"></div>
-            </div>
-
-            <!-- Summary -->
-            <div class="form-group form-full">
-              <label class="form-label" for="form-summary-input">
-                Summary <span class="required" aria-label="required">*</span>
-              </label>
-              <textarea 
-                class="form-textarea" 
-                id="form-summary-input" 
-                name="summary"
-                maxlength="500"
-                required
-                aria-required="true"
-                aria-describedby="form-summary-hint form-summary-error"
-              ></textarea>
-              <div class="form-char-count" id="form-summary-count">0 / 500</div>
-              <div class="form-error" id="form-summary-error" role="alert"></div>
-            </div>
-
-            <!-- Date -->
-            <div class="form-group">
-              <label class="form-label" for="form-date-input">
-                Date <span class="required" aria-label="required">*</span>
-              </label>
-              <input 
-                type="date" 
-                class="form-input" 
-                id="form-date-input" 
-                name="date"
-                required
-                aria-required="true"
-                aria-describedby="form-date-error"
-              />
-              <div class="form-error" id="form-date-error" role="alert"></div>
-            </div>
-
-            <!-- Person -->
-            <div class="form-group">
-              <label class="form-label" for="form-person-input">
-                Person's Name <span class="required" aria-label="required">*</span>
-              </label>
-              <input 
-                type="text" 
-                class="form-input" 
-                id="form-person-input" 
-                name="person"
-                maxlength="50"
-                required
-                aria-required="true"
-                aria-describedby="form-person-error"
-              />
-              <div class="form-error" id="form-person-error" role="alert"></div>
-            </div>
-
-            <!-- Category -->
-            <div class="form-group" id="category-form-group">
-              <label class="form-label" for="form-category-input">
-                Category <span class="required" aria-label="required">*</span>
-              </label>
-              <input 
-                type="text" 
-                class="form-input" 
-                id="form-category-input" 
-                name="category"
-                maxlength="30"
-                placeholder="Type or pick a category…"
-                required
-                aria-required="true"
-                aria-describedby="form-category-error"
-                autocomplete="off"
-              />
-              <div class="form-error" id="form-category-error" role="alert"></div>
-            </div>
-
-            <!-- Image upload -->
-            <div class="form-group form-full">
-              <label class="form-label" for="form-image-input">
-                Image <span class="optional">(optional, max ~200KB)</span>
-              </label>
-              <input 
-                type="file" 
-                class="form-input form-file-input" 
-                id="form-image-input" 
-                name="image"
-                accept="image/*"
-                aria-describedby="form-image-hint form-image-error"
-              />
-              <p class="form-hint" id="form-image-hint">Images will be compressed automatically</p>
-              <img id="form-image-preview" class="form-image-preview" style="display: none;" alt="Image preview"/>
-              <div class="form-error" id="form-image-error" role="alert"></div>
+      <!-- App Mockup -->
+      <div class="hero-visual fade-in" style="transition-delay:.2s">
+        <div class="app-mockup">
+          <div class="mockup-header">
+            <div class="mockup-avatar">👵</div>
+            <div>
+              <div class="mockup-greet">Bonjour, Madeleine ☀️</div>
+              <div class="mockup-date">Mercredi 14 mai • 9h15</div>
             </div>
           </div>
-
-          <!-- Form actions -->
-          <div class="form-actions">
-            <button type="button" class="btn btn-ghost" id="btn-cancel-form">Cancel</button>
-            <button type="submit" class="btn btn-primary" id="btn-submit-form">
-              <span aria-hidden="true">✨</span> Add Accomplishment
-            </button>
+          <div class="mockup-card">
+            <div class="mockup-icon mc-green">✅</div>
+            <div class="mockup-card-text">
+              <p>Traitement du matin confirmé</p>
+              <span>Il y a quelques instants</span>
+            </div>
           </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         MONTHLY SHELF SECTION
-         ============================================================ -->
-    <section id="shelf-section" class="section" aria-labelledby="shelf-title">
-      <div class="section-header">
-        <h2 class="section-title" id="shelf-title">
-          <span aria-hidden="true">📚</span> Monthly Archive
-        </h2>
-      </div>
-      <div class="section-body">
-        <div class="shelf-container" id="shelf-container" role="list">
-          <!-- Monthly shelf items will be dynamically inserted here -->
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ============================================================
-       FOOTER
-       ============================================================ -->
-  <footer id="app-footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-stats">
-          <div class="footer-stat">
-            <span aria-hidden="true">📊</span>
-            <span id="footer-total-accomplishments">0 total accomplishments</span>
+          <div class="mockup-card">
+            <div class="mockup-icon mc-blue">🏥</div>
+            <div class="mockup-card-text">
+              <p>Rendez-vous médecin jeudi à 10h30</p>
+              <span>Dr. Lefebvre · Confirmé</span>
+            </div>
           </div>
-        </div>
-        <div>
-          <span id="footer-last-backup">Last sync: 05/2026</span>
+          <div class="mockup-card">
+            <div class="mockup-icon mc-sand">📸</div>
+            <div class="mockup-card-text">
+              <p>Jean a partagé une photo</p>
+              <span>Votre fils · Il y a 2h</span>
+            </div>
+          </div>
+          <div class="mockup-card">
+            <div class="mockup-icon mc-dark">🚶</div>
+            <div class="mockup-card-text">
+              <p>Marche douce jeudi matin</p>
+              <span>Activité près de chez vous</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <!-- Toast container -->
-  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+<!-- ============================================================
+     POURQUOI COMPLICE
+============================================================ -->
+<section id="pourquoi" class="section">
+  <div class="container">
+    <div class="section-tag fade-in">
+      <span class="badge">Notre approche</span>
+      <h2>Pourquoi Complice ?</h2>
+      <p>Une solution pensée pour préserver l'autonomie des seniors et offrir la sérénité aux familles — sans technicité, sans rupture de lien.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card fade-in">
+        <div class="benefit-icon">🧩</div>
+        <h3>Tout centraliser</h3>
+        <p>Fini les outils dispersés. Complice réunit en une seule interface le social, l'administratif et la santé — pour simplifier le quotidien.</p>
+      </div>
+      <div class="benefit-card fade-in" style="transition-delay:.1s">
+        <div class="benefit-icon">🤝</div>
+        <h3>Rassurer les aidants</h3>
+        <p>Les proches ont accès en temps réel aux informations essentielles, sans être intrusifs. Un tableau de bord clair, des alertes pertinentes.</p>
+      </div>
+      <div class="benefit-card fade-in" style="transition-delay:.2s">
+        <div class="benefit-icon">🌿</div>
+        <h3>Préserver l'autonomie</h3>
+        <p>Complice accompagne, ne décide pas. Le senior reste maître de son quotidien, avec un outil qui s'adapte à son rythme et ses habitudes.</p>
+      </div>
+      <div class="benefit-card fade-in" style="transition-delay:.3s">
+        <div class="benefit-icon">📍</div>
+        <h3>Un lien humain et local</h3>
+        <p>49 partenaires locaux en Maine-et-Loire. Une équipe terrain disponible. Complice n'est pas une appli froide : c'est une présence de proximité.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- Hidden file input for import -->
-  <input type="file" id="import-file-input" accept=".json" style="display: none;" aria-label="Import file"/>
+<!-- ============================================================
+     NOS SOLUTIONS
+============================================================ -->
+<section id="solutions" class="section">
+  <div class="container">
+    <div class="section-tag fade-in">
+      <span class="badge">Nos solutions</span>
+      <h2>Trois dimensions, une seule plateforme</h2>
+      <p>Complice couvre les besoins essentiels du quotidien à domicile, de façon intégrée et simple à utiliser.</p>
+    </div>
+    <div class="solutions-grid">
 
-  <!-- ============================================================
-       JAVASCRIPT APPLICATION
-       ============================================================ -->
-  <!-- App: Firebase + Logic in one deferred module, no race conditions -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+      <!-- Lien social -->
+      <div class="solution-card social fade-in">
+        <div class="solution-icon">💬</div>
+        <h3>Lien social</h3>
+        <p>Rester connecté à ceux qu'on aime, sans complexité. Partager des moments, retrouver ses amis, participer à la vie locale.</p>
+        <ul class="solution-features">
+          <li>Messages et appels simplifiés avec la famille</li>
+          <li>Partage de photos et de souvenirs entre proches</li>
+          <li>Activités locales adaptées et agenda partagé</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline btn-sm">En savoir plus</a>
+      </div>
 
-    /* ── Firebase ─────────────────────────────────────────────── */
-    const FB_CONFIG = {
-      apiKey: "AIzaSyD2gdbnfALS_SnV0ebVOPZS_8vnnALx02k",
-      authDomain: "clindoc-tracker.firebaseapp.com",
-      databaseURL: "https://clindoc-tracker-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "clindoc-tracker",
-      storageBucket: "clindoc-tracker.firebasestorage.app",
-      messagingSenderId: "288975950208",
-      appId: "1:288975950208:web:9bbb2e80ef72937e64b165"
-    };
+      <!-- Aide administrative -->
+      <div class="solution-card admin fade-in" style="transition-delay:.1s">
+        <div class="solution-icon">📋</div>
+        <h3>Aide administrative</h3>
+        <p>Simplifier les démarches, éviter les oublis et se protéger des arnaques. L'administratif, enfin sans stress.</p>
+        <ul class="solution-features">
+          <li>Centralisation des documents importants</li>
+          <li>Rappels d'échéances, factures et renouvellements</li>
+          <li>Alertes anti-arnaques et accompagnement aux démarches</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline btn-sm">En savoir plus</a>
+      </div>
 
-    let db = null, useFirebase = false;
-    try {
-      db = getDatabase(initializeApp(FB_CONFIG));
-      useFirebase = true;
-    } catch (e) { console.warn('Firebase unavailable:', e); }
+      <!-- Suivi santé -->
+      <div class="solution-card health fade-in" style="transition-delay:.2s">
+        <div class="solution-icon">❤️</div>
+        <h3>Suivi santé</h3>
+        <p>Un carnet de santé numérique partagé avec les proches et les professionnels. La santé au quotidien, sans anxiété.</p>
+        <ul class="solution-features">
+          <li>Rappels de médicaments et ordonnances</li>
+          <li>Rendez-vous médicaux et suivi de l'historique</li>
+          <li>Coordination avec professionnels de santé et aidants</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline btn-sm">En savoir plus</a>
+      </div>
 
-    /* ── Config ───────────────────────────────────────────────── */
-    const CFG = {
-      VERSION: '1.0.0',
-      LS_DATA: 'clindoc_data',
-      LS_REACTIONS: 'clindoc_reactions',
-      LS_DRAFT: 'clindoc_draft',
-      LS_CAT_COLORS: 'clindoc_cat_colors',
-      LS_DEVICE: 'clindoc_device_id',
-      MAX_IMG: 204800,
-      MESSAGES: {
-        0: "Plant your first seed of success! 🌱",
-        1: "Great start! Your garden is growing! 🌿",
-        2: "Momentum building! Keep it up! 💪",
-        3: "Halfway to full bloom! 🌼",
-        4: "Almost there! One more for celebration! 🎊",
-        5: "Full bloom achieved! Amazing work! 🌸✨"
-      }
-    };
+    </div>
+  </div>
+</section>
 
-    /* ── Category colours ─────────────────────────────────────── */
-    const CAT_PALETTE = [
-      { bg:'#fce4ec', fg:'#c2185b', bd:'#f48fb1' },
-      { bg:'#e8eaf6', fg:'#3949ab', bd:'#9fa8da' },
-      { bg:'#e0f7fa', fg:'#00838f', bd:'#80deea' },
-      { bg:'#e8f5e9', fg:'#2e7d32', bd:'#a5d6a7' },
-      { bg:'#fff3e0', fg:'#e65100', bd:'#ffcc80' },
-      { bg:'#f3e5f5', fg:'#6a1b9a', bd:'#ce93d8' },
-      { bg:'#e3f2fd', fg:'#1565c0', bd:'#90caf9' },
-      { bg:'#fafafa', fg:'#424242', bd:'#bdbdbd' },
-      { bg:'#fff8e1', fg:'#f57f17', bd:'#ffe082' },
-      { bg:'#fbe9e7', fg:'#bf360c', bd:'#ffab91' },
-      { bg:'#e0f2f1', fg:'#00695c', bd:'#80cbc4' },
-      { bg:'#f9fbe7', fg:'#558b2f', bd:'#dce775' },
-    ];
-
-    let catColorMap = {};
-    function loadCatColors() {
-      try { catColorMap = JSON.parse(localStorage.getItem(CFG.LS_CAT_COLORS) || '{}'); } catch (_) { catColorMap = {}; }
-    }
-    function saveCatColors() {
-      try { localStorage.setItem(CFG.LS_CAT_COLORS, JSON.stringify(catColorMap)); } catch (_) {}
-    }
-    function getCatColor(name) {
-      if (catColorMap[name] === undefined) {
-        const used = new Set(Object.values(catColorMap));
-        let i = 0;
-        while (used.has(i)) i++;
-        catColorMap[name] = i % CAT_PALETTE.length;
-        saveCatColors();
-      }
-      return CAT_PALETTE[catColorMap[name] % CAT_PALETTE.length];
-    }
-
-    /* ── State ────────────────────────────────────────────────── */
-    let DATA = null; // { accomplishments:[], categories:[], people:[], monthlySnapshots:{}, settings:{} }
-    let FILTERED = [];
-    let FILTERS = { search:'', person:'', category:'', dateFrom:'', dateTo:'', sort:'date-desc' };
-    let EDITING_ID = null;
-    let MY_REACTIONS = {};
-    let UNDO_STACK = [];
-    const CURRENT_MONTH = (() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`; })();
-
-    /* ── Helpers ──────────────────────────────────────────────── */
-    function uuid() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-        const r = Math.random()*16|0; return (c==='x'?r:(r&3|8)).toString(16);
-      });
-    }
-    function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-    function fmtDate(s) { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
-    function fmtMonth(s) { const [y,m]=s.split('-'); return new Date(y,+m-1,1).toLocaleDateString('en-US',{year:'numeric',month:'long'}); }
-    function totalRx(a) { return Object.values(a.reactions||{}).reduce((s,arr)=>s+(arr||[]).length,0); }
-    function lsOk() { try{localStorage.setItem('_t','1');localStorage.removeItem('_t');return true;}catch(_){return false;} }
-    function getDeviceId() {
-      let id = lsOk() ? localStorage.getItem(CFG.LS_DEVICE) : null;
-      if (!id) { id=uuid(); if(lsOk()) localStorage.setItem(CFG.LS_DEVICE,id); }
-      return id;
-    }
-    function defaultData() {
-      return { version:CFG.VERSION, accomplishments:[], categories:[], people:[], monthlySnapshots:{}, settings:{lastBackup:null} };
-    }
-    function validData(d) {
-      return d && typeof d==='object' && Array.isArray(d.accomplishments) && Array.isArray(d.categories) && Array.isArray(d.people);
-    }
-
-    /* ── Toast ────────────────────────────────────────────────── */
-    function toast(msg, type='info', duration=4000, onUndo=null) {
-      const c = document.getElementById('toast-container');
-      const t = document.createElement('div');
-      t.className = `toast ${type}`;
-      t.innerHTML = `<span>${{success:'✓',error:'✕',warning:'⚠',info:'ℹ'}[type]||'ℹ'}</span><span>${esc(msg)}</span>`;
-      if (onUndo) {
-        const b=document.createElement('button'); b.className='toast-undo'; b.textContent='Undo';
-        b.onclick=()=>{onUndo();t.remove();}; t.appendChild(b);
-      }
-      c.appendChild(t);
-      setTimeout(()=>{ t.style.animation='toastOut 0.3s ease forwards'; setTimeout(()=>t.remove(),300); }, duration);
-    }
-
-    /* ── Modal ────────────────────────────────────────────────── */
-    function modal(title, body, actions=[]) {
-      return new Promise(resolve => {
-        const o=document.createElement('div'); o.className='modal-overlay';
-        o.innerHTML=`<div class="modal-box" role="dialog" aria-modal="true">
-          <h3 class="modal-title">${esc(title)}</h3>
-          <div class="modal-body">${esc(body)}</div>
-          <div id="_ma" class="modal-actions"></div></div>`;
-        document.body.appendChild(o);
-        actions.forEach(a=>{ const b=document.createElement('button'); b.className=`btn ${a.class||'btn-secondary'}`; b.textContent=a.label; b.onclick=()=>{o.remove();resolve(a.value);}; o.querySelector('#_ma').appendChild(b); });
-        o.onclick=e=>{ if(e.target===o){o.remove();resolve(null);} };
-      });
-    }
-
-    /* ── Firebase data conversion ─────────────────────────────── */
-    function fromFirebase(raw) {
-      if (!raw) return defaultData();
-      return {
-        version: raw.version || CFG.VERSION,
-        accomplishments: raw.accomplishments ? Object.values(raw.accomplishments) : [],
-        categories: raw.categories ? (Array.isArray(raw.categories) ? raw.categories : Object.values(raw.categories)) : [],
-        people: raw.people ? (Array.isArray(raw.people) ? raw.people : Object.values(raw.people)) : [],
-        settings: raw.settings || { lastBackup: null },
-        monthlySnapshots: raw.monthlySnapshots || {}
-      };
-    }
-
-    function toFirebase(data) {
-      const accObj = {};
-      data.accomplishments.forEach(a => { accObj[a.id] = a; });
-      return {
-        version: data.version,
-        accomplishments: accObj,
-        categories: data.categories,
-        people: data.people,
-        settings: { ...data.settings, lastBackup: new Date().toISOString() },
-        monthlySnapshots: data.monthlySnapshots
-      };
-    }
-
-    /* ── Save ─────────────────────────────────────────────────── */
-    async function saveData() {
-      if (!DATA) return;
-      if (useFirebase) {
-        try { await set(ref(db,'clindoc/data'), toFirebase(DATA)); }
-        catch(e) { console.error('Firebase save error:',e); toast('Save error','error'); }
-      } else {
-        if (lsOk()) try { localStorage.setItem(CFG.LS_DATA, JSON.stringify(DATA)); } catch(_) {}
-      }
-    }
-
-    /* ── CRUD ─────────────────────────────────────────────────── */
-    async function addAccomplishment(fd) {
-      const acc = {
-        id: uuid(), title: fd.title.trim(), summary: fd.summary.trim(),
-        date: fd.date, person: fd.person.trim(), category: fd.category.trim(),
-        links: fd.links||[], image: fd.image||null,
-        reactions: { applause:[], confetti:[], happy:[], surprised:[] },
-        createdAt: new Date().toISOString(), modifiedAt: new Date().toISOString()
-      };
-      DATA.accomplishments.push(acc);
-      if (!DATA.categories.includes(acc.category)) DATA.categories.push(acc.category);
-      if (!DATA.people.includes(acc.person)) DATA.people.push(acc.person);
-      await saveData();
-    }
-
-    async function updateAccomplishment(id, fd) {
-      const acc = DATA.accomplishments.find(a=>a.id===id);
-      if (!acc) return;
-      Object.assign(acc, {
-        title:fd.title.trim(), summary:fd.summary.trim(), date:fd.date,
-        person:fd.person.trim(), category:fd.category.trim(),
-        links:fd.links, image:fd.image,
-        modifiedAt: new Date().toISOString()
-      });
-      if (!DATA.categories.includes(acc.category)) DATA.categories.push(acc.category);
-      if (!DATA.people.includes(acc.person)) DATA.people.push(acc.person);
-      await saveData();
-    }
-
-    async function deleteAccomplishment(id) {
-      const i = DATA.accomplishments.findIndex(a=>a.id===id);
-      if (i===-1) return;
-      const [del] = DATA.accomplishments.splice(i,1);
-      UNDO_STACK.push(del);
-      if (UNDO_STACK.length > 10) UNDO_STACK.shift();
-      await saveData();
-    }
-
-    async function undoDelete() {
-      const item = UNDO_STACK.pop();
-      if (!item) return false;
-      DATA.accomplishments.push(item);
-      await saveData();
-      return true;
-    }
-
-    async function toggleReaction(accId, type) {
-      const acc = DATA.accomplishments.find(a=>a.id===accId);
-      if (!acc) return;
-      const dev = getDeviceId();
-      const prev = MY_REACTIONS[accId];
-      if (prev && acc.reactions[prev]) {
-        const pi = acc.reactions[prev].indexOf(dev);
-        if (pi>-1) acc.reactions[prev].splice(pi,1);
-      }
-      if (prev === type) {
-        delete MY_REACTIONS[accId];
-      } else {
-        if (!acc.reactions[type]) acc.reactions[type] = [];
-        if (!acc.reactions[type].includes(dev)) acc.reactions[type].push(dev);
-        MY_REACTIONS[accId] = type;
-      }
-      if (lsOk()) try { localStorage.setItem(CFG.LS_REACTIONS, JSON.stringify(MY_REACTIONS)); } catch(_) {}
-      await saveData();
-      // For localStorage mode, re-render since no realtime listener
-      if (!useFirebase) refreshUI();
-    }
-
-    /* ── Flower ───────────────────────────────────────────────── */
-    function flowerStage(count) { return Math.min(count, 5); }
-
-    function renderFlower(stage) {
-      const get = id => document.getElementById(id);
-      const stem=get('stem'), lL=get('leaf-left'), lR=get('leaf-right'), bud=get('bud'), bloom=get('bloom');
-      const disp=get('flower-display'), parts=get('celebration-particles');
-      [stem,lL,lR,bud,bloom].forEach(e=>{e.style.animation='none';});
-      parts.innerHTML=''; disp.classList.remove('blooming');
-      if (stage===0) {
-        stem.style.transform='scaleY(0)';
-        [lL,lR,bud,bloom].forEach(e=>{e.style.transform='scale(0)';e.style.opacity='0';});
-        return;
-      }
-      setTimeout(()=>{ stem.style.animation='growStem 0.8s ease-out forwards'; },100);
-      if (stage>=2) setTimeout(()=>{ lL.style.animation='growLeaf 0.6s ease-out forwards'; },900);
-      else { lL.style.transform='scale(0)'; lL.style.opacity='0'; }
-      if (stage>=3) setTimeout(()=>{ lR.style.animation='growLeaf 0.6s ease-out forwards'; },1200);
-      else { lR.style.transform='scale(0)'; lR.style.opacity='0'; }
-      if (stage===4) { setTimeout(()=>{ bud.style.animation='growBud 0.5s ease-out forwards'; },1500); bloom.style.transform='scale(0)'; bloom.style.opacity='0'; }
-      else { bud.style.transform='scale(0)'; bud.style.opacity='0'; }
-      if (stage>=5) {
-        bud.style.transform='scale(0)'; bud.style.opacity='0';
-        setTimeout(()=>{
-          bloom.style.animation='bloomPetal 0.8s ease-out forwards';
-          document.querySelectorAll('#sparkles circle').forEach((s,i)=>{
-            setTimeout(()=>{ s.style.animation=`sparkle 1.5s ease-in-out infinite`; s.style.animationDelay=`${i*0.3}s`; },800+i*100);
-          });
-          disp.classList.add('blooming');
-          const colors=['#E91E63','#9C27B0','#FDD835','#4CAF50','#2196F3'];
-          for(let i=0;i<20;i++){
-            const p=document.createElement('div'); p.className='particle';
-            p.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*5)]};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s`;
-            parts.appendChild(p);
-          }
-        },1500);
-      } else { bloom.style.transform='scale(0)'; bloom.style.opacity='0'; }
-    }
-
-    function updateFlower() {
-      const monthAccs = DATA.accomplishments.filter(a=>a.date.startsWith(CURRENT_MONTH));
-      const count = monthAccs.length;
-      const stage = flowerStage(count);
-      document.getElementById('flower-stage-label').textContent = `Stage ${stage} / 5`;
-      document.getElementById('flower-progress-fill').style.width = `${(stage/5)*100}%`;
-      document.getElementById('flower-message').textContent = CFG.MESSAGES[stage] || CFG.MESSAGES[5];
-      document.getElementById('stat-month-count').textContent = count;
-      document.getElementById('stat-total-count').textContent = DATA.accomplishments.length;
-      renderFlower(stage);
-    }
-
-    /* ── Monthly shelf ────────────────────────────────────────── */
-    function updateSnapshots() {
-      const byMonth = {};
-      DATA.accomplishments.forEach(a => {
-        const m = a.date.substring(0,7);
-        if (!byMonth[m]) byMonth[m]=[];
-        byMonth[m].push(a);
-      });
-      Object.keys(byMonth).forEach(m => {
-        if (!DATA.monthlySnapshots[m] && m !== CURRENT_MONTH) {
-          const c = byMonth[m].length;
-          DATA.monthlySnapshots[m] = { accomplishmentCount:c, flowerStage:flowerStage(c), snapshotDate:new Date().toISOString() };
-        }
-      });
-    }
-
-    function badge(count) { return count>=5?'gold':count>=3?'silver':count>=1?'bronze':null; }
-
-    function renderShelf() {
-      const container = document.getElementById('shelf-container');
-      const months = new Set();
-      DATA.accomplishments.forEach(a=>months.add(a.date.substring(0,7)));
-      Object.keys(DATA.monthlySnapshots).forEach(m=>months.add(m));
-      // Only show current month and months that have accomplishments
-      const sorted = [...months].filter(m => {
-        const hasAccs = DATA.accomplishments.some(a => a.date.startsWith(m));
-        return hasAccs;
-      }).sort().reverse();
-      if (!sorted.length) {
-        container.innerHTML='<p style="color:var(--gray);text-align:center;padding:20px">No archived months yet</p>';
-        return;
-      }
-      container.innerHTML = sorted.map(month => {
-        const isCur = month===CURRENT_MONTH;
-        const count = DATA.accomplishments.filter(a=>a.date.startsWith(month)).length;
-        const b = badge(count);
-        const bHTML = b ? `<div class="shelf-badge ${b}">${b==='gold'?'🥇':b==='silver'?'🥈':'🥉'}</div>` : '';
-        const flower = count===0?'🪴':count>=5?'🌸':count>=4?'🌺':count>=3?'🌼':count>=2?'🌿':'🌱';
-        return `<div class="shelf-month${isCur?' current':''}" role="listitem" tabindex="0" data-month="${month}">
-          ${bHTML}
-          <div class="shelf-month-name">${fmtMonth(month)}</div>
-          <div class="shelf-flower-mini">${flower}</div>
-          <div class="shelf-count">${count} accomplishment${count!==1?'s':''}</div>
-        </div>`;
-      }).join('');
-      container.querySelectorAll('.shelf-month').forEach(el => {
-        el.addEventListener('click', ()=>{
-          const m = el.dataset.month;
-          FILTERS.dateFrom = `${m}-01`;
-          FILTERS.dateTo = `${m}-${new Date(m.split('-')[0],+m.split('-')[1],0).getDate()}`;
-          applyFilters(); renderFilterControls();
-          document.getElementById('cards-section').scrollIntoView({behavior:'smooth'});
-        });
-      });
-    }
-
-    /* ── Filters ──────────────────────────────────────────────── */
-    function applyFilters() {
-      let list = [...DATA.accomplishments];
-      if (FILTERS.search) {
-        const q = FILTERS.search.toLowerCase();
-        list = list.filter(a => a.title.toLowerCase().includes(q) || a.summary.toLowerCase().includes(q));
-      }
-      if (FILTERS.person)   list = list.filter(a=>a.person===FILTERS.person);
-      if (FILTERS.category) list = list.filter(a=>a.category===FILTERS.category);
-      if (FILTERS.dateFrom) list = list.filter(a=>a.date>=FILTERS.dateFrom);
-      if (FILTERS.dateTo)   list = list.filter(a=>a.date<=FILTERS.dateTo);
-      switch(FILTERS.sort) {
-        case 'date-asc':       list.sort((a,b)=>a.date.localeCompare(b.date)); break;
-        case 'reactions-desc': list.sort((a,b)=>totalRx(b)-totalRx(a)); break;
-        case 'title-asc':      list.sort((a,b)=>a.title.localeCompare(b.title)); break;
-        default:               list.sort((a,b)=>b.date.localeCompare(a.date));
-      }
-      FILTERED = list;
-      renderCards();
-      document.getElementById('results-count').textContent =
-        list.length===DATA.accomplishments.length
-          ? `Showing all ${list.length} accomplishment${list.length!==1?'s':''}`
-          : `Showing ${list.length} of ${DATA.accomplishments.length} accomplishment${DATA.accomplishments.length!==1?'s':''}`;
-    }
-
-    function renderFilterControls() {
-      // Person select
-      const ps = document.getElementById('filter-person');
-      const pv = ps.value;
-      ps.innerHTML = '<option value="">All People</option>';
-      [...DATA.people].sort().forEach(p=>{ const o=document.createElement('option'); o.value=o.textContent=p; if(p===pv) o.selected=true; ps.appendChild(o); });
-      // Category select
-      const cs = document.getElementById('filter-category');
-      const cv = cs.value;
-      cs.innerHTML = '<option value="">All Categories</option>';
-      [...DATA.categories].sort().forEach(c=>{ const o=document.createElement('option'); o.value=o.textContent=c; if(c===cv) o.selected=true; cs.appendChild(o); });
-      // Tags
-      const tags = document.getElementById('filter-tags');
-      tags.innerHTML = '';
-      const active = [];
-      if (FILTERS.search)   active.push({label:`Search: "${FILTERS.search}"`,clear:()=>{FILTERS.search='';document.getElementById('search-input').value='';}});
-      if (FILTERS.person)   active.push({label:`Person: ${FILTERS.person}`,clear:()=>{FILTERS.person='';document.getElementById('filter-person').value='';}});
-      if (FILTERS.category) active.push({label:`Category: ${FILTERS.category}`,clear:()=>{FILTERS.category='';document.getElementById('filter-category').value='';}});
-      if (FILTERS.dateFrom||FILTERS.dateTo) active.push({label:`Date: ${FILTERS.dateFrom||'…'} → ${FILTERS.dateTo||'…'}`,clear:()=>{ FILTERS.dateFrom=FILTERS.dateTo=''; document.getElementById('filter-date-from').value=''; document.getElementById('filter-date-to').value=''; }});
-      active.forEach(f=>{
-        const tag=document.createElement('div'); tag.className='filter-tag';
-        tag.innerHTML=`<span>${esc(f.label)}</span><button class="filter-tag-remove">×</button>`;
-        tag.querySelector('button').onclick=()=>{ f.clear(); applyFilters(); renderFilterControls(); };
-        tags.appendChild(tag);
-      });
-    }
-
-    function clearFilters() {
-      FILTERS = {search:'',person:'',category:'',dateFrom:'',dateTo:'',sort:'date-desc'};
-      ['search-input','filter-person','filter-category','filter-date-from','filter-date-to'].forEach(id=>{ document.getElementById(id).value=''; });
-      document.getElementById('filter-sort').value='date-desc';
-      applyFilters(); renderFilterControls();
-    }
-
-    /* ── Cards ────────────────────────────────────────────────── */
-    function highlight(text) {
-      if (!FILTERS.search) return esc(text);
-      const q=FILTERS.search.toLowerCase(), lo=text.toLowerCase(), i=lo.indexOf(q);
-      if (i===-1) return esc(text);
-      return esc(text.slice(0,i))+`<mark>${esc(text.slice(i,i+FILTERS.search.length))}</mark>`+highlight(text.slice(i+FILTERS.search.length));
-    }
-
-    function renderCards() {
-      const grid = document.getElementById('cards-grid');
-      if (!grid) return;
-      grid.innerHTML = '';
-      if (!FILTERED.length) {
-        const empty = DATA.accomplishments.length === 0;
-        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-          <div class="empty-state-icon">🌱</div>
-          <h3 class="empty-state-title">${empty?'No accomplishments yet':'No results found'}</h3>
-          <p class="empty-state-text">${empty?'Click "Add New Accomplishment" above to get started!':'Try adjusting your search or filters.'}</p>
-        </div>`;
-        return;
-      }
-      FILTERED.forEach(acc => {
-        const c = document.createElement('div');
-        c.className='card'; c.setAttribute('role','listitem');
-        const cat = getCatColor(acc.category);
-        const imgHTML = acc.image
-          ? `<img src="${acc.image}" alt="" class="card-image" loading="lazy"/>`
-          : `<div class="card-image-placeholder">${['🎯','🚀','💡','⭐','🏆','✨'][Math.floor(Math.random()*6)]}</div>`;
-        const linksHTML = acc.links?.length
-          ? `<div class="card-links">${acc.links.map((l,i)=>`<a href="${esc(l)}" target="_blank" rel="noopener noreferrer" class="card-link">🔗 Link ${i+1}</a>`).join('')}</div>`
-          : '';
-        const myRx = MY_REACTIONS[acc.id];
-        const rxHTML = ['applause','confetti','happy','surprised'].map((type,i) => {
-          const emoji=['👏','🎉','😊','😲'][i];
-          const cnt=(acc.reactions?.[type]||[]).length;
-          return `<button class="reaction-btn${myRx===type?' active':''}" data-id="${acc.id}" data-rx="${type}" aria-pressed="${myRx===type}">
-            ${emoji}${cnt?`<span class="reaction-count">${cnt}</span>`:''}
-          </button>`;
-        }).join('');
-        c.innerHTML = `
-${imgHTML}
-          <div class="card-body">
-            <span class="card-category" style="--cat-bg:${cat.bg};--cat-color:${cat.fg};--cat-border:${cat.bd}">${esc(acc.category)}</span>
-            <h3 class="card-title">${highlight(acc.title)}</h3>
-            <p class="card-summary">${highlight(acc.summary)}</p>
-            <div class="card-meta">
-              <span class="card-meta-item">👤 ${esc(acc.person)}</span>
-              <span class="card-meta-item">📅 ${fmtDate(acc.date)}</span>
+<!-- ============================================================
+     ESPACE AIDANTS
+============================================================ -->
+<section id="aidants" class="section">
+  <div class="container">
+    <div class="aidants-grid">
+      <div class="aidants-content fade-in">
+        <span class="badge">Espace aidants</span>
+        <h2>Soyez présent, sans être envahissant</h2>
+        <p>Complice donne aux aidants familiaux une vision claire et rassurante du quotidien de leur proche — sans avoir besoin de multiplier les appels ou les visites.</p>
+        <ul class="aidants-features">
+          <li>
+            <div class="feat-icon">📅</div>
+            <div class="feat-text">
+              <strong>Agenda partagé</strong>
+              <span>Rendez-vous médicaux, activités et rappels visibles en un coup d'œil</span>
             </div>
-            ${linksHTML}
-            <div class="card-reactions">${rxHTML}</div>
+          </li>
+          <li>
+            <div class="feat-icon">💊</div>
+            <div class="feat-text">
+              <strong>Suivi des traitements</strong>
+              <span>Confirmations de prise de médicaments et alertes en cas d'oubli</span>
+            </div>
+          </li>
+          <li>
+            <div class="feat-icon">📄</div>
+            <div class="feat-text">
+              <strong>Documents importants</strong>
+              <span>Factures, papiers à vérifier, ordonnances centralisés et accessibles</span>
+            </div>
+          </li>
+          <li>
+            <div class="feat-icon">🔔</div>
+            <div class="feat-text">
+              <strong>Alertes pertinentes</strong>
+              <span>Seulement ce qui compte vraiment, sans bombardement de notifications</span>
+            </div>
+          </li>
+          <li>
+            <div class="feat-icon">🤝</div>
+            <div class="feat-text">
+              <strong>Coordination familiale</strong>
+              <span>Partagez les informations avec d'autres proches ou professionnels</span>
+            </div>
+          </li>
+        </ul>
+        <div style="margin-top:32px">
+          <a href="#tarifs" class="btn btn-primary">Découvrir les offres</a>
+        </div>
+      </div>
+
+      <!-- Dashboard Mockup -->
+      <div class="fade-in" style="transition-delay:.15s">
+        <div class="dashboard-mockup">
+          <div class="dash-header">
+            <div>
+              <div class="dash-title">Tableau de bord — Madeleine</div>
+              <div class="dash-date">Mercredi 14 mai 2025</div>
+            </div>
+            <span class="dash-badge-live">En direct</span>
           </div>
-          <div class="card-footer">
-            <button class="btn btn-ghost btn-sm" data-action="edit" data-id="${acc.id}">✏️ Edit</button>
-            <button class="btn btn-danger btn-sm" data-action="delete" data-id="${acc.id}">🗑️ Delete</button>
-          </div>`;
-        c.querySelectorAll('.reaction-btn').forEach(b=>b.onclick=()=>toggleReaction(b.dataset.id,b.dataset.rx));
-        c.querySelector('[data-action="edit"]').onclick=()=>startEdit(acc.id);
-        c.querySelector('[data-action="delete"]').onclick=()=>confirmDelete(acc.id);
-        grid.appendChild(c);
-      });
-    }
+          <div class="dash-body">
+            <div class="dash-card">
+              <div class="dash-card-icon dc-green">✅</div>
+              <div class="dash-card-text">
+                <p>Traitement du matin confirmé</p>
+                <span>Médicaments · 8h12</span>
+              </div>
+              <span class="dash-card-status status-ok">OK</span>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-icon dc-blue">🏥</div>
+              <div class="dash-card-text">
+                <p>Rendez-vous médecin : jeudi à 10h30</p>
+                <span>Dr. Lefebvre · Cardiologue</span>
+              </div>
+              <span class="dash-card-status status-info">Demain</span>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-icon dc-yellow">📄</div>
+              <div class="dash-card-text">
+                <p>Facture mutuelle à vérifier</p>
+                <span>Document · À traiter avant le 20/05</span>
+              </div>
+              <span class="dash-card-status status-alert">En attente</span>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-icon dc-green">🚶</div>
+              <div class="dash-card-text">
+                <p>Nouvelle activité locale disponible</p>
+                <span>Marche douce · Jeudi matin · 10h</span>
+              </div>
+              <span class="dash-card-status status-info">Nouveau</span>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-icon dc-sand">📸</div>
+              <div class="dash-card-text">
+                <p>Jean a partagé une photo</p>
+                <span>Famille · Il y a 2 heures</span>
+              </div>
+              <span class="dash-card-status status-ok">Lu</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    /* ── Full UI refresh ──────────────────────────────────────── */
-    function refreshUI() {
-      if (!DATA) return;
-      updateSnapshots();
-      updateFlower();
-      renderShelf();
-      applyFilters();
-      renderFilterControls();
-      updateFooter();
-    }
+<!-- ============================================================
+     TARIFS
+============================================================ -->
+<section id="tarifs" class="section">
+  <div class="container">
+    <div class="section-tag fade-in">
+      <span class="badge">Nos offres</span>
+      <h2>Des offres claires, sans mauvaise surprise</h2>
+      <p>Choisissez l'offre adaptée aux besoins de votre proche. Chaque niveau inclut les fonctionnalités du précédent.</p>
+    </div>
+    <div class="pricing-grid">
 
-    /* ── Form ─────────────────────────────────────────────────── */
-    function openForm() {
-      const body = document.getElementById('form-body');
-      if (!body.classList.contains('open')) {
-        body.classList.add('open');
-        document.getElementById('form-header').setAttribute('aria-expanded','true');
-        document.querySelector('#form-header .form-toggle-icon').classList.add('open');
-        document.getElementById('form-date-input').value = new Date().toISOString().split('T')[0];
-        document.getElementById('form-title-input').focus();
+      <!-- Essentiel -->
+      <div class="pricing-card fade-in">
+        <div class="pricing-title">Essentiel</div>
+        <div class="pricing-focus">Focus · Lien social</div>
+        <div class="pricing-price">
+          <span class="price-amount">35</span>
+          <span class="price-unit">€ / mois</span>
+        </div>
+        <ul class="pricing-features">
+          <li>Communication simplifiée avec la famille</li>
+          <li>Partage de photos et de messages</li>
+          <li>Agenda d'activités locales</li>
+          <li>Accès aidant inclus</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline" style="width:100%;justify-content:center">Choisir cette offre</a>
+      </div>
+
+      <!-- Sérénité -->
+      <div class="pricing-card fade-in" style="transition-delay:.1s">
+        <div class="pricing-title">Sérénité</div>
+        <div class="pricing-focus">Focus · Aide administrative</div>
+        <div class="pricing-price">
+          <span class="price-amount">55</span>
+          <span class="price-unit">€ / mois</span>
+        </div>
+        <ul class="pricing-features">
+          <li>Tout l'offre Essentiel</li>
+          <li>Centralisation des documents importants</li>
+          <li>Rappels de factures et d'échéances</li>
+          <li>Accompagnement aux démarches</li>
+          <li>Protection contre les arnaques</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline" style="width:100%;justify-content:center">Choisir cette offre</a>
+      </div>
+
+      <!-- Vitalité (featured) -->
+      <div class="pricing-card featured fade-in" style="transition-delay:.2s">
+        <div class="pricing-badge">⭐ La plus complète</div>
+        <div class="pricing-title">Vitalité</div>
+        <div class="pricing-focus">Focus · Santé & bien-être</div>
+        <div class="pricing-price">
+          <span class="price-amount">75</span>
+          <span class="price-unit">€ / mois</span>
+        </div>
+        <ul class="pricing-features">
+          <li>Tout l'offre Sérénité</li>
+          <li>Rappels de médicaments personnalisés</li>
+          <li>Carnet de santé numérique partagé</li>
+          <li>Suivi des rendez-vous médicaux</li>
+          <li>Coordination avec les professionnels de santé</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary" style="width:100%;justify-content:center">Choisir cette offre</a>
+      </div>
+
+    </div>
+    <p class="pricing-note fade-in">
+      Engagement annuel. Accompagnement à la prise en main inclus. Sans frais cachés.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     TÉMOIGNAGES
+============================================================ -->
+<section id="temoignages" class="section">
+  <div class="container">
+    <div class="section-tag fade-in">
+      <span class="badge">Témoignages</span>
+      <h2>Ils font confiance à Complice</h2>
+      <p>Des seniors et des aidants qui témoignent d'un quotidien plus serein grâce à Complice.</p>
+    </div>
+    <div class="temoignages-grid">
+      <div class="temoignage-card fade-in">
+        <div class="stars">★★★★★</div>
+        <p class="temoignage-text">"Depuis que ma mère utilise Complice, je peux voir en un coup d'œil si elle a pris ses médicaments, si elle a un rendez-vous à venir... Je me sens beaucoup moins anxieux. Et surtout, elle se sent plus autonome."</p>
+        <div class="temoignage-author">
+          <div class="author-avatar">ML</div>
+          <div>
+            <div class="author-name">Marc L.</div>
+            <div class="author-role">Fils aidant, 52 ans — Angers</div>
+          </div>
+        </div>
+      </div>
+      <div class="temoignage-card fade-in" style="transition-delay:.1s">
+        <div class="stars">★★★★★</div>
+        <p class="temoignage-text">"Je vis seule depuis quelques années. Complice m'a permis de rester en contact avec mes enfants sans qu'ils s'inquiètent. Je partage des photos, je vois les activités près de chez moi. C'est simple, c'est beau, ça ne me prend pas la tête."</p>
+        <div class="temoignage-author">
+          <div class="author-avatar">SM</div>
+          <div>
+            <div class="author-name">Simone M.</div>
+            <div class="author-role">Senior, 77 ans — Saint-Barthélemy-d'Anjou</div>
+          </div>
+        </div>
+      </div>
+      <div class="temoignage-card fade-in" style="transition-delay:.2s">
+        <div class="stars">★★★★★</div>
+        <p class="temoignage-text">"En tant qu'infirmière libérale, je recommande Complice à mes patients âgés. Le suivi de la prise médicamenteuse est un vrai plus. Et la coordination avec la famille se fait vraiment plus facilement."</p>
+        <div class="temoignage-author">
+          <div class="author-avatar">CV</div>
+          <div>
+            <div class="author-name">Claire V.</div>
+            <div class="author-role">Infirmière libérale — Maine-et-Loire</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PARTENAIRES BANNER
+============================================================ -->
+<div id="partenaires">
+  <div class="container">
+    <h3>Déjà 49 partenaires de proximité engagés</h3>
+    <p>Pharmacies, CCAS, associations, professionnels de santé et collectivités qui font confiance à Complice</p>
+    <div class="partners-logos">
+      <span class="partner-pill">🏥 Pharmacies partenaires</span>
+      <span class="partner-pill">🏛 CCAS Maine-et-Loire</span>
+      <span class="partner-pill">❤️ Associations d'aide à domicile</span>
+      <span class="partner-pill">👨‍⚕️ Médecins généralistes</span>
+      <span class="partner-pill">🏠 Services à la personne</span>
+      <span class="partner-pill">🏋 Clubs sportifs adaptés</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PROXIMITÉ / ÉQUIPE
+============================================================ -->
+<section id="proximite" class="section">
+  <div class="container">
+    <div class="proximity-hero">
+      <div class="proximity-content fade-in">
+        <span class="badge">Notre ancrage local</span>
+        <h2>Une équipe à Angers, pour vous accompagner en personne</h2>
+        <p>Complice n'est pas qu'une application. C'est une équipe locale disponible pour accompagner chaque senior dans la prise en main, en présentiel si besoin.</p>
+        <p>Nous connaissons le terrain, les partenaires, les structures de votre territoire. Parce que bien vieillir chez soi, ça se construit avec des gens de confiance, près de chez vous.</p>
+        <div class="partner-tags">
+          <span class="partner-tag">📍 Angers & Maine-et-Loire</span>
+          <span class="partner-tag">🤝 Démonstrations en présentiel</span>
+          <span class="partner-tag">📞 Accompagnement humain</span>
+          <span class="partner-tag">🏘 Réseau local de confiance</span>
+        </div>
+      </div>
+      <div class="proximity-stats fade-in" style="transition-delay:.2s">
+        <div class="prox-stat">
+          <span class="prox-stat-num">49</span>
+          <span class="prox-stat-label">partenaires locaux</span>
+        </div>
+        <div class="prox-stat">
+          <span class="prox-stat-num">5</span>
+          <span class="prox-stat-label">membres d'équipe</span>
+        </div>
+        <div class="prox-stat">
+          <span class="prox-stat-num">1</span>
+          <span class="prox-stat-label">territoire de cœur</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Équipe -->
+    <div class="team-section">
+      <h3>Notre équipe locale</h3>
+      <div class="team-grid">
+        <div class="team-card fade-in">
+          <div class="team-avatar">LA</div>
+          <div class="team-name">Lou-Anne</div>
+          <div class="team-role">Direction</div>
+        </div>
+        <div class="team-card fade-in" style="transition-delay:.1s">
+          <div class="team-avatar">PB</div>
+          <div class="team-name">Pablo</div>
+          <div class="team-role">Communication & Marketing</div>
+        </div>
+        <div class="team-card fade-in" style="transition-delay:.2s">
+          <div class="team-avatar">EC</div>
+          <div class="team-name">Enzo C.</div>
+          <div class="team-role">Développement commercial</div>
+        </div>
+        <div class="team-card fade-in" style="transition-delay:.3s">
+          <div class="team-avatar">TM</div>
+          <div class="team-name">Timothé</div>
+          <div class="team-role">Finance & Conformité</div>
+        </div>
+        <div class="team-card fade-in" style="transition-delay:.4s">
+          <div class="team-avatar">EB</div>
+          <div class="team-name">Enzo B.</div>
+          <div class="team-role">Technique & Support</div>
+        </div>
+      </div>
+      <div class="expert-note fade-in">
+        <strong>Expertise médico-sociale :</strong> Complice bénéficie de l'accompagnement d'une consultante spécialisée en gérontologie et accompagnement du vieillissement à domicile, pour garantir une approche rigoureuse et bienveillante.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BLOG
+============================================================ -->
+<section id="blog" class="section">
+  <div class="container">
+    <div class="section-tag fade-in">
+      <span class="badge">Blog & Conseils</span>
+      <h2>Des ressources pour bien vieillir à domicile</h2>
+      <p>Conseils pratiques, guides et témoignages pour les seniors et leurs aidants.</p>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card fade-in">
+        <div class="blog-thumb t1">🏠</div>
+        <div class="blog-body">
+          <span class="blog-cat">Maintien à domicile</span>
+          <h3>Comment aider un parent à rester autonome à domicile ?</h3>
+          <p class="blog-excerpt">Quelques ajustements bien pensés peuvent faire une grande différence. Tour d'horizon des solutions pratiques, humaines et technologiques pour soutenir l'indépendance.</p>
+          <a href="#contact" class="btn btn-outline btn-sm">Lire l'article →</a>
+        </div>
+      </div>
+      <div class="blog-card fade-in" style="transition-delay:.1s">
+        <div class="blog-thumb t2">🧠</div>
+        <div class="blog-body">
+          <span class="blog-cat">Aidants familiaux</span>
+          <h3>Aidants : comment réduire votre charge mentale au quotidien ?</h3>
+          <p class="blog-excerpt">Entre suivi médical, démarches et coordination familiale, la charge est réelle. Voici comment mieux vous organiser — et vous ménager sans culpabiliser.</p>
+          <a href="#contact" class="btn btn-outline btn-sm">Lire l'article →</a>
+        </div>
+      </div>
+      <div class="blog-card fade-in" style="transition-delay:.2s">
+        <div class="blog-thumb t3">💻</div>
+        <div class="blog-body">
+          <span class="blog-cat">Numérique & seniors</span>
+          <h3>Seniors et numérique : comment lever les freins ensemble ?</h3>
+          <p class="blog-excerpt">La peur du numérique est souvent liée à de mauvaises expériences ou à un manque d'accompagnement. Des approches concrètes pour aborder la technologie autrement.</p>
+          <a href="#contact" class="btn btn-outline btn-sm">Lire l'article →</a>
+        </div>
+      </div>
+      <div class="blog-card fade-in" style="transition-delay:.3s">
+        <div class="blog-thumb t4">💊</div>
+        <div class="blog-body">
+          <span class="blog-cat">Santé au quotidien</span>
+          <h3>Prévenir les oublis de médicaments sans stresser son proche</h3>
+          <p class="blog-excerpt">Les rappels répétés peuvent créer des tensions. Il existe des méthodes douces, non infantilisantes, pour sécuriser la prise médicamenteuse tout en préservant la dignité.</p>
+          <a href="#contact" class="btn btn-outline btn-sm">Lire l'article →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section id="contact" class="section">
+  <div class="container">
+    <div class="section-tag fade-in">
+      <span class="badge">Contact</span>
+      <h2>Parlons de vos besoins</h2>
+      <p>Vous accompagnez un proche ou souhaitez en savoir plus sur Complice ? Notre équipe vous répond avec plaisir.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info fade-in">
+        <h3>Une question, une démo, un partenariat ?</h3>
+        <p>Notre équipe angevine est disponible pour répondre à toutes vos questions, organiser une démonstration ou discuter d'un partenariat local.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">✉️</div>
+          <div class="contact-detail-text">
+            <strong>Email</strong>
+            <span>bonjour@complice.com</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📞</div>
+          <div class="contact-detail-text">
+            <strong>Téléphone</strong>
+            <span>01 23 45 67 89</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📍</div>
+          <div class="contact-detail-text">
+            <strong>Adresse</strong>
+            <span>Angers, Maine-et-Loire (49)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form fade-in" style="transition-delay:.15s">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" placeholder="Dupont" />
+          </div>
+          <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" placeholder="Marie" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="marie@exemple.fr" />
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="tel" placeholder="06 XX XX XX XX" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Votre profil</label>
+          <select>
+            <option value="" disabled selected>Sélectionnez votre profil</option>
+            <option>Senior</option>
+            <option>Aidant familial</option>
+            <option>Professionnel de santé</option>
+            <option>Partenaire institutionnel</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Votre message</label>
+          <textarea placeholder="Dites-nous comment nous pouvons vous aider..."></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:16px" onclick="event.preventDefault()">
+          Envoyer ma demande →
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 10 C75 10, 90 30, 90 50 C90 55, 88 60, 85 64 L70 56 C72 53, 74 51.5, 74 50 C74 38, 63 26, 50 26 C37 26, 26 38, 26 50 L10 50 C10 30, 28 10, 50 10Z" fill="#3BBEE9"/>
+            <path d="M85 64 C80 75, 66 90, 50 90 C28 90, 10 72, 10 50 L26 50 C26 63, 37 74, 50 74 C57 74, 63 71, 67 66Z" fill="rgba(255,255,255,0.6)"/>
+            <circle cx="50" cy="50" r="8" fill="rgba(255,255,255,0.5)"/>
+          </svg>
+          Complice
+        </div>
+        <p>Le compagnon numérique qui simplifie le maintien à domicile des seniors et rassure leurs proches. Basé à Angers, ancré en Maine-et-Loire.</p>
+        <div class="footer-ethics">
+          Complice s'engage à protéger les données personnelles et à garantir une utilisation transparente, sécurisée et respectueuse des informations partagées. Conformité RGPD.
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Complice</h4>
+        <ul>
+          <li><a href="#pourquoi">Pourquoi Complice ?</a></li>
+          <li><a href="#solutions">Nos solutions</a></li>
+          <li><a href="#aidants">Espace aidants</a></li>
+          <li><a href="#tarifs">Tarifs</a></li>
+          <li><a href="#proximite">Notre équipe</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="#blog">Blog & Conseils</a></li>
+          <li><a href="#contact">Centre d'aide</a></li>
+          <li><a href="#contact">Devenir partenaire</a></li>
+          <li><a href="#contact">Presse & Médias</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Politique de confidentialité</a></li>
+          <li><a href="#">Gestion des cookies</a></li>
+          <li><a href="#">Conditions générales de vente</a></li>
+          <li><a href="#">Conditions générales d'utilisation</a></li>
+          <li><a href="#">Cadre légal & éthique</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 Complice — Votre compagnon au quotidien · Angers, Maine-et-Loire</p>
+      <p>Fait avec ❤️ pour le bien vieillir à domicile</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  /* ----- Sticky header ----- */
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ----- Mobile menu ----- */
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+
+  /* ----- Intersection Observer: fade-in ----- */
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
       }
-    }
+    });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => observer.observe(el));
 
-    function closeForm() {
-      const body = document.getElementById('form-body');
-      body.classList.remove('open');
-      document.getElementById('form-header').setAttribute('aria-expanded','false');
-      document.querySelector('#form-header .form-toggle-icon').classList.remove('open');
-    }
-
-    function toggleForm() {
-      const body = document.getElementById('form-body');
-      if (body.classList.contains('open')) {
-        closeForm();
-        if (!EDITING_ID) resetForm();
-      } else {
-        openForm();
-      }
-    }
-
-    function resetForm() {
-      document.getElementById('accomplishment-form').reset();
-      const prev = document.getElementById('form-image-preview');
-      prev.style.display='none'; prev.src='';
-      document.getElementById('form-links-list').innerHTML =
-        `<div class="form-link-item"><input type="url" class="form-input" name="link-0" placeholder="https://example.com" aria-label="Link 1"/></div>`;
-      document.querySelectorAll('.form-error').forEach(e=>e.textContent='');
-      document.querySelectorAll('.form-input,.form-textarea').forEach(e=>e.classList.remove('error','valid'));
-      document.getElementById('form-title-count').textContent='0 / 100';
-      document.getElementById('form-summary-count').textContent='0 / 500';
-      document.getElementById('btn-submit-form').innerHTML='<span>✨</span> Add Accomplishment';
-      EDITING_ID = null;
-    }
-
-    function getFormData() {
-      const fd = new FormData(document.getElementById('accomplishment-form'));
-      const links = [];
-      for(let i=0;;i++){ const l=fd.get(`link-${i}`); if(l===null) break; if(l.trim()) links.push(l.trim()); }
-      const prev = document.getElementById('form-image-preview');
-      return {
-        title: fd.get('title')||'', summary: fd.get('summary')||'',
-        date: fd.get('date')||'', person: fd.get('person')||'',
-        category: fd.get('category')||'',
-        links, image: prev.style.display!=='none' ? prev.src : null
-      };
-    }
-
-    function validateField(name, val) {
-      if (name==='title')    return !val?.trim() ? ['Title is required'] : val.length>100 ? ['Max 100 chars'] : [];
-      if (name==='summary')  return !val?.trim() ? ['Summary is required'] : val.length>500 ? ['Max 500 chars'] : [];
-      if (name==='date')     return !val ? ['Date is required'] : [];
-      if (name==='person')   return !val?.trim() ? ['Person is required'] : [];
-      if (name==='category') return !val?.trim() ? ['Category is required'] : [];
-      return [];
-    }
-
-    function showFieldErr(name, errs) {
-      const inp=document.getElementById(`form-${name}-input`);
-      const div=document.getElementById(`form-${name}-error`);
-      if (errs.length) { inp.classList.add('error'); inp.classList.remove('valid'); div.textContent=errs[0]; }
-      else { inp.classList.remove('error'); inp.classList.add('valid'); div.textContent=''; }
-    }
-
-    function validateForm() {
-      const fd=getFormData(); let ok=true;
-      ['title','summary','date','person','category'].forEach(f=>{ const e=validateField(f,fd[f]); showFieldErr(f,e); if(e.length) ok=false; });
-      return ok;
-    }
-
-    async function handleSubmit(e) {
-      e.preventDefault();
-      if (!validateForm()) { toast('Please fix the errors','error'); return; }
-      const fd = getFormData();
-      const btn = document.getElementById('btn-submit-form');
-      btn.disabled=true; btn.textContent='Saving…';
-      try {
-        if (EDITING_ID) {
-          await updateAccomplishment(EDITING_ID, fd);
-          toast('Accomplishment updated! ✅','success');
-        } else {
-          await addAccomplishment(fd);
-          toast('Accomplishment added! 🎉','success');
-        }
-        closeForm();
-        resetForm();
-        // For localStorage, refresh manually; Firebase listener handles it automatically
-        if (!useFirebase) refreshUI();
-        document.getElementById('cards-section').scrollIntoView({behavior:'smooth'});
-      } catch(err) {
-        console.error(err); toast('Error saving','error');
-      } finally {
-        btn.disabled=false; btn.innerHTML='<span>✨</span> Add Accomplishment';
-      }
-    }
-
-    function startEdit(id) {
-      const acc = DATA.accomplishments.find(a=>a.id===id);
-      if (!acc) return;
-      EDITING_ID = id;
-      document.getElementById('form-title-input').value = acc.title;
-      document.getElementById('form-summary-input').value = acc.summary;
-      document.getElementById('form-date-input').value = acc.date;
-      document.getElementById('form-person-input').value = acc.person;
-      document.getElementById('form-category-input').value = acc.category;
-      const ll=document.getElementById('form-links-list');
-      ll.innerHTML = acc.links.length
-        ? acc.links.map((l,i)=>`<div class="form-link-item"><input type="url" class="form-input" name="link-${i}" value="${esc(l)}" placeholder="https://example.com" aria-label="Link ${i+1}"/>${i>0?'<button type="button" class="form-link-remove">Remove</button>':''}</div>`).join('')
-        : `<div class="form-link-item"><input type="url" class="form-input" name="link-0" placeholder="https://example.com" aria-label="Link 1"/></div>`;
-      ll.querySelectorAll('.form-link-remove').forEach(b=>b.onclick=()=>b.parentElement.remove());
-      if (acc.image) { const p=document.getElementById('form-image-preview'); p.src=acc.image; p.style.display='block'; }
-      updateCharCount('title'); updateCharCount('summary');
-      document.getElementById('btn-submit-form').innerHTML='<span>💾</span> Update Accomplishment';
-      openForm();
-      document.getElementById('form-section').scrollIntoView({behavior:'smooth'});
-    }
-
-    async function confirmDelete(id) {
-      const acc = DATA.accomplishments.find(a=>a.id===id);
-      if (!acc) return;
-      const ok = await modal('Delete?', `Delete "${acc.title}"?`,
-        [{label:'Cancel',value:false,class:'btn-secondary'},{label:'Delete',value:true,class:'btn-danger'}]);
-      if (!ok) return;
-      await deleteAccomplishment(id);
-      if (!useFirebase) refreshUI();
-      toast('Deleted','success',5000, async ()=>{
-        if (await undoDelete()) { if(!useFirebase) refreshUI(); toast('Restored ✅','success'); }
-      });
-    }
-
-    function addLinkField() {
-      const ll=document.getElementById('form-links-list');
-      const n=ll.querySelectorAll('.form-link-item').length;
-      if (n>=5) { toast('Maximum 5 links','warning'); return; }
-      const div=document.createElement('div'); div.className='form-link-item';
-      div.innerHTML=`<input type="url" class="form-input" name="link-${n}" placeholder="https://example.com" aria-label="Link ${n+1}"/><button type="button" class="form-link-remove">Remove</button>`;
-      div.querySelector('.form-link-remove').onclick=()=>div.remove();
-      ll.appendChild(div);
-    }
-
-    async function handleImage(e) {
-      const file=e.target.files[0]; if(!file) return;
-      const err=document.getElementById('form-image-error'), prev=document.getElementById('form-image-preview');
-      if (!file.type.startsWith('image/')) { err.textContent='Please select an image'; prev.style.display='none'; return; }
-      if (file.size>10*1024*1024) { err.textContent='Max 10MB'; prev.style.display='none'; return; }
-      err.textContent='Compressing…';
-      try {
-        const data = await new Promise((res,rej)=>{
-          const r=new FileReader(); r.onload=e2=>{
-            const img=new Image(); img.onload=()=>{
-              const canvas=document.createElement('canvas');
-              let {width,height}=img; const max=800;
-              if(width>height&&width>max){height=height/width*max;width=max;}
-              else if(height>max){width=width/height*max;height=max;}
-              canvas.width=width; canvas.height=height;
-              canvas.getContext('2d').drawImage(img,0,0,width,height);
-              let q=0.9, d=canvas.toDataURL('image/jpeg',q);
-              while(d.length>CFG.MAX_IMG&&q>0.1){q-=0.1;d=canvas.toDataURL('image/jpeg',q);}
-              d.length>CFG.MAX_IMG?rej(new Error('Too large')):res(d);
-            }; img.src=e2.target.result;
-          }; r.readAsDataURL(file);
+  /* ----- Smooth active nav highlight ----- */
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const navObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = '';
+          if (link.getAttribute('href') === '#' + e.target.id) {
+            link.style.color = header.classList.contains('scrolled') ? 'var(--blue-dark)' : '#fff';
+          }
         });
-        prev.src=data; prev.style.display='block'; err.textContent='';
-        toast('Image ready ✅','success');
-      } catch(_) { err.textContent='Image too large, try a smaller file'; prev.style.display='none'; }
-    }
-
-    function updateCharCount(name) {
-      const inp=document.getElementById(`form-${name}-input`);
-      const div=document.getElementById(`form-${name}-count`);
-      const l=inp.value.length, max=inp.maxLength;
-      div.textContent=`${l} / ${max}`;
-      div.classList.toggle('warning',l>max*0.9);
-      div.classList.toggle('error',l>=max);
-    }
-
-    /* ── Datalist ─────────────────────────────────────────────── */
-/* ── Footer ───────────────────────────────────────────────── */
-    function updateFooter() {
-      const total=DATA.accomplishments.length;
-      document.getElementById('footer-total-accomplishments').textContent=
-        `${total} total accomplishment${total!==1?'s':''}`;
-      if (DATA.settings?.lastBackup) {
-        const d=new Date(DATA.settings.lastBackup);
-        document.getElementById('footer-last-backup').textContent=
-          `Last sync: ${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
       }
-    }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => navObserver.observe(s));
+</script>
 
-    /* ── Draft autosave ───────────────────────────────────────── */
-    function saveDraft() {
-      if (!lsOk()) return;
-      const fd=getFormData();
-      if (fd.title||fd.summary) try{localStorage.setItem(CFG.LS_DRAFT,JSON.stringify(fd));}catch(_){}
-    }
-
-    function loadDraft() {
-      if (!lsOk()) return;
-      try {
-        const raw=localStorage.getItem(CFG.LS_DRAFT); if(!raw) return;
-        const d=JSON.parse(raw);
-        modal('Restore draft?','You have an unsaved draft. Restore it?',
-          [{label:'Discard',value:false,class:'btn-ghost'},{label:'Restore',value:true,class:'btn-primary'}]
-        ).then(ok=>{
-          if(ok){
-            ['title','summary','date','person','category'].forEach(f=>{document.getElementById(`form-${f}-input`).value=d[f]||'';});
-            updateCharCount('title'); updateCharCount('summary');
-            openForm();
-          } else localStorage.removeItem(CFG.LS_DRAFT);
-        });
-      } catch(_){}
-    }
-
-    /* ── Export / Import ──────────────────────────────────────── */
-    async function showExportMenu() {
-      const fmt=await modal('Export data','Choose format:',
-        [{label:'Cancel',value:null,class:'btn-ghost'},{label:'CSV',value:'csv',class:'btn-secondary'},{label:'JSON',value:'json',class:'btn-primary'}]);
-      if (fmt==='json') {
-        const blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});
-        const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`clindoc-${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(a.href);
-        toast('Exported ✅','success');
-      } else if (fmt==='csv') {
-        const h=['Title','Summary','Date','Person','Category','Links','Reactions'];
-        const rows=DATA.accomplishments.map(a=>[
-          `"${a.title.replace(/"/g,'""')}"`,`"${a.summary.replace(/"/g,'""')}"`,
-          a.date,`"${a.person.replace(/"/g,'""')}"`,`"${a.category.replace(/"/g,'""')}"`,
-          `"${(a.links||[]).join('; ')}"`,totalRx(a)
-        ].join(','));
-        const blob=new Blob([[h.join(','),...rows].join('\n')],{type:'text/csv'});
-        const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`clindoc-${new Date().toISOString().split('T')[0]}.csv`; a.click(); URL.revokeObjectURL(a.href);
-        toast('Exported ✅','success');
-      }
-    }
-
-    async function importFile(file) {
-      try {
-        const imported=JSON.parse(await file.text());
-        if (!validData(imported)) { toast('Invalid file format','error'); return; }
-        const ok=await modal('Import?',`Import ${imported.accomplishments.length} accomplishments?`,
-          [{label:'Cancel',value:false,class:'btn-ghost'},{label:'Import',value:true,class:'btn-primary'}]);
-        if (!ok) return;
-        let n=0;
-        imported.accomplishments.forEach(imp=>{
-          const dup=DATA.accomplishments.some(e=>e.title===imp.title&&e.date===imp.date&&e.person===imp.person);
-          if(!dup){imp.id=uuid();DATA.accomplishments.push(imp);n++;
-            if(!DATA.categories.includes(imp.category)) DATA.categories.push(imp.category);
-            if(!DATA.people.includes(imp.person)) DATA.people.push(imp.person);}
-        });
-        await saveData();
-        if (!useFirebase) refreshUI();
-        toast(`Imported ${n} (${imported.accomplishments.length-n} skipped)`,'success',6000);
-      } catch(e){ console.error(e); toast('Import failed','error'); }
-    }
-
-    /* ── Event listeners ──────────────────────────────────────── */
-    function bindEvents() {
-      // Form toggle
-      document.getElementById('form-header').onclick = toggleForm;
-      document.getElementById('form-header').onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleForm();} };
-      document.getElementById('accomplishment-form').onsubmit = handleSubmit;
-      document.getElementById('btn-cancel-form').onclick = ()=>{ closeForm(); resetForm(); };
-
-      // Field validation on blur
-      ['title','summary','date','person','category'].forEach(f=>{
-        document.getElementById(`form-${f}-input`).onblur=()=>{
-          showFieldErr(f,validateField(f,document.getElementById(`form-${f}-input`).value));
-        };
-      });
-      // Char counters
-      document.getElementById('form-title-input').oninput=()=>updateCharCount('title');
-      document.getElementById('form-summary-input').oninput=()=>updateCharCount('summary');
-      // Category swatches on type
-      document.getElementById('form-category-input').oninput=e=>{
-        };
-      // Links
-      document.getElementById('btn-add-link').onclick=addLinkField;
-      // Image
-      document.getElementById('form-image-input').onchange=handleImage;
-
-      // Search & filters
-      let searchTimer;
-      document.getElementById('search-input').oninput=e=>{
-        clearTimeout(searchTimer);
-        searchTimer=setTimeout(()=>{ FILTERS.search=e.target.value; applyFilters(); renderFilterControls(); },300);
-      };
-      document.getElementById('filter-person').onchange=e=>{ FILTERS.person=e.target.value; applyFilters(); renderFilterControls(); };
-      document.getElementById('filter-category').onchange=e=>{ FILTERS.category=e.target.value; applyFilters(); renderFilterControls(); };
-      document.getElementById('filter-date-from').onchange=e=>{ FILTERS.dateFrom=e.target.value; applyFilters(); renderFilterControls(); };
-      document.getElementById('filter-date-to').onchange=e=>{ FILTERS.dateTo=e.target.value; applyFilters(); renderFilterControls(); };
-      document.getElementById('filter-sort').onchange=e=>{ FILTERS.sort=e.target.value; applyFilters(); };
-      document.getElementById('btn-clear-filters').onclick=clearFilters;
-
-      // Export/Import (hidden but functional)
-      const btnExp=document.getElementById('btn-export');
-      const btnImp=document.getElementById('btn-import');
-      const fileInp=document.getElementById('import-file-input');
-      if(btnExp) btnExp.onclick=showExportMenu;
-      if(btnImp) btnImp.onclick=()=>fileInp.click();
-      fileInp.onchange=e=>{ if(e.target.files[0]) importFile(e.target.files[0]); e.target.value=''; };
-
-      // Autosave draft
-      setInterval(saveDraft, 30000);
-    }
-
-    /* ── Init ─────────────────────────────────────────────────── */
-    function init() {
-      loadCatColors();
-      try { MY_REACTIONS = JSON.parse(localStorage.getItem(CFG.LS_REACTIONS)||'{}'); } catch(_) { MY_REACTIONS={}; }
-
-      if (useFirebase) {
-        // Firebase: realtime listener refreshes UI on every change
-        onValue(ref(db,'clindoc/data'), snapshot => {
-          DATA = fromFirebase(snapshot.val());
-          refreshUI();
-        }, err => {
-          console.error('Firebase error:',err);
-          toast('Firebase error – switching to local mode','warning',6000);
-          useFirebase=false;
-          loadLocal();
-        });
-      } else {
-        loadLocal();
-      }
-
-      bindEvents();
-      setTimeout(loadDraft, 1200);
-    }
-
-    function loadLocal() {
-      DATA = defaultData();
-      if (lsOk()) {
-        try {
-          const raw=localStorage.getItem(CFG.LS_DATA);
-          if(raw){ const p=JSON.parse(raw); if(validData(p)) DATA=p; }
-        } catch(_) {}
-      }
-      refreshUI();
-      // Show info banner
-      const banner=document.getElementById('storage-warning');
-      const txt=document.getElementById('storage-warning-text');
-      if(banner&&txt){
-        banner.style.cssText='display:flex;background:#e3f2fd;border-left:4px solid #2196F3';
-        txt.style.color='#0d47a1';
-        txt.textContent='⚠️ Mode local uniquement – configurez Firebase pour partager les données en temps réel.';
-      }
-    }
-
-    // Module scripts are deferred — DOM is guaranteed ready
-    init();
-
-  </script>
 </body>
 </html>
